@@ -28,7 +28,7 @@
             padding: 0.5rem 1rem;
         }
         .form-item{
-            padding-bottom: 1.4rem;
+            /* padding-bottom: 1.4rem; */
             position: relative;
         }
         label{
@@ -42,15 +42,29 @@
         }
         .field-rule{
             width: calc(100% - 1rem);
-            position: absolute;
+            /* position: absolute; */
+            position: relative;
             left: 0;
             bottom: 6px;
-            height: 1rem;
+            height: 1.6rem;
             margin: 0 0.5rem;
             font-size: 0.75rem;
-            line-height: 1rem;
+            line-height: 1.6rem;
             color: #ff0000;
             text-indent: 1rem;
+        }
+        .remark-rule{
+            width: calc(100% - 1rem);
+            /* position: absolute; */
+            position: relative;
+            left: 0;
+            top: 2px;
+            height: 1.6rem;
+            margin: 0 0.5rem;
+            font-size: 0.75rem;
+            line-height: 1.6rem;
+            color: #ff0000;
+            text-indent: 2rem;
         }
         .field-icon{
             display: block;
@@ -97,6 +111,27 @@
             outline: none;
             -webkit-appearance: none;
             border-radius: 0;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+        }
+        .field-remark{
+            display:inline-block;
+            width: calc(100% - 40px);
+            font-size:16px;
+            font-family:PingFang SC;
+            font-weight:bold;
+            color:rgba(0,0,0,1);
+            line-height:24px;
+            height: 30px;
+            padding: 6px 5px;
+            line-height: 1.42857143;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            outline: none;
+            -webkit-appearance: none;
             -webkit-tap-highlight-color: rgba(0,0,0,0);
         }
         .field-text-date{
@@ -147,6 +182,9 @@
         }
         .field-div{
             padding: 0.3rem 0.4rem;
+        }
+        .field-div-remark{
+            display: none;
         }
         .field-radio{
             position: absolute;
@@ -290,6 +328,14 @@
         .orderNum{
             color: #007AFF;
         }
+        .beizhu{
+            font-size: 0.8rem;
+            color: #888;
+        }
+        .remarkRed{
+            border-color: #ff0000;
+            box-shadow: 0px 0px 6px #e74040;;
+        }
     </style>
 </head>
 <body>
@@ -312,7 +358,7 @@
         var params = {};
 
         let IP = 'http://10.128.151.108:443';
-        let search = '?formId=1259674933590257664&userId=10001'
+        let search = '?formId=1259727100787322880&userId=10001'
         search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
         // var IP = location.origin;
@@ -410,6 +456,9 @@
                             <input name='select-${item.id}' id="select-${item.id}" data-id="${item.id}" readonly="readonly" unselectable="on" class="field-text field-text-select" placeholder="请选择"/>
                         </div>
                         <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
+                        <div class="field-div field-div-remark field-remark-${item.id}">
+                            <span class="beizhu">备注：</span><input name='remark-${item.id}-1' id="remark-${item.id}" data-id="${item.id}" class="field-remark field-text-remark"/>
+                        </div>
                     </div>`
         })
     }
@@ -422,6 +471,9 @@
                         <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
                         ${option}
                         <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
+                        <div class="field-div field-div-remark field-remark-${item.id}">
+                            <span class="beizhu">备注：</span><input name='remark-${item.id}-1' id="remark-${item.id}" data-id="${item.id}" class="field-remark field-text-remark"/>
+                        </div>
                     </div>`
         })
         
@@ -429,7 +481,7 @@
     function optionItem2(item,data){
         return data.map(e=>{
                 return `<div class="field-div">
-                            <input type="radio" data-logic='${JSON.stringify(e.logic)}' data-text='${e.content}' data-id='${item.id}' id="radio-${item.id}-${e.order}" name="radio-${item.id}" class="field-radio" value="${e.order}"/><label for="radio-${item.id}-${e.order}">${e.content}</label><br/>
+                            <input type="radio" data-logic='${JSON.stringify(e.logic)}' data-rule='${JSON.stringify(e)}' data-text='${e.content}' data-id='${item.id}' id="radio-${item.id}-${e.order}" name="radio-${item.id}" class="field-radio" value="${e.order}"/><label for="radio-${item.id}-${e.order}">${e.content}</label><br/>
                         </div>`
                 })
     }
@@ -454,6 +506,9 @@
         return data.map(e=>{
                 return `<div class="field-div">
                             <input type="checkbox" data-rule='${ruleStr}' data-rule2='${JSON.stringify(e)}' data-content='${e.content}' data-id="${item.id}" data-logic='${JSON.stringify(e.logic)}'' id="checkbox-${item.id}-${e.order}" name="checkbox-${item.id}" class="field-checkbox" value="${e.order}"><label for="checkbox-${item.id}-${e.order}" class="checkbox-${item.id}-${e.order}">${e.content}</label><br/>
+                            <div class="field-div field-div-remark field-remark-${item.id}-${e.order}">
+                                <span class="beizhu">备注：</span><input name='remark-${item.id}-${e.order}' data-order='${e.order}' data-rule='${JSON.stringify(e)}' id="remark-${item.id}-${e.order}" data-id="${item.id}"  class="field-remark field-text-remark"/>
+                            </div>
                         </div>`
                 })
     }
@@ -582,6 +637,18 @@
                     $(`#select-${topicId}`).val(item.content)
                     $(`.form-item-${topicId}`).children(".field-rule").html('')
                 }
+                if(item.remark){
+                    FormObject[`remark-${topicId}_1`] = item.remark
+                    let remarkObj = JSON.parse(item.remark)
+                    $(`.field-remark-${topicId}`).show()
+                    $(`#remark-${topicId}`).val(remarkObj.desp)
+                    if(remarkObj.required){
+                        $(`#remark-${topicId}`).attr('data-required','1')
+                    }else{
+                        $(`#remark-${topicId}`).attr('data-required','0')
+                    }
+                    
+                }
             
 
             }else if(type === '2'){
@@ -597,6 +664,17 @@
                         
                     })
                 }
+                if(item.remark){
+                    FormObject[`remark-${topicId}_1`] = item.remark
+                    let remarkObj = JSON.parse(item.remark)
+                    $(`.field-remark-${topicId}`).show()
+                    $(`#remark-${topicId}`).val(remarkObj.desp)
+                    if(remarkObj.required){
+                        $(`#remark-${topicId}`).attr('data-required','1')
+                    }else{
+                        $(`#remark-${topicId}`).attr('data-required','0')
+                    }
+                }
                 
 
             }else if(type === '3'){
@@ -610,6 +688,20 @@
                             $(`#checkbox-${topicId}-${order+1}`).attr("checked", 'checked');
                         }
                     })
+                }
+                if(item.remark){
+                    let remarkList = JSON.parse(item.remark)
+                    remarkList.map(item2=>{
+                        $(`.field-remark-${topicId}-${item2.order}`).show()
+                        $(`#remark-${topicId}-${item2.order}`).val(item2.desp)
+                        FormObject[`remark-${topicId}_${item2.order}`] = JSON.stringify(item2)
+                        if(item2.required){
+                            $(`#remark-${topicId}-${item2.order}`).attr('data-required','1')
+                        }else{
+                            $(`#remark-${topicId}-${item2.order}`).attr('data-required','0')
+                        }
+                    })
+                    
                 }
                 
 
@@ -654,9 +746,10 @@
                 
             }
         })
+        console.log(FormObject)
     }
 
-
+    
 
 </script>
 <script>
@@ -690,6 +783,31 @@
 
                     FormObject[name] = e[0].label;
                     console.log(FormObject)
+
+                    let remark = e[0].remark;
+                    let required = e[0].required;
+                    if(remark){
+                        $(`.field-remark-${topicId}`).show()
+                        $(`#remark-${topicId}`).val('')
+                        FormObject[`remark-${topicId}_1`] = JSON.stringify({desp:'',required:required})
+                    }else{
+                        $(`.field-remark-${topicId}`).hide();
+                        $(`#remark-${topicId}`).val('')
+                        FormObject[`remark-${topicId}_1`] = ''
+                    }
+                    if(required){
+                        $(`#remark-${topicId}`).addClass('remarkRed')
+                        $(`#remark-${topicId}`).attr('data-required','1')
+                        // $(`.remark-rule-${topicId}`).show();
+                        // $(`.remark-rule-${topicId}`).html('必填项');
+                        // $(`.remark-rule-${topicId}`).attr('data-required','1')
+                    }else{
+                        $(`#remark-${topicId}`).removeClass('remarkRed')
+                        $(`#remark-${topicId}`).attr('data-required','0')
+                        // $(`.remark-rule-${topicId}`).hide();
+                        // $(`.remark-rule-${topicId}`).html('');
+                        // $(`.remark-rule-${topicId}`).attr('data-required','0')
+                    }
 
                     list.map(item=>{
                         if(item.order!==order){
@@ -726,6 +844,8 @@
     $(document).on('click','.field-radio',function(){
         $(this).attr('data-check','1')
 
+        let that = $(this)
+
         let value = $(this).val()
         console.log(value)
 
@@ -736,6 +856,34 @@
         console.log(name)
 
         let content = $(this).attr('data-text')
+
+        let rule = JSON.parse(that.attr('data-rule'))
+        console.log(rule)
+
+        let remark = rule.remark;
+        let required = rule.required;
+        if(remark){
+            $(`.field-remark-${topicId}`).show()
+            $(`#remark-${topicId}`).val('')
+            FormObject[`remark-${topicId}_1`] = JSON.stringify({desp:'',required:required})
+        }else{
+            $(`.field-remark-${topicId}`).hide();
+            $(`#remark-${topicId}`).val('')
+            FormObject[`remark-${topicId}_1`] = ''
+        }
+        if(required){
+            $(`#remark-${topicId}`).addClass('remarkRed')
+            $(`#remark-${topicId}`).attr('data-required','1')
+            // $(`.remark-rule-${topicId}`).show();
+            // $(`.remark-rule-${topicId}`).html('必填项');
+            // $(`.remark-rule-${topicId}`).attr('data-required','1')
+        }else{
+            $(`#remark-${topicId}`).removeClass('remarkRed')
+            $(`#remark-${topicId}`).attr('data-required','0')
+            // $(`.remark-rule-${topicId}`).hide();
+            // $(`.remark-rule-${topicId}`).html('');
+            // $(`.remark-rule-${topicId}`).attr('data-required','0')
+        }
 
         FormObject[name] = content;
         let radioList = $(`input:radio[name="${name}"]`).not(this)
@@ -787,17 +935,43 @@
         let name = $(this).attr('name')
         console.log(name)
 
+        let topicId = $(this).attr('data-id')
+
         let rule = JSON.parse(that.attr("data-rule"));
-        console.log('多选框',rule)
+        console.log(rule)
+
+        let rule2 = JSON.parse(that.attr("data-rule2"));
+        console.log('多选框规则',rule2)
+
 
         let logic = $(this).attr('data-logic');
         logic = JSON.parse(logic)
         console.log(logic)
 
+
+        let remark = rule2.remark;
+        let required = rule2.required;
+ 
+
         let list=[];
         let isCheck = $(this).prop('checked');
         console.log('是否选中',isCheck)
         if(isCheck){
+
+            if(remark){
+                $(`.field-remark-${topicId}-${rule2.order}`).show()
+                $(`#remark-${topicId}-${rule2.order}`).val('')
+                FormObject[`remark-${topicId}_${rule2.order}`] = JSON.stringify({order:rule2.order,desp:'',required:required})
+            }
+
+            if(required){
+                $(`#remark-${topicId}-${rule2.order}`).addClass('remarkRed')
+                $(`#remark-${topicId}-${rule2.order}`).attr('data-required','1')
+                // $(`.remark-rule-${topicId}`).show();
+                // $(`.remark-rule-${topicId}`).html('必填项');
+                // $(`.remark-rule-${topicId}`).attr('data-required','1')
+            }
+
             logic.length&&logic.map(item=>{
                 let el = $(`.form-item-${item}`).attr('data-count')*1 + 1;
                 $(`.form-item-${item}`).attr('data-count',el).removeClass('form-item-hide')
@@ -808,6 +982,17 @@
                 })
             })
         }else{
+
+            $(`.field-remark-${topicId}-${rule2.order}`).hide();
+            $(`#remark-${topicId}-${rule2.order}`).val('')
+            delete FormObject[`remark-${topicId}_${rule2.order}`]
+            // FormObject[`remark-${topicId}_${rule2.order}`] = ''
+
+            $(`#remark-${topicId}-${rule2.order}`).removeClass('remarkRed')
+            $(`#remark-${topicId}-${rule2.order}`).attr('data-required','0')
+
+
+
             logic.length&&logic.map(item=>{
                 let el = $(`.form-item-${item}`).attr('data-count')*1 - 1;
                 el = el<0?0:el
@@ -1236,8 +1421,38 @@
         $(`#file-${topicId}`).css('backgroundImage','url(img/upload.png)')
         $(this).css('display','none')
     })
+
+    //备注-必填
+    $(document).on('input','.field-remark',function(){
+        let that = $(this);
+        let value = that.val();
+        let id = that.attr("data-id");
+
+        let isRequired = that.attr('data-required')
+
+        let order = that.attr('data-order')
+        
+        
+        if(order){
+            FormObject[`remark-${id}_${order}`] = JSON.stringify({order:order,desp:value,required:isRequired==='1'});
+        }else{
+            FormObject[`remark-${id}_1`] = JSON.stringify({desp:value,required:isRequired==='1'});
+        }
+        console.log(isRequired,order,FormObject)
+
+        if(value){
+            that.removeClass('remarkRed')
+        }else{
+            if(isRequired === '1'){
+                that.addClass('remarkRed')
+            }else{
+                that.removeClass('remarkRed')
+            }
+        }
+    })
 </script>
 <script>
+
     function submit(){
 
         let ruleList = [];
@@ -1250,6 +1465,11 @@
             weui.topTips('表单填写不规范或必填项没填', 1500);
             return;
         }
+
+        if($('.remarkRed').length){
+            weui.topTips('表单备注没填', 1500);
+            return;
+        }
         
         
 
@@ -1259,24 +1479,56 @@
             if(item.indexOf('checkbox')<0&&item.indexOf('select')<0&&item.indexOf('radio')<0){
                 let list = item.split('=')
                 FormObject[list[0]] = list[1]||''
-                
-                
             }
-            
         })
+
         console.log(FormObject)
 
+        let list = [],remarkList = [],allFormData={};
+        for(let key in FormObject){
+            let regStr = /^remark-[0-9]{19}-[0-9]{1,2}$/;
+            if(regStr.test(key)){
+                // delete FormObject[key]
+            }
+            let regStr2 = /^remark-[0-9]{19}_/;
+            if(regStr2.test(key)){
+                remarkList.push({id:key.substring(7,26),remark:FormObject[key]})
+                // delete FormObject[key]
+            }
+            if(!regStr.test(key)&&!regStr2.test(key)){
+                allFormData[key] = FormObject[key]
+            }
+        }
 
-        let list = [];
-        for(let name in FormObject){
+        console.log(remarkList,FormObject,allFormData)
+        
+        for(let name in allFormData){
             let formName = name.split('-')[0];
             let formId = name.split('-')[1];
             let content = FormObject[name]
             if(formName==='checkbox'){
+                let arr = [];
+                remarkList.map(item=>{
+                    if(formId === item.id&&item.remark){
+                        arr.push(JSON.parse(item.remark))
+                    }
+                })
                 list.push({
                     "topicId": formId,
                     "content": content,
-                    "remark": ""
+                    "remark": arr.length&&JSON.stringify(arr)||''
+                })
+            }else if(formName==='radio'||formName==='select'){
+                let str = '';
+                remarkList.map(item=>{
+                    if(formId === item.id){
+                        str = item.remark
+                    }
+                })
+                list.push({
+                    "topicId": formId,
+                    "content": content,
+                    "remark": str
                 })
             }else{
                 list.push({
@@ -1303,7 +1555,7 @@
             })
         })
         console.log(body)
-
+        // return
         let submitUrl = `${IP}/services/web/config/questionnaireFormAnswer/commitForm/${formId}/${userId}`;
         let submitLoading = weui.loading('提交中...');
         $.ajax({
