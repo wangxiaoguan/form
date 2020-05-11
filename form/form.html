@@ -52,6 +52,14 @@
             color: #ff0000;
             text-indent: 1rem;
         }
+        .field-icon{
+            display: block;
+            float: left;
+            height: 1rem;
+            margin: 0.6rem 0;
+            padding-right:0.6rem;
+            border-left: 0.2rem solid #635CEA;
+        }
         .field-name{
             width: calc(100% - 1rem);
             display: block;
@@ -304,7 +312,7 @@
         var params = {};
 
         let IP = 'http://10.128.151.108:443';
-        let search = '?formId=1259658963182186496&userId=10001'
+        let search = '?formId=1259674933590257664&userId=10001'
         search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
         // var IP = location.origin;
@@ -326,6 +334,7 @@
         var topicList6 = [];//城市
         var topicList7 = [];//日期
         var topicList8 = [];//附件
+        var lastJoinAnswer = [];//上次填写的答案
         
         function getFormData(){
             let DataLoading = weui.loading('数据请求中...');
@@ -335,7 +344,10 @@
                         DataLoading.hide();
                         formData = data.root.object;
                         topicAllList = formData.form.topics;
+                        console.log(formData)
+                        lastJoinAnswer = formData.lastJoinAnswer||[];
                         getTopicList(topicAllList)
+                        setLastAnswer(lastJoinAnswer)
                         $('#app').show()
                     }else{
                         DataLoading.hide();
@@ -383,14 +395,7 @@
                     $('#form').append(fieldItem8([item]).join(''))
                 }
             })
-            
-            // $('#form').append(fieldItem2(topicList2).join(''))
-            // $('#form').append(fieldItem3(topicList3).join(''))
-            // $('#form').append(fieldItem4(topicList4).join(''))
-            // $('#form').append(fieldItem5(topicList5).join(''))
-            // $('#form').append(fieldItem6(topicList6).join(''))
-            // $('#form').append(fieldItem7(topicList7).join(''))
-            // $('#form').append(fieldItem8(topicList8).join(''))
+        
         }
         getFormData()
 </script>
@@ -399,8 +404,8 @@
     //下拉框
     function fieldItem1(data){
         return data.map(item=>{
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'} form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'} form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
+                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
                         <div class="field-div">
                             <input name='select-${item.id}' id="select-${item.id}" data-id="${item.id}" readonly="readonly" unselectable="on" class="field-text field-text-select" placeholder="请选择"/>
                         </div>
@@ -413,8 +418,8 @@
         return data.map(item=>{
             let optionList = item.content;
             let option = optionItem2(item,optionList).join('')
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
+                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
                         ${option}
                         <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
                     </div>`
@@ -424,7 +429,7 @@
     function optionItem2(item,data){
         return data.map(e=>{
                 return `<div class="field-div">
-                            <input type="radio" data-logic='${JSON.stringify(e.logic)}' data-text='${e.content}' data-id='${item.id}' id="radio*${item.id}-${e.order}" name="radio-${item.id}" class="field-radio" value="${e.order}"/><label for="radio*${item.id}-${e.order}">${e.content}</label><br/>
+                            <input type="radio" data-logic='${JSON.stringify(e.logic)}' data-text='${e.content}' data-id='${item.id}' id="radio-${item.id}-${e.order}" name="radio-${item.id}" class="field-radio" value="${e.order}"/><label for="radio-${item.id}-${e.order}">${e.content}</label><br/>
                         </div>`
                 })
     }
@@ -434,8 +439,8 @@
         return data.map(item=>{
             let optionList = item.content;
             let option = optionItem3(item,optionList).join('')
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
+                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
                         ${option}
                         <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
                     </div>`
@@ -448,7 +453,7 @@
         let ruleStr = JSON.stringify(rule)
         return data.map(e=>{
                 return `<div class="field-div">
-                            <input type="checkbox" data-rule='${ruleStr}' data-logic='${JSON.stringify(e.logic)}'' id="checkbox*${item.id}-${e.order}" name="checkbox-${item.id}" class="field-checkbox" value="${e.order}"><label for="checkbox*${item.id}-${e.order}">${e.content}</label><br/>
+                            <input type="checkbox" data-rule='${ruleStr}' data-rule2='${JSON.stringify(e)}' data-content='${e.content}' data-id="${item.id}" data-logic='${JSON.stringify(e.logic)}'' id="checkbox-${item.id}-${e.order}" name="checkbox-${item.id}" class="field-checkbox" value="${e.order}"><label for="checkbox-${item.id}-${e.order}" class="checkbox-${item.id}-${e.order}">${e.content}</label><br/>
                         </div>`
                 })
     }
@@ -460,10 +465,10 @@
             let rule = JSON.parse(item.typeDetailLimit)
             rule.isRequiredQuestions = item.isRequiredQuestions;
             let ruleStr = JSON.stringify(rule)
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
+                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
                         <div class="field-div">
-                            <input type="text" name='number-${item.id}' data-rule='${ruleStr}' class="field-text field-text-number" placeholder="请输入..."/>
+                            <input type="text" name='number-${item.id}' id='number-${item.id}' data-rule='${ruleStr}' class="field-text field-text-number" placeholder="请输入..."/>
                         </div>
                         <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
                     </div>`
@@ -478,10 +483,10 @@
             rule.isRequiredQuestions = item.isRequiredQuestions;
             let ruleStr = JSON.stringify(rule)
             let height = Math.ceil(rule.max/18)
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
+                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
                         <div class="field-div">
-                            <textarea name='textarea-${item.id}' class="field-txt" rows="${height}" data-rule='${ruleStr}' placeholder="请输入...">${item.content||''}</textarea>
+                            <textarea name='textarea-${item.id}' id='textarea-${item.id}' class="field-txt" rows="${height}" data-rule='${ruleStr}' placeholder="请输入...">${item.content||''}</textarea>
                         </div>
                         <div class="field-rule">${item.content?'':item.isRequiredQuestions?'必填项':''}</div>
                     </div>`
@@ -496,10 +501,10 @@
             let includeAll = rule.includeAll?`<div class="field-area">海外地区填写></div>`:''
             let height = Math.ceil(rule.max/18)
             let ruleStr = JSON.stringify(rule)
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
+                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
                         <div class="field-div">
-                            <input type="text" name='address-${item.id}' id="address${item.orderNum}" data-rule='${ruleStr}' readonly="readonly" unselectable="on" class="field-text field-text-address" placeholder="省/市/区/详细地址"/>
+                            <input type="text" name='address-${item.id}' id="address-${item.id}" data-rule='${ruleStr}' readonly="readonly" unselectable="on" class="field-text field-text-address" placeholder="省/市/区/详细地址"/>
                             ${includeAll}
                         </div>
                         <div class="field-rule">${item.content?'':item.isRequiredQuestions?'必填项':''}</div>
@@ -511,10 +516,10 @@
     //日期
     function fieldItem7(data){
         return data.map(item=>{
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
+                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
                         <div class="field-div">
-                            <input type="text" name='date-${item.id}' data-rule='${item.typeDetailLimit}' id="date${item.orderNum}" readonly="readonly" unselectable="on" class="field-text field-text-date"/>
+                            <input type="text" name='date-${item.id}' data-rule='${item.typeDetailLimit}' id="date-${item.id}" readonly="readonly" unselectable="on" class="field-text field-text-date"/>
                         </div>
                         <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
                     </div>`
@@ -540,8 +545,8 @@
             if(rule.indexOf('zip,rar,7z')>-1){
                 acceptType = acceptType + 'application/x-zip-compressed'
             }
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
+                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
                         <div class="field-div">
                             <input type="file" id="file-${item.id}" accept="${acceptType}" data-id="${item.id}"  name="file-${item.id}" data-rule='${item.typeDetailLimit}' class="field-text field-file" />
                             <div class='deleteFile deleteFile-${item.id}' data-rule="${item.isRequiredQuestions}" data-id="${item.id}"></div>
@@ -551,7 +556,6 @@
         })
         
     }
-
     //题目设置
     function setNum(num){
         if(num>9){
@@ -565,7 +569,96 @@
 
 
 </script>
+<script>
+    function setLastAnswer(data){
+        data.map(item=>{
+            console.log(item)
+            let topicId = item.topicId;
+            let type = $(`.form-item-${topicId}`).attr("data-type")
+            $(`.form-item-${topicId}`).children(".field-rule").html('')
+            if(type === '1'){
+                if(item.content){
+                    FormObject[`select-${topicId}`] = item.content;
+                    $(`#select-${topicId}`).val(item.content)
+                    $(`.form-item-${topicId}`).children(".field-rule").html('')
+                }
+            
 
+            }else if(type === '2'){
+                if(item.content){
+                    FormObject[`radio-${topicId}`] = item.content;
+                    let content = item.content
+                    $(`.form-item-${topicId}`).children(".field-rule").html('')
+                    $(`input[name=radio-${topicId}]`).each(function(order){
+                        let text = $(`#radio-${topicId}-${order+1}`).attr('data-text')
+                        if(content===text){
+                            $(`#radio-${topicId}-${order+1}`).attr("checked", 'checked');
+                        }
+                        
+                    })
+                }
+                
+
+            }else if(type === '3'){
+                if(item.content){
+                    FormObject[`checkbox-${topicId}`] = item.content;
+                    let list = item.content.split(';')
+                    $(`.form-item-${topicId}`).children(".field-rule").html('')
+                    $(`input[name=checkbox-${topicId}]`).each(function(order){
+                        let content = $(`#checkbox-${topicId}-${order+1}`).attr('data-content')
+                        if(list.indexOf(content)>-1){
+                            $(`#checkbox-${topicId}-${order+1}`).attr("checked", 'checked');
+                        }
+                    })
+                }
+                
+
+            }else if(type === '4'){
+                if(item.content){
+                    FormObject[`number-${topicId}`] = item.content;
+                    $(`#number-${topicId}`).val(item.content)
+                    $(`.form-item-${topicId}`).children(".field-rule").html('')
+                }
+                
+
+            }else if(type === '5'){
+                if(item.content){
+                    FormObject[`textarea-${topicId}`] = item.content;
+                    $(`#textarea-${topicId}`).val(item.content)
+                    $(`.form-item-${topicId}`).children(".field-rule").html('')
+                }
+            
+
+            }else if(type === '6'){
+                if(item.content){
+                    FormObject[`address-${topicId}`] = item.content;
+                    $(`#address-${topicId}`).val(item.content)
+                    $(`.form-item-${topicId}`).children(".field-rule").html('')
+                }
+                
+            }else if(type === '7'){
+                if(item.content){
+                    FormObject[`date-${topicId}`] = item.content;
+                    $(`#date-${topicId}`).val(item.content)
+                    $(`.form-item-${topicId}`).children(".field-rule").html('')
+                }
+                
+
+            }else if(type === '8'){
+                if(item.content){
+                    FormObject[`file-${topicId}`] = item.content;
+                    $(`.form-item-${topicId}`).children(".field-rule").html('')
+                    $(`#file-${topicId}`).css('backgroundImage','url(img/uploadOk.png)')
+                    $(`.deleteFile-${topicId}`).css('display','block')
+                }
+                
+            }
+        })
+    }
+
+
+
+</script>
 <script>
     
     //下拉框
