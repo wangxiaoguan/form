@@ -6,7 +6,7 @@
     <meta http-equiv="content-type" content="no-cache, must-revalidate" />
     <meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>题目预览</title>
+    <title>预览</title>
     <link rel="stylesheet" type="text/css" href="css/weui.css" />
     <link rel="stylesheet" type="text/css" href="css/validate.css">
     <style>
@@ -17,10 +17,7 @@
             margin:0;
         }
         #app{
-            max-width: 500px;
-            margin: 0 auto;
-            border: 1px solid #c0c0c0;
-            min-height: calc(100% - 2px);
+            width: 100%;
             display: none;
         }
         header>img{
@@ -55,14 +52,6 @@
             color: #ff0000;
             text-indent: 1rem;
         }
-        .field-icon{
-            display: block;
-            float: left;
-            height: 1rem;
-            margin: 0.6rem 0;
-            padding-right:0.6rem;
-            border-left: 0.2rem solid #635CEA;
-        }
         .field-name{
             width: calc(100% - 1rem);
             display: block;
@@ -77,6 +66,8 @@
             font-weight:400;
             color:rgba(181,181,181,1);
             padding: 0.3rem;
+            cursor: pointer;
+            color: #007AFF;
         }
         .field-text{
             display:inline-block;
@@ -102,7 +93,7 @@
         }
         .field-text-date{
             border: 1px solid #e0e0e0;
-            border-radius: 18px;
+            border-radius: 6px;
             padding-left: 40px;
             background-image: url('img/icon_day.png');
             background-size: 16px 20px;
@@ -110,6 +101,8 @@
             background-repeat: no-repeat;
         }
         .field-text-address{
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
             padding-left: 40px;
             background-image: url('img/icon_address.png');
             background-size: 16px 20px;
@@ -118,12 +111,16 @@
         }
         .field-text-select{
             border: 1px solid #e0e0e0;
-            border-radius: 18px;
+            border-radius: 6px;
             padding-left: 20px;
             background-image: url('img/down.png');
             background-size: 16px 20px;
             background-position: 96% 7px;
             background-repeat: no-repeat;
+        }
+        .field-text-number{
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
         }
         .field-txt{
             width: calc(100% - 20px);
@@ -244,11 +241,11 @@
             padding: 2rem 0;
         }
         .submitBtn{
-            width: 60%;
-            margin:0 20%;
+            width:90%;
+            margin:0 5%;
             height: 2.4rem;
-            border-radius: 1.2rem;
-            background: #635CEA;
+            border-radius: 0.4rem;
+            background: #007AFF;
             text-align: center;
             line-height: 2.4rem;
             color: #fff;
@@ -282,6 +279,9 @@
             background-repeat: no-repeat;
             display: none;
         }
+        .orderNum{
+            color: #007AFF;
+        }
     </style>
 </head>
 <body>
@@ -301,22 +301,20 @@
 <script type="text/javascript" src="js/weui.js"></script>
 <script type="text/javascript" src='js/moment.js'></script>
 <script>
-
         var params = {};
 
-        // let IP = 'http://10.128.151.108:443';
-        // let search = '?formId=1250722340382633984&userId=10001'
-        // search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+        let IP = 'http://10.128.151.108:443';
+        let search = '?formId=1259674933590257664&userId=10001'
+        search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
-
-        var IP = location.origin;
-        location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+        // var IP = location.origin;
+        // location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
         var formId = params.formId;
         var userId = params.userId;
         
-        // let url = `${IP}/services/web/config/questionnaireForm/getDetailByFormIdFromCache/${formId}/${userId}/false`;
-        var url = `${IP}/services/web/config/questionnaireForm/getPreview/${formId}`
+        
+        var url = `${IP}/services/web/config/questionnaireForm/getDetailByFormIdFromCache/${formId}/${userId}`;
         var formData = {};//总表单数据
         var topicAllList = [];//总题目列表
         var FormObject = {};//提交表单数据
@@ -332,13 +330,11 @@
         function getFormData(){
             let DataLoading = weui.loading('数据请求中...');
             fetch(url).then(function(res){
-                console.log(res)
-                DataLoading.hide();
                 res.json().then(data=>{
                     if(data.status === 1){
                         DataLoading.hide();
                         formData = data.root.object;
-                        topicAllList = formData.topics;
+                        topicAllList = formData.form.topics;
                         getTopicList(topicAllList)
                         $('#app').show()
                     }else{
@@ -404,8 +400,7 @@
     function fieldItem1(data){
         return data.map(item=>{
             return `<div class="form-item form-item-${item.isShow?'show':'hide'} form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-icon"></span>
-                        <span class="field-name">${item.orderNum}、${item.name}</span><br/>
+                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
                         <div class="field-div">
                             <input name='select-${item.id}' id="select-${item.id}" data-id="${item.id}" readonly="readonly" unselectable="on" class="field-text field-text-select" placeholder="请选择"/>
                         </div>
@@ -419,8 +414,7 @@
             let optionList = item.content;
             let option = optionItem2(item,optionList).join('')
             return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-icon"></span>
-                        <span class="field-name">${item.orderNum}、${item.name}</span><br/>
+                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
                         ${option}
                         <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
                     </div>`
@@ -429,9 +423,8 @@
     }
     function optionItem2(item,data){
         return data.map(e=>{
-            console.log('---------------->',e)
                 return `<div class="field-div">
-                            <input type="radio" data-logic='${JSON.stringify(e.logic)}' data-id='${item.id}' id="radio*${item.id}-${e.order}" name="radio-${item.id}" class="field-radio" value="${e.order}"/><label for="radio*${item.id}-${e.order}">${e.content}</label><br/>
+                            <input type="radio" data-logic='${JSON.stringify(e.logic)}' data-text='${e.content}' data-id='${item.id}' id="radio*${item.id}-${e.order}" name="radio-${item.id}" class="field-radio" value="${e.order}"/><label for="radio*${item.id}-${e.order}">${e.content}</label><br/>
                         </div>`
                 })
     }
@@ -442,8 +435,7 @@
             let optionList = item.content;
             let option = optionItem3(item,optionList).join('')
             return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-icon"></span>
-                        <span class="field-name">${item.orderNum}、${item.name}</span><br/>
+                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
                         ${option}
                         <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
                     </div>`
@@ -452,10 +444,11 @@
     }
     function optionItem3(item,data){
         let rule = JSON.parse(item.typeDetailLimit)
-        rule = JSON.stringify({...rule,isRequiredQuestions:item.isRequiredQuestions})
+        rule.isRequiredQuestions = item.isRequiredQuestions;
+        let ruleStr = JSON.stringify(rule)
         return data.map(e=>{
                 return `<div class="field-div">
-                            <input type="checkbox" data-rule='${rule}' data-logic='${JSON.stringify(e.logic)}'' id="checkbox*${item.id}-${e.order}" name="checkbox-${item.id}" class="field-checkbox" value="${e.order}"><label for="checkbox*${item.id}-${e.order}">${e.content}</label><br/>
+                            <input type="checkbox" data-rule='${ruleStr}' data-logic='${JSON.stringify(e.logic)}'' id="checkbox*${item.id}-${e.order}" name="checkbox-${item.id}" class="field-checkbox" value="${e.order}"><label for="checkbox*${item.id}-${e.order}">${e.content}</label><br/>
                         </div>`
                 })
     }
@@ -465,12 +458,12 @@
         
         return data.map(item=>{
             let rule = JSON.parse(item.typeDetailLimit)
-            rule = JSON.stringify({...rule,isRequiredQuestions:item.isRequiredQuestions})
+            rule.isRequiredQuestions = item.isRequiredQuestions;
+            let ruleStr = JSON.stringify(rule)
             return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-icon"></span>
-                        <span class="field-name">${item.orderNum}、${item.name}</span><br/>
+                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
                         <div class="field-div">
-                            <input type="text" name='number-${item.id}' data-rule='${rule}' class="field-text field-text-number" placeholder="请输入..."/>
+                            <input type="text" name='number-${item.id}' data-rule='${ruleStr}' class="field-text field-text-number" placeholder="请输入..."/>
                         </div>
                         <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
                     </div>`
@@ -481,13 +474,12 @@
     //问答
     function fieldItem5(data){
         return data.map(item=>{
-            // let rule = JSON.parse(item.typeDetailLimit)
             let rule = eval("("+item.typeDetailLimit+")");
-            let ruleStr = JSON.stringify({...rule,isRequiredQuestions:item.isRequiredQuestions})
+            rule.isRequiredQuestions = item.isRequiredQuestions;
+            let ruleStr = JSON.stringify(rule)
             let height = Math.ceil(rule.max/18)
             return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-icon"></span>
-                        <span class="field-name">${item.orderNum}、${item.name}</span><br/>
+                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
                         <div class="field-div">
                             <textarea name='textarea-${item.id}' class="field-txt" rows="${height}" data-rule='${ruleStr}' placeholder="请输入...">${item.content||''}</textarea>
                         </div>
@@ -500,15 +492,14 @@
     //城市
     function fieldItem6(data){
         return data.map(item=>{
-            // let rule = JSON.parse(item.typeDetailLimit)
             let rule = eval("("+item.typeDetailLimit+")");
-            let includeAll = rule.includeAll?`<div class="field-area">海外地区填写</div>`:''
+            let includeAll = rule.includeAll?`<div class="field-area">海外地区填写></div>`:''
             let height = Math.ceil(rule.max/18)
+            let ruleStr = JSON.stringify(rule)
             return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-icon"></span>
-                        <span class="field-name">${item.orderNum}、${item.name}</span><br/>
+                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
                         <div class="field-div">
-                            <input type="text" name='address-${item.id}' id="address${item.orderNum}" readonly="readonly" unselectable="on" class="field-text field-text-address" placeholder="省/市/区/详细地址"/>
+                            <input type="text" name='address-${item.id}' id="address${item.orderNum}" data-rule='${ruleStr}' readonly="readonly" unselectable="on" class="field-text field-text-address" placeholder="省/市/区/详细地址"/>
                             ${includeAll}
                         </div>
                         <div class="field-rule">${item.content?'':item.isRequiredQuestions?'必填项':''}</div>
@@ -520,10 +511,8 @@
     //日期
     function fieldItem7(data){
         return data.map(item=>{
-            // let rule = JSON.parse(item.typeDetailLimit)
             return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-icon"></span>
-                        <span class="field-name">${item.orderNum}、${item.name}</span><br/>
+                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
                         <div class="field-div">
                             <input type="text" name='date-${item.id}' data-rule='${item.typeDetailLimit}' id="date${item.orderNum}" readonly="readonly" unselectable="on" class="field-text field-text-date"/>
                         </div>
@@ -552,8 +541,7 @@
                 acceptType = acceptType + 'application/x-zip-compressed'
             }
             return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-icon"></span>
-                        <span class="field-name">${item.orderNum}、${item.name}</span><br/>
+                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
                         <div class="field-div">
                             <input type="file" id="file-${item.id}" accept="${acceptType}" data-id="${item.id}"  name="file-${item.id}" data-rule='${item.typeDetailLimit}' class="field-text field-file" />
                             <div class='deleteFile deleteFile-${item.id}' data-rule="${item.isRequiredQuestions}" data-id="${item.id}"></div>
@@ -562,6 +550,15 @@
                     </div>`
         })
         
+    }
+
+    //题目设置
+    function setNum(num){
+        if(num>9){
+            return `<span class="orderNum">*${num}</span>`
+        }else{
+            return `<span class="orderNum">*0${num}</span>`
+        }
     }
 
    
@@ -606,6 +603,7 @@
                             let otherlogic = item.logic;
                             otherlogic.length&&otherlogic.map(item=>{
                                 let el = $(`.form-item-${item}`).attr('data-count') - 1;
+                                el = el<0?0:el
                                 $(`.form-item-${item}`).attr('data-count',el)
                                 el===0&&$(`.form-item-${item}`).addClass('form-item-hide')
                                 topicAllList.map(e=>{
@@ -644,6 +642,9 @@
         let name = $(this).attr('name');
         console.log(name)
 
+        let content = $(this).attr('data-text')
+
+        FormObject[name] = content;
         let radioList = $(`input:radio[name="${name}"]`).not(this)
         console.log(radioList)
         radioList.each(function() { 
@@ -653,6 +654,7 @@
                 console.log(otherlogic)
                 otherlogic.length&&otherlogic.map(item=>{
                     let el = $(`.form-item-${item}`).attr('data-count') - 1;
+                    el = el<0?0:el;
                     el===0&&$(`.form-item-${item}`).addClass('form-item-hide').attr('data-count','0')
                     $(`.form-item-${item}`).attr('data-count',el)
                     topicAllList.map(e=>{
@@ -715,6 +717,7 @@
         }else{
             logic.length&&logic.map(item=>{
                 let el = $(`.form-item-${item}`).attr('data-count')*1 - 1;
+                el = el<0?0:el
                 if(el === 0 ){
                     $(`.form-item-${item}`).addClass('form-item-hide')
                     topicAllList.map(e=>{
@@ -817,21 +820,51 @@
     $(document).on('click','.field-text-address',function(){
         let that = $(this)
         let value = $(this).val()
-        weui.picker(chinaCityList, 
+        let list = [];
+        let rule = that.attr("data-rule");
+        
+        rule = JSON.parse(rule)
+        console.log(rule)
+        let min = 3 - rule.min;
+        let provinceLimit = rule.provinceLimit;
+        if(provinceLimit == '100000'){
+            list = chinaCityList
+        }else{
+            list = chinaCityList.filter(item=>{
+                return item.value == provinceLimit
+            })
+        }
+        
+        console.log(list)
+        weui.picker(list, 
             {
-                defaultValue: ['110000','110100','110101'],
+                // defaultValue: ['110000','110100','110101'],
+                depth:min,
                 onChange: function (e) {
                     console.log(e);
                 },
                 onConfirm: function (e) {
                     console.log(e);  
-                    if(e.length===1){
+                    if(min===1){
                         that.val(e[0].label)
-                    }else if(e.length===2){
-                        that.val(`${e[0].label}|${e[1].label}`)
-                    }else if(e.length===3){
-                        that.val(`${e[0].label}|${e[1].label}|${e[2].label}`)
-                    }  
+                    }else if(min===2){
+                        if(e.length===1){
+                            that.val(e[0].label)
+                        }else if(e.length===2){
+                            that.val(`${e[0].label}|${e[1].label}`)
+                        }else if(e.length===3){
+                            that.val(`${e[0].label}|${e[1].label}`)
+                        }
+                    }else if(min===3){
+                        if(e.length===1){
+                            that.val(e[0].label)
+                        }else if(e.length===2){
+                            that.val(`${e[0].label}|${e[1].label}`)
+                        }else if(e.length===3){
+                            that.val(`${e[0].label}|${e[1].label}|${e[2].label}`)
+                        }
+                    }
+  
                     that.parent().parent().children(".field-rule").html('')      
                 }
             }
@@ -856,8 +889,6 @@
                 }
             }
         );
-        
-        
     })
 
     //日期
@@ -872,7 +903,7 @@
         if(format==='YYYY-MM-DD'||format==='YYYY-MM'||format==='YYYY'||format==='MM-DD'||format==='DD'){
             weui.datePicker({
                 start:2000,
-                end:2020,
+                end:2099,
                 // end: new Date(),
                 defaultValue: [new Date().getFullYear(), new Date().getMonth()+1, new Date().getDate()],
                 depth:format==='YYYY-MM-DD'?3:format==='YYYY-MM'?2:format==='YYYY'?1:3,
@@ -885,15 +916,21 @@
                     if(format==='YYYY-MM-DD'){
                         that.val(`${e[0].value}-${e[1].value}-${e[2].value}`)
                         if(rule.min){
-                            let min = new Date(rule.min).getTime() + rule.delay*3600*24*1000;
+                            let min = new Date(rule.min).getTime();
+                            if(Number(rule.delay)>0){
+                                let newDate = moment(new Date()).format('YYYY-MM-DD')
+                                min = new Date(newDate).getTime() + rule.delay*3600*24*1000;
+                            }
                             let max = new Date(rule.max).getTime();
-                            let time = new Date(`${e[0].value}-${e[1].value}-${e[2].value}`).getTime();
+                            let time = new Date(`${e[0].value}-${e[1].value*1<10?'0'+ e[1].value:e[1].value}-${e[2].value}`).getTime();
                             if(time<min||time>max){
-                                that.parent().parent().children(".field-rule").html(`时间限制范围${rule.min}~${rule.max}`)
+                                that.parent().parent().children(".field-rule").html(`时间限制范围${moment(min).format('YYYY-MM-DD')}~${rule.max}`)
                             }else{
                                 that.parent().parent().children(".field-rule").html('')
                             }
                             
+                        }else{
+                            that.parent().parent().children(".field-rule").html('')
                         }
 
                     }else if(format==='YYYY-MM'){
@@ -909,6 +946,8 @@
                             }else{
                                 that.parent().parent().children(".field-rule").html('')
                             }
+                        }else{
+                            that.parent().parent().children(".field-rule").html('')
                         }
                         
                       
@@ -928,6 +967,8 @@
                             }else{
                                 that.parent().parent().children(".field-rule").html('')
                             }
+                        }else{
+                            that.parent().parent().children(".field-rule").html('')
                         }
 
                     }else if(format==='YYYY'){
@@ -941,6 +982,8 @@
                             }else{
                                 that.parent().parent().children(".field-rule").html('')
                             }
+                        }else{
+                            that.parent().parent().children(".field-rule").html('')
                         }
                     }else if(format==='MM'){
                         that.val(`${e[1].value}`)
@@ -954,6 +997,8 @@
                             }else{
                                 that.parent().parent().children(".field-rule").html('')
                             }
+                        }else{
+                            that.parent().parent().children(".field-rule").html('')
                         }
                     }else if(format==='DD'){
                         that.val(`${e[2].value}`)
@@ -970,6 +1015,8 @@
                             }else{
                                 that.parent().parent().children(".field-rule").html('')
                             }
+                        }else{
+                            that.parent().parent().children(".field-rule").html('')
                         }
                     }
                     
@@ -1116,7 +1163,7 @@
         console.log($('#form').serialize());
         let result = $('#form').serialize().split('&')
         result.map(item=>{
-            if(item.indexOf('checkbox')<0&&item.indexOf('select')<0){
+            if(item.indexOf('checkbox')<0&&item.indexOf('select')<0&&item.indexOf('radio')<0){
                 let list = item.split('=')
                 FormObject[list[0]] = list[1]||''
                 
@@ -1178,7 +1225,8 @@
                 if(data.status === 1){
                     setTimeout(()=>{
                         weui.toast('提交成功', 1200);
-                        window.location.href = 'finish.html?ToAPP=1'
+                        // window.location.href = 'finish.html?ToAPP=1'
+                        window.location.href = `${IP}/services/app/static/cicth5/form/finish.html?ToAPP=1`
                     },200)
                 }
             },

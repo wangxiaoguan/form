@@ -31,11 +31,15 @@
             font-family:'Microsoft YaHei';
             font-weight:400;
             color:#666;
-            background-image: url('img/right.png');
+            /* background-image: url('img/right.png');
             background-size: 1.3rem 1.3rem;
             background-position:100%;
             background-repeat: no-repeat;
-            cursor: pointer;
+            cursor: pointer; */
+        }
+        .detailLook{
+            float: right;
+            color: #007aff;
         }
         footer{
             border-bottom:0px solid transparent;
@@ -172,13 +176,13 @@
         var params = {};
 
 
-        // var IP = 'http://10.110.200.62:443';
-        // var search = '?formId=1250722340382633984&userId=10001'
-        // search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+        var IP = 'http://10.128.151.108:443';
+        var search = '?formId=1259658963182186496&userId=10001'
+        search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
 
-        var IP = location.origin;
-        location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+        // var IP = location.origin;
+        // location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
         console.log(params)
         function getFormData(pageNum=1,pageSize=10){
@@ -215,7 +219,7 @@
         function setFormData(data){
             let liStr = '';
             data.map(item=>{
-                liStr = liStr + `<li class="record" data-time="${item.createDate}">${item.createDate}</li>`
+                liStr = liStr + `<li class="record" data-time="${item.createDate}">${item.createDate}<span class="detailLook">查看</span></li>`
             })
             $('.list').html(liStr)
         }

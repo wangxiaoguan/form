@@ -62,11 +62,11 @@
             margin-top: 4rem;
         }
         .submitBtn{
-            width: 60%;
-            margin:0 20%;
+            width:90%;
+            margin:0 5%;
             height: 2.4rem;
-            border-radius: 1.2rem;
-            background: #635CEA;
+            border-radius: 0.4rem;
+            background: #007AFF;
             text-align: center;
             line-height: 2.4rem;
             color: #fff;
@@ -98,13 +98,13 @@
 <script>
         var params = {};
 
-        // let IP = 'http://10.110.200.62:443';
-        // let search = '?formId=1250722340382633984&userId=10001'
-        // search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+        let IP = 'http://10.128.151.108:443';
+        let search = '?formId=1259658963182186496&userId=10001'
+        search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
 
-        var IP = location.origin;
-        location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+        // var IP = location.origin;
+        // location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
         
         console.log(params)
 
