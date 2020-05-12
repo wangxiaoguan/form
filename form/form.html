@@ -357,12 +357,12 @@
 <script>
         var params = {};
 
-        let IP = 'http://10.128.151.108:443';
-        let search = '?formId=1259727100787322880&userId=10001'
-        search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+        // let IP = 'http://10.128.151.108:443';
+        // let search = '?formId=1259810649712390144&userId=10001'
+        // search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
-        // var IP = location.origin;
-        // location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+        var IP = location.origin;
+        location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
         var formId = params.formId;
         var userId = params.userId;
@@ -633,6 +633,7 @@
             $(`.form-item-${topicId}`).children(".field-rule").html('')
             if(type === '1'){
                 if(item.content){
+                    $(`.form-item-${topicId}`).show()
                     FormObject[`select-${topicId}`] = item.content;
                     $(`#select-${topicId}`).val(item.content)
                     $(`.form-item-${topicId}`).children(".field-rule").html('')
@@ -653,6 +654,7 @@
 
             }else if(type === '2'){
                 if(item.content){
+                    $(`.form-item-${topicId}`).show()
                     FormObject[`radio-${topicId}`] = item.content;
                     let content = item.content
                     $(`.form-item-${topicId}`).children(".field-rule").html('')
@@ -679,6 +681,7 @@
 
             }else if(type === '3'){
                 if(item.content){
+                    $(`.form-item-${topicId}`).show()
                     FormObject[`checkbox-${topicId}`] = item.content;
                     let list = item.content.split(';')
                     $(`.form-item-${topicId}`).children(".field-rule").html('')
@@ -707,6 +710,7 @@
 
             }else if(type === '4'){
                 if(item.content){
+                    $(`.form-item-${topicId}`).show()
                     FormObject[`number-${topicId}`] = item.content;
                     $(`#number-${topicId}`).val(item.content)
                     $(`.form-item-${topicId}`).children(".field-rule").html('')
@@ -715,6 +719,7 @@
 
             }else if(type === '5'){
                 if(item.content){
+                    $(`.form-item-${topicId}`).show()
                     FormObject[`textarea-${topicId}`] = item.content;
                     $(`#textarea-${topicId}`).val(item.content)
                     $(`.form-item-${topicId}`).children(".field-rule").html('')
@@ -723,6 +728,7 @@
 
             }else if(type === '6'){
                 if(item.content){
+                    $(`.form-item-${topicId}`).show()
                     FormObject[`address-${topicId}`] = item.content;
                     $(`#address-${topicId}`).val(item.content)
                     $(`.form-item-${topicId}`).children(".field-rule").html('')
@@ -730,6 +736,7 @@
                 
             }else if(type === '7'){
                 if(item.content){
+                    $(`.form-item-${topicId}`).show()
                     FormObject[`date-${topicId}`] = item.content;
                     $(`#date-${topicId}`).val(item.content)
                     $(`.form-item-${topicId}`).children(".field-rule").html('')
@@ -738,6 +745,7 @@
 
             }else if(type === '8'){
                 if(item.content){
+                    $(`.form-item-${topicId}`).show()
                     FormObject[`file-${topicId}`] = item.content;
                     $(`.form-item-${topicId}`).children(".field-rule").html('')
                     $(`#file-${topicId}`).css('backgroundImage','url(img/uploadOk.png)')
@@ -789,7 +797,7 @@
                     if(remark){
                         $(`.field-remark-${topicId}`).show()
                         $(`#remark-${topicId}`).val('')
-                        FormObject[`remark-${topicId}_1`] = JSON.stringify({desp:'',required:required})
+                        FormObject[`remark-${topicId}_1`] = JSON.stringify({desp:'',required:required,logic:logic})
                     }else{
                         $(`.field-remark-${topicId}`).hide();
                         $(`#remark-${topicId}`).val('')
@@ -865,7 +873,7 @@
         if(remark){
             $(`.field-remark-${topicId}`).show()
             $(`#remark-${topicId}`).val('')
-            FormObject[`remark-${topicId}_1`] = JSON.stringify({desp:'',required:required})
+            FormObject[`remark-${topicId}_1`] = JSON.stringify({desp:'',required:required,logic:rule.logic})
         }else{
             $(`.field-remark-${topicId}`).hide();
             $(`#remark-${topicId}`).val('')
@@ -961,7 +969,7 @@
             if(remark){
                 $(`.field-remark-${topicId}-${rule2.order}`).show()
                 $(`#remark-${topicId}-${rule2.order}`).val('')
-                FormObject[`remark-${topicId}_${rule2.order}`] = JSON.stringify({order:rule2.order,desp:'',required:required})
+                FormObject[`remark-${topicId}_${rule2.order}`] = JSON.stringify({order:rule2.order,desp:'',required:required,logic:logic})
             }
 
             if(required){
@@ -1383,7 +1391,9 @@
                     $(`.deleteFile-${topicId}`).css('display','block')
                     $(`.field-rule-${topicId}`).html('')
                     FormObject[`file-${topicId}`] = res.root.object[0].filePath
-                } 
+                }else{
+                    weui.topTips(res.errorMsg, 1500);
+                }
                 console.log(res); 
                 
             }, 
@@ -1434,9 +1444,16 @@
         
         
         if(order){
-            FormObject[`remark-${id}_${order}`] = JSON.stringify({order:order,desp:value,required:isRequired==='1'});
+            let remarkObj = {};
+            remarkObj = JSON.parse(FormObject[`remark-${id}_${order}`]);
+            remarkObj.desp = value;
+            FormObject[`remark-${id}_${order}`] = JSON.stringify(remarkObj);
         }else{
-            FormObject[`remark-${id}_1`] = JSON.stringify({desp:value,required:isRequired==='1'});
+            let remarkObj = {};
+            remarkObj = JSON.parse(FormObject[`remark-${id}_1`]);
+            remarkObj.desp = value;
+            FormObject[`remark-${id}_1`] = JSON.stringify(remarkObj);
+            // FormObject[`remark-${id}_1`] = JSON.stringify({desp:value,required:isRequired==='1'});
         }
         console.log(isRequired,order,FormObject)
 
@@ -1505,24 +1522,26 @@
         for(let name in allFormData){
             let formName = name.split('-')[0];
             let formId = name.split('-')[1];
-            let content = FormObject[name]
+            let content = allFormData[name]
             if(formName==='checkbox'){
-                let arr = [];
+                let arr2 = [];
                 remarkList.map(item=>{
                     if(formId === item.id&&item.remark){
-                        arr.push(JSON.parse(item.remark))
+                        arr2.push(JSON.parse(item.remark))
                     }
                 })
+                
                 list.push({
                     "topicId": formId,
                     "content": content,
-                    "remark": arr.length&&JSON.stringify(arr)||''
+                    "remark": arr2.length?JSON.stringify(arr2):''
                 })
             }else if(formName==='radio'||formName==='select'){
                 let str = '';
                 remarkList.map(item=>{
                     if(formId === item.id){
                         str = item.remark
+            
                     }
                 })
                 list.push({
@@ -1531,6 +1550,7 @@
                     "remark": str
                 })
             }else{
+                console.log(formId)
                 list.push({
                     "topicId": formId,
                     "content": decodeURI(String(content)),
@@ -1543,13 +1563,14 @@
         topicAllList.map(item=>{
             list.map(e=>{
                 if(e.topicId===item.id){
-                    if(item.isShow){
-                        body.push(e)
-                    }else{
-                        e.content = '';
-                        e.remark = '';
-                        body.push(e)
-                    }
+                    body.push(e)
+                    // if(item.isShow){
+                    //     body.push(e)
+                    // }else{
+                    //     e.content = '';
+                    //     e.remark = '';
+                    //     body.push(e)
+                    // }
                 }
                 
             })

@@ -98,13 +98,13 @@
 <script>
         var params = {};
 
-        let IP = 'http://10.128.151.108:443';
-        let search = '?formId=1259658963182186496&userId=10001'
-        search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+        // let IP = 'http://10.128.151.108:443';
+        // let search = '?formId=1259658963182186496&userId=10001'
+        // search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
 
-        // var IP = location.origin;
-        // location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+        var IP = location.origin;
+        location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
         
         console.log(params)
 
