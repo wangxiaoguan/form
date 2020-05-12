@@ -32,7 +32,7 @@
             position: relative;
         }
         label{
-            font-size: 0.8rem;
+            font-size: 16px;
         }
         .form-item-show{
             display: block;
@@ -45,7 +45,7 @@
             /* position: absolute; */
             position: relative;
             left: 0;
-            bottom: 6px;
+            bottom: -2px;
             height: 1.6rem;
             margin: 0 0.5rem;
             font-size: 0.75rem;
@@ -80,11 +80,15 @@
             float: left;
             margin: 0.6rem 0;
             line-height: 1.2rem;
+            font-size: 16px;
+            font-family:'PingFang SC';
+            font-weight:500;
+            color:rgba(51,51,51,1)
         }
         .field-area{
             text-align: right;
             font-size: 1rem;
-            font-family:PingFang SC;
+            font-family:'PingFang SC';
             font-weight:400;
             color:rgba(181,181,181,1);
             padding: 0.3rem;
@@ -95,10 +99,10 @@
             display:inline-block;
             width: 100%;
             font-size:16px;
-            font-family:PingFang SC;
-            font-weight:bold;
-            color:rgba(0,0,0,1);
-            line-height:24px;
+            font-family:'PingFang SC';
+            font-weight:400;
+            color:rgba(51,51,51,1);
+            line-height:16px;
             height: 36px;
             padding: 6px 5px;
             line-height: 1.42857143;
@@ -116,11 +120,11 @@
         .field-remark{
             display:inline-block;
             width: calc(100% - 40px);
-            font-size:16px;
-            font-family:PingFang SC;
-            font-weight:bold;
-            color:rgba(0,0,0,1);
-            line-height:24px;
+            font-size:14px;
+            font-family:'PingFang SC';
+            font-weight:400;
+            color:rgba(51,51,51,1);
+            line-height:14px;
             height: 30px;
             padding: 6px 5px;
             line-height: 1.42857143;
@@ -175,13 +179,37 @@
             border-color: #e0e0e0;
             -webkit-appearance: none;
             font-size:16px;
-            font-family:PingFang SC;
-            font-weight:bold;
+            font-family:'PingFang SC';
+            /* font-weight:bold; */
             color:rgba(0,0,0,1);
             line-height:24px;
         }
+        .field-txt::-webkit-scrollbar{
+            width: 6px;
+            background-color: #f0f0f0;
+        }
+        .field-txt::-webkit-scrollbar-thumb{
+            -webkit-box-shadow:inset 0 0 6px #aaa;
+            border-radius: 3px;
+            background-color: #aaa;
+        }
         .field-div{
-            padding: 0.3rem 0.4rem;
+            padding: 0.8rem 0.4rem  0rem;
+            /* height: 50px; */
+            /* line-height: 50px; */
+            /* border: 0px solid transparent; */
+        }
+        .field-div-select{
+            padding-bottom: 0rem;
+        }
+        .field-div-option{
+            padding: 1rem 0;
+        }
+        .field-div-radio{
+            margin-bottom: 1.2rem;
+        }
+        .field-div-checkbox{
+            margin-bottom: 1.2rem;
         }
         .field-div-remark{
             display: none;
@@ -195,8 +223,8 @@
         .field-radio + label::before {
             content: " ";
             display: inline-block;
-            vertical-align: middle;
-            /* font-size: 18px; */
+            vertical-align: middle;;
+            font-size: 16px;
             width: 18px;
             height: 18px;
             margin-right: .4em;
@@ -305,7 +333,7 @@
             border: none;
             background-image: url('img/upload.png');
             background-size:70px 70px;
-            background-position:30px 0;
+            background-position:0 0;
             background-repeat: no-repeat;
         }
         input[type="file" i]::-webkit-file-upload-button {
@@ -318,7 +346,7 @@
             background: #fff;
             position: absolute;
             top: 28px;
-            left: 92px;
+            left: 64px;
             background-image: url('img/deleteFile.png');
             background-size:24px 24px;
             background-position:0 0;
@@ -358,7 +386,7 @@
         var params = {};
 
         // let IP = 'http://10.128.151.108:443';
-        // let search = '?formId=1259810649712390144&userId=10001'
+        // let search = '?formId=1260133759028326400&userId=10001'
         // search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
         var IP = location.origin;
@@ -451,8 +479,8 @@
     function fieldItem1(data){
         return data.map(item=>{
             return `<div class="form-item form-item-${item.isShow?'show':'hide'} form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
-                        <div class="field-div">
+                        <div class="field-name">${setNum(item.orderNum)}.${item.name}</div><br/>
+                        <div class="field-div field-div-select">
                             <input name='select-${item.id}' id="select-${item.id}" data-id="${item.id}" readonly="readonly" unselectable="on" class="field-text field-text-select" placeholder="请选择"/>
                         </div>
                         <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
@@ -468,7 +496,7 @@
             let optionList = item.content;
             let option = optionItem2(item,optionList).join('')
             return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
+                        <div class="field-name field-div-radio">${setNum(item.orderNum)}.${item.name}</div><br/>
                         ${option}
                         <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
                         <div class="field-div field-div-remark field-remark-${item.id}">
@@ -480,7 +508,7 @@
     }
     function optionItem2(item,data){
         return data.map(e=>{
-                return `<div class="field-div">
+                return `<div class="field-div field-div-option">
                             <input type="radio" data-logic='${JSON.stringify(e.logic)}' data-rule='${JSON.stringify(e)}' data-text='${e.content}' data-id='${item.id}' id="radio-${item.id}-${e.order}" name="radio-${item.id}" class="field-radio" value="${e.order}"/><label for="radio-${item.id}-${e.order}">${e.content}</label><br/>
                         </div>`
                 })
@@ -492,7 +520,7 @@
             let optionList = item.content;
             let option = optionItem3(item,optionList).join('')
             return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
+                        <span class="field-name field-div-checkbox">${setNum(item.orderNum)}.${item.name}</span><br/>
                         ${option}
                         <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
                     </div>`
@@ -504,7 +532,7 @@
         rule.isRequiredQuestions = item.isRequiredQuestions;
         let ruleStr = JSON.stringify(rule)
         return data.map(e=>{
-                return `<div class="field-div">
+                return `<div class="field-div field-div-option">
                             <input type="checkbox" data-rule='${ruleStr}' data-rule2='${JSON.stringify(e)}' data-content='${e.content}' data-id="${item.id}" data-logic='${JSON.stringify(e.logic)}'' id="checkbox-${item.id}-${e.order}" name="checkbox-${item.id}" class="field-checkbox" value="${e.order}"><label for="checkbox-${item.id}-${e.order}" class="checkbox-${item.id}-${e.order}">${e.content}</label><br/>
                             <div class="field-div field-div-remark field-remark-${item.id}-${e.order}">
                                 <span class="beizhu">备注：</span><input name='remark-${item.id}-${e.order}' data-order='${e.order}' data-rule='${JSON.stringify(e)}' id="remark-${item.id}-${e.order}" data-id="${item.id}"  class="field-remark field-text-remark"/>
@@ -523,7 +551,7 @@
             return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
                         <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
                         <div class="field-div">
-                            <input type="text" name='number-${item.id}' id='number-${item.id}' data-rule='${ruleStr}' class="field-text field-text-number" placeholder="请输入..."/>
+                            <input type="text" name='number-${item.id}' id='number-${item.id}' data-rule='${ruleStr}' class="field-text field-text-number" placeholder="请输入数字（只保留小数点后三位）"/>
                         </div>
                         <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
                     </div>`
@@ -537,11 +565,11 @@
             let rule = eval("("+item.typeDetailLimit+")");
             rule.isRequiredQuestions = item.isRequiredQuestions;
             let ruleStr = JSON.stringify(rule)
-            let height = Math.ceil(rule.max/18)
+            // let height = Math.ceil(rule.max/18)
             return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
                         <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
                         <div class="field-div">
-                            <textarea name='textarea-${item.id}' id='textarea-${item.id}' class="field-txt" rows="${height}" data-rule='${ruleStr}' placeholder="请输入...">${item.content||''}</textarea>
+                            <textarea name='textarea-${item.id}' id='textarea-${item.id}' class="field-txt" rows="6" data-rule='${ruleStr}' placeholder="请填写">${item.content||''}</textarea>
                         </div>
                         <div class="field-rule">${item.content?'':item.isRequiredQuestions?'必填项':''}</div>
                     </div>`
@@ -574,7 +602,7 @@
             return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
                         <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
                         <div class="field-div">
-                            <input type="text" name='date-${item.id}' data-rule='${item.typeDetailLimit}' id="date-${item.id}" readonly="readonly" unselectable="on" class="field-text field-text-date"/>
+                            <input type="text" name='date-${item.id}' data-rule='${item.typeDetailLimit}' id="date-${item.id}"  placeholder="请选择日期" readonly="readonly" unselectable="on" class="field-text field-text-date"/>
                         </div>
                         <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
                     </div>`
@@ -636,7 +664,6 @@
                     $(`.form-item-${topicId}`).show()
                     FormObject[`select-${topicId}`] = item.content;
                     $(`#select-${topicId}`).val(item.content)
-                    $(`.form-item-${topicId}`).children(".field-rule").html('')
                 }
                 if(item.remark){
                     FormObject[`remark-${topicId}_1`] = item.remark
@@ -657,7 +684,6 @@
                     $(`.form-item-${topicId}`).show()
                     FormObject[`radio-${topicId}`] = item.content;
                     let content = item.content
-                    $(`.form-item-${topicId}`).children(".field-rule").html('')
                     $(`input[name=radio-${topicId}]`).each(function(order){
                         let text = $(`#radio-${topicId}-${order+1}`).attr('data-text')
                         if(content===text){
@@ -684,7 +710,6 @@
                     $(`.form-item-${topicId}`).show()
                     FormObject[`checkbox-${topicId}`] = item.content;
                     let list = item.content.split(';')
-                    $(`.form-item-${topicId}`).children(".field-rule").html('')
                     $(`input[name=checkbox-${topicId}]`).each(function(order){
                         let content = $(`#checkbox-${topicId}-${order+1}`).attr('data-content')
                         if(list.indexOf(content)>-1){
@@ -713,7 +738,6 @@
                     $(`.form-item-${topicId}`).show()
                     FormObject[`number-${topicId}`] = item.content;
                     $(`#number-${topicId}`).val(item.content)
-                    $(`.form-item-${topicId}`).children(".field-rule").html('')
                 }
                 
 
@@ -722,7 +746,6 @@
                     $(`.form-item-${topicId}`).show()
                     FormObject[`textarea-${topicId}`] = item.content;
                     $(`#textarea-${topicId}`).val(item.content)
-                    $(`.form-item-${topicId}`).children(".field-rule").html('')
                 }
             
 
@@ -731,7 +754,6 @@
                     $(`.form-item-${topicId}`).show()
                     FormObject[`address-${topicId}`] = item.content;
                     $(`#address-${topicId}`).val(item.content)
-                    $(`.form-item-${topicId}`).children(".field-rule").html('')
                 }
                 
             }else if(type === '7'){
@@ -739,7 +761,6 @@
                     $(`.form-item-${topicId}`).show()
                     FormObject[`date-${topicId}`] = item.content;
                     $(`#date-${topicId}`).val(item.content)
-                    $(`.form-item-${topicId}`).children(".field-rule").html('')
                 }
                 
 
@@ -747,7 +768,6 @@
                 if(item.content){
                     $(`.form-item-${topicId}`).show()
                     FormObject[`file-${topicId}`] = item.content;
-                    $(`.form-item-${topicId}`).children(".field-rule").html('')
                     $(`#file-${topicId}`).css('backgroundImage','url(img/uploadOk.png)')
                     $(`.deleteFile-${topicId}`).css('display','block')
                 }
@@ -1061,6 +1081,7 @@
             $(this).parent().parent().children(".field-rule").html('非数字值，请规范填写')
         }else{
             let num = Number(value)
+            let numReg = /[0-9]{1,1000}.[0-9]{4,1000}$/;
             if(!isNaN(rule.min)){
                 if(num<rule.min){
                     $(this).parent().parent().children(".field-rule").html(`数值范围为${rule.min}~${rule.max}`)
@@ -1070,6 +1091,8 @@
                     $(this).parent().parent().children(".field-rule").html(`限制小数输入`)
                 }else if(rule.numbersetup.indexOf('3')<0&&num<0){
                     $(this).parent().parent().children(".field-rule").html(`限制负数输入`)
+                }else if(value.indexOf('.')>-1&&value.match(numReg)){
+                    $(this).parent().parent().children(".field-rule").html(`保留三位小数点`)
                 }else{
                     $(this).parent().parent().children(".field-rule").html('')
                 }
@@ -1078,6 +1101,8 @@
                     $(this).parent().parent().children(".field-rule").html(`限制小数输入`)
                 }else if(rule.numbersetup.indexOf('3')<0&&num<0){
                     $(this).parent().parent().children(".field-rule").html(`限制负数输入`)
+                }else if(value.indexOf('.')>-1&&value.match(numReg)){
+                    $(this).parent().parent().children(".field-rule").html(`保留三位小数点`)
                 }else{
                     $(this).parent().parent().children(".field-rule").html('')
                 }
