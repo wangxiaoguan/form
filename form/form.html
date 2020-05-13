@@ -385,12 +385,12 @@
 <script>
         var params = {};
 
-        let IP = 'http://10.128.151.108:443';
-        let search = '?formId=1260464902740541440&userId=10001'
-        search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+        // let IP = 'http://10.128.151.108:443';
+        // let search = '?formId=1260512257036681216&userId=10001'
+        // search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
-        // var IP = location.origin;
-        // location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+        var IP = location.origin;
+        location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
         var formId = params.formId;
         var userId = params.userId;
@@ -1614,6 +1614,8 @@
                         // window.location.href = 'finish.html?ToAPP=1'
                         window.location.href = `${IP}/services/app/static/cicth5/form/finish.html?ToAPP=1`
                     },200)
+                }else{
+                    weui.topTips(data.errorMsg, 1500);
                 }
             },
             error:function(error){

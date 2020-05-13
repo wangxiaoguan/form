@@ -28,11 +28,11 @@
             padding: 0.5rem 1rem;
         }
         .form-item{
-            padding-bottom: 1.4rem;
+            /* padding-bottom: 1.4rem; */
             position: relative;
         }
         label{
-            font-size: 0.8rem;
+            font-size: 16px;
         }
         .form-item-show{
             display: block;
@@ -42,15 +42,37 @@
         }
         .field-rule{
             width: calc(100% - 1rem);
-            position: absolute;
+            /* position: absolute; */
+            position: relative;
             left: 0;
-            bottom: 6px;
-            height: 1rem;
+            bottom: -2px;
+            height: 1.6rem;
             margin: 0 0.5rem;
             font-size: 0.75rem;
-            line-height: 1rem;
+            line-height: 1.6rem;
             color: #ff0000;
             text-indent: 1rem;
+        }
+        .remark-rule{
+            width: calc(100% - 1rem);
+            /* position: absolute; */
+            position: relative;
+            left: 0;
+            top: 2px;
+            height: 1.6rem;
+            margin: 0 0.5rem;
+            font-size: 0.75rem;
+            line-height: 1.6rem;
+            color: #ff0000;
+            text-indent: 2rem;
+        }
+        .field-icon{
+            display: block;
+            float: left;
+            height: 1rem;
+            margin: 0.6rem 0;
+            padding-right:0.6rem;
+            border-left: 0.2rem solid #635CEA;
         }
         .field-name{
             width: calc(100% - 1rem);
@@ -58,11 +80,15 @@
             float: left;
             margin: 0.6rem 0;
             line-height: 1.2rem;
+            font-size: 16px;
+            font-family:'PingFang SC';
+            font-weight:500;
+            color:rgba(51,51,51,1)
         }
         .field-area{
             text-align: right;
             font-size: 1rem;
-            font-family:PingFang SC;
+            font-family:'PingFang SC';
             font-weight:400;
             color:rgba(181,181,181,1);
             padding: 0.3rem;
@@ -73,10 +99,10 @@
             display:inline-block;
             width: 100%;
             font-size:16px;
-            font-family:PingFang SC;
-            font-weight:bold;
-            color:rgba(0,0,0,1);
-            line-height:24px;
+            font-family:'PingFang SC';
+            font-weight:400;
+            color:rgba(51,51,51,1);
+            line-height:16px;
             height: 36px;
             padding: 6px 5px;
             line-height: 1.42857143;
@@ -89,6 +115,27 @@
             outline: none;
             -webkit-appearance: none;
             border-radius: 0;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+        }
+        .field-remark{
+            display:inline-block;
+            width: calc(100% - 40px);
+            font-size:14px;
+            font-family:'PingFang SC';
+            font-weight:400;
+            color:rgba(51,51,51,1);
+            line-height:14px;
+            height: 30px;
+            padding: 6px 5px;
+            line-height: 1.42857143;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            outline: none;
+            -webkit-appearance: none;
             -webkit-tap-highlight-color: rgba(0,0,0,0);
         }
         .field-text-date{
@@ -132,13 +179,40 @@
             border-color: #e0e0e0;
             -webkit-appearance: none;
             font-size:16px;
-            font-family:PingFang SC;
-            font-weight:bold;
+            font-family:'PingFang SC';
+            /* font-weight:bold; */
             color:rgba(0,0,0,1);
             line-height:24px;
         }
+        .field-txt::-webkit-scrollbar{
+            width: 6px;
+            background-color: #f0f0f0;
+        }
+        .field-txt::-webkit-scrollbar-thumb{
+            -webkit-box-shadow:inset 0 0 6px #aaa;
+            border-radius: 3px;
+            background-color: #aaa;
+        }
         .field-div{
-            padding: 0.3rem 0.4rem;
+            padding: 0.8rem 0.4rem  0rem;
+            /* height: 50px; */
+            /* line-height: 50px; */
+            /* border: 0px solid transparent; */
+        }
+        .field-div-select{
+            padding-bottom: 0rem;
+        }
+        .field-div-option{
+            padding: 1rem 0;
+        }
+        .field-div-radio{
+            margin-bottom: 1.2rem;
+        }
+        .field-div-checkbox{
+            margin-bottom: 1.2rem;
+        }
+        .field-div-remark{
+            display: none;
         }
         .field-radio{
             position: absolute;
@@ -149,8 +223,8 @@
         .field-radio + label::before {
             content: " ";
             display: inline-block;
-            vertical-align: middle;
-            /* font-size: 18px; */
+            vertical-align: middle;;
+            font-size: 16px;
             width: 18px;
             height: 18px;
             margin-right: .4em;
@@ -259,7 +333,7 @@
             border: none;
             background-image: url('img/upload.png');
             background-size:70px 70px;
-            background-position:30px 0;
+            background-position:0 0;
             background-repeat: no-repeat;
         }
         input[type="file" i]::-webkit-file-upload-button {
@@ -272,7 +346,7 @@
             background: #fff;
             position: absolute;
             top: 28px;
-            left: 92px;
+            left: 64px;
             background-image: url('img/deleteFile.png');
             background-size:24px 24px;
             background-position:0 0;
@@ -281,6 +355,14 @@
         }
         .orderNum{
             color: #007AFF;
+        }
+        .beizhu{
+            font-size: 0.8rem;
+            color: #888;
+        }
+        .remarkRed{
+            border-color: #ff0000;
+            box-shadow: 0px 0px 6px #e74040;;
         }
     </style>
 </head>
@@ -304,7 +386,7 @@
         var params = {};
 
         // let IP = 'http://10.128.151.108:443';
-        // let search = '?formId=1259658963182186496&userId=10001'
+        // let search = '?formId=1260457002848649216&userId=10001'
         // search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
         var IP = location.origin;
@@ -326,6 +408,10 @@
         var topicList6 = [];//城市
         var topicList7 = [];//日期
         var topicList8 = [];//附件
+        var lastJoinAnswer = [];//上次填写的答案
+        var selectStatus = {};//下拉单选状态
+        var radioStatus = {};//单选状态
+        var checkStatus = {};//多选状态
         
         function getFormData(){
             let DataLoading = weui.loading('数据请求中...');
@@ -335,7 +421,10 @@
                         DataLoading.hide();
                         formData = data.root.object;
                         topicAllList = formData.form.topics;
+                        console.log(formData)
+                        lastJoinAnswer = formData.lastJoinAnswer||[];
                         getTopicList(topicAllList)
+                        setLastAnswer(lastJoinAnswer)
                         $('#app').show()
                     }else{
                         DataLoading.hide();
@@ -383,14 +472,7 @@
                     $('#form').append(fieldItem8([item]).join(''))
                 }
             })
-            
-            // $('#form').append(fieldItem2(topicList2).join(''))
-            // $('#form').append(fieldItem3(topicList3).join(''))
-            // $('#form').append(fieldItem4(topicList4).join(''))
-            // $('#form').append(fieldItem5(topicList5).join(''))
-            // $('#form').append(fieldItem6(topicList6).join(''))
-            // $('#form').append(fieldItem7(topicList7).join(''))
-            // $('#form').append(fieldItem8(topicList8).join(''))
+        
         }
         getFormData()
 </script>
@@ -399,12 +481,15 @@
     //下拉框
     function fieldItem1(data){
         return data.map(item=>{
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'} form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
-                        <div class="field-div">
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'} form-item-${item.id}" data-id="${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
+                        <div class="field-name">${setNum(item.orderNum)}.${item.name}</div><br/>
+                        <div class="field-div field-div-select">
                             <input name='select-${item.id}' id="select-${item.id}" data-id="${item.id}" readonly="readonly" unselectable="on" class="field-text field-text-select" placeholder="请选择"/>
                         </div>
                         <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
+                        <div class="field-div field-div-remark field-remark-${item.id}">
+                            <span class="beizhu">备注：</span><input name='remark-${item.id}-1' id="remark-${item.id}" data-id="${item.id}" class="field-remark field-text-remark"/>
+                        </div>
                     </div>`
         })
     }
@@ -413,18 +498,21 @@
         return data.map(item=>{
             let optionList = item.content;
             let option = optionItem2(item,optionList).join('')
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-id="${item.id}" data-count="${item.isShow?'1':'0'}">
+                        <div class="field-name field-div-radio">${setNum(item.orderNum)}.${item.name}</div><br/>
                         ${option}
                         <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
+                        <div class="field-div field-div-remark field-remark-${item.id}">
+                            <span class="beizhu">备注：</span><input name='remark-${item.id}-1' id="remark-${item.id}" data-id="${item.id}" class="field-remark field-text-remark"/>
+                        </div>
                     </div>`
         })
         
     }
     function optionItem2(item,data){
         return data.map(e=>{
-                return `<div class="field-div">
-                            <input type="radio" data-logic='${JSON.stringify(e.logic)}' data-text='${e.content}' data-id='${item.id}' id="radio*${item.id}-${e.order}" name="radio-${item.id}" class="field-radio" value="${e.order}"/><label for="radio*${item.id}-${e.order}">${e.content}</label><br/>
+                return `<div class="field-div field-div-option">
+                            <input type="radio" data-logic='${JSON.stringify(e.logic)}' data-rule='${JSON.stringify(e)}' data-text='${e.content}' data-id='${item.id}' id="radio-${item.id}-${e.order}" name="radio-${item.id}" class="field-radio" value="${e.order}"/><label for="radio-${item.id}-${e.order}">${e.content}</label><br/>
                         </div>`
                 })
     }
@@ -434,8 +522,8 @@
         return data.map(item=>{
             let optionList = item.content;
             let option = optionItem3(item,optionList).join('')
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-id="${item.id}" data-count="${item.isShow?'1':'0'}">
+                        <span class="field-name field-div-checkbox">${setNum(item.orderNum)}.${item.name}</span><br/>
                         ${option}
                         <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
                     </div>`
@@ -447,8 +535,11 @@
         rule.isRequiredQuestions = item.isRequiredQuestions;
         let ruleStr = JSON.stringify(rule)
         return data.map(e=>{
-                return `<div class="field-div">
-                            <input type="checkbox" data-rule='${ruleStr}' data-logic='${JSON.stringify(e.logic)}'' id="checkbox*${item.id}-${e.order}" name="checkbox-${item.id}" class="field-checkbox" value="${e.order}"><label for="checkbox*${item.id}-${e.order}">${e.content}</label><br/>
+                return `<div class="field-div field-div-option">
+                            <input type="checkbox" data-rule='${ruleStr}' data-rule2='${JSON.stringify(e)}' data-content='${e.content}' data-id="${item.id}" data-logic='${JSON.stringify(e.logic)}'' id="checkbox-${item.id}-${e.order}" name="checkbox-${item.id}" class="field-checkbox" value="${e.order}"><label for="checkbox-${item.id}-${e.order}" class="checkbox-${item.id}-${e.order}">${e.content}</label><br/>
+                            <div class="field-div field-div-remark field-remark-${item.id}-${e.order}">
+                                <span class="beizhu">备注：</span><input name='remark-${item.id}-${e.order}' data-order='${e.order}' data-rule='${JSON.stringify(e)}' id="remark-${item.id}-${e.order}" data-id="${item.id}"  class="field-remark field-text-remark"/>
+                            </div>
                         </div>`
                 })
     }
@@ -457,13 +548,14 @@
     function fieldItem4(data){
         
         return data.map(item=>{
+            console.log('------------>',item)
             let rule = JSON.parse(item.typeDetailLimit)
             rule.isRequiredQuestions = item.isRequiredQuestions;
             let ruleStr = JSON.stringify(rule)
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-id="${item.id}" data-count="${item.isShow?'1':'0'}">
+                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
                         <div class="field-div">
-                            <input type="text" name='number-${item.id}' data-rule='${ruleStr}' class="field-text field-text-number" placeholder="请输入..."/>
+                            <input type="text" name='number-${item.id}' id='number-${item.id}' data-rule='${ruleStr}' class="field-text field-text-number" placeholder="请输入数字（只保留小数点后三位）"/>
                         </div>
                         <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
                     </div>`
@@ -477,11 +569,11 @@
             let rule = eval("("+item.typeDetailLimit+")");
             rule.isRequiredQuestions = item.isRequiredQuestions;
             let ruleStr = JSON.stringify(rule)
-            let height = Math.ceil(rule.max/18)
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
+            // let height = Math.ceil(rule.max/18)
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-id="${item.id}" data-count="${item.isShow?'1':'0'}">
+                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
                         <div class="field-div">
-                            <textarea name='textarea-${item.id}' class="field-txt" rows="${height}" data-rule='${ruleStr}' placeholder="请输入...">${item.content||''}</textarea>
+                            <textarea name='textarea-${item.id}' id='textarea-${item.id}' class="field-txt" rows="6" data-rule='${ruleStr}' placeholder="请填写">${item.content||''}</textarea>
                         </div>
                         <div class="field-rule">${item.content?'':item.isRequiredQuestions?'必填项':''}</div>
                     </div>`
@@ -496,10 +588,10 @@
             let includeAll = rule.includeAll?`<div class="field-area">海外地区填写></div>`:''
             let height = Math.ceil(rule.max/18)
             let ruleStr = JSON.stringify(rule)
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-id="${item.id}" data-count="${item.isShow?'1':'0'}">
+                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
                         <div class="field-div">
-                            <input type="text" name='address-${item.id}' id="address${item.orderNum}" data-rule='${ruleStr}' readonly="readonly" unselectable="on" class="field-text field-text-address" placeholder="省/市/区/详细地址"/>
+                            <input type="text" name='address-${item.id}' id="address-${item.id}" data-rule='${ruleStr}' readonly="readonly" unselectable="on" class="field-text field-text-address" placeholder="省/市/区/详细地址"/>
                             ${includeAll}
                         </div>
                         <div class="field-rule">${item.content?'':item.isRequiredQuestions?'必填项':''}</div>
@@ -511,10 +603,10 @@
     //日期
     function fieldItem7(data){
         return data.map(item=>{
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-id="${item.id}" data-count="${item.isShow?'1':'0'}">
+                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
                         <div class="field-div">
-                            <input type="text" name='date-${item.id}' data-rule='${item.typeDetailLimit}' id="date${item.orderNum}" readonly="readonly" unselectable="on" class="field-text field-text-date"/>
+                            <input type="text" name='date-${item.id}' data-rule='${item.typeDetailLimit}' id="date-${item.id}"  placeholder="请选择日期" readonly="readonly" unselectable="on" class="field-text field-text-date"/>
                         </div>
                         <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
                     </div>`
@@ -540,8 +632,8 @@
             if(rule.indexOf('zip,rar,7z')>-1){
                 acceptType = acceptType + 'application/x-zip-compressed'
             }
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}、${item.name}</span><br/>
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-id="${item.id}" data-count="${item.isShow?'1':'0'}">
+                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
                         <div class="field-div">
                             <input type="file" id="file-${item.id}" accept="${acceptType}" data-id="${item.id}"  name="file-${item.id}" data-rule='${item.typeDetailLimit}' class="field-text field-file" />
                             <div class='deleteFile deleteFile-${item.id}' data-rule="${item.isRequiredQuestions}" data-id="${item.id}"></div>
@@ -551,7 +643,6 @@
         })
         
     }
-
     //题目设置
     function setNum(num){
         if(num>9){
@@ -565,8 +656,172 @@
 
 
 </script>
-
 <script>
+    function setLastAnswer(data){
+        data.map(item=>{
+            console.log(item)
+            let topicId = item.topicId;
+            let type = $(`.form-item-${topicId}`).attr("data-type")
+            
+            if(type === '1'){
+                if(item.content){
+                    $(`.form-item-${topicId}`).children(".field-rule").html('')
+                    $(`.form-item-${topicId}`).removeClass('form-item-hide')
+                    FormObject[`select-${topicId}`] = item.content;
+                    $(`#select-${topicId}`).val(item.content)
+                }
+                if(item.remark){
+                    let remarkObj1 = JSON.parse(item.remark)
+                    FormObject[`remark-${topicId}_1`] = item.remark
+                    selectStatus.order = remarkObj1.order;
+                    selectStatus.logic = remarkObj1.logic;
+
+                    if(remarkObj1.remark){
+                        $(`.field-remark-${topicId}`).show()
+                        $(`#remark-${topicId}`).val(remarkObj1.desp)
+                        if(remarkObj1.required){
+                            $(`#remark-${topicId}`).attr('data-required','1')
+                        }else{
+                            $(`#remark-${topicId}`).attr('data-required','0')
+                        }
+                        
+                    }
+                    if(remarkObj1.logic.length){
+                        remarkObj1.logic.map(item=>{
+                            let logic = $(`.form-item-${item}`).attr('data-count')
+                            $(`.form-item-${item}`).attr('data-count',logic*1+1)
+                            $(`.form-item-${item}`).removeClass('form-item-hide')
+                        })
+                        
+                    }
+                }
+
+            
+
+            }else if(type === '2'){
+                if(item.content){
+                    $(`.form-item-${topicId}`).children(".field-rule").html('')
+                    $(`.form-item-${topicId}`).removeClass('form-item-hide')
+                    FormObject[`radio-${topicId}`] = item.content;
+                    let content = item.content
+                    $(`input[name=radio-${topicId}]`).each(function(order){
+                        let text = $(`#radio-${topicId}-${order+1}`).attr('data-text')
+                        if(content===text){
+                            $(`#radio-${topicId}-${order+1}`).attr("checked", 'checked');
+                        }
+                        
+                    })
+                }
+                if(item.remark){
+                    let remarkObj2 = JSON.parse(item.remark)
+                    FormObject[`remark-${topicId}_1`] = item.remark;
+                    radioStatus.order = remarkObj2.order;
+                    radioStatus.logic = remarkObj2.logic;
+                    if(remarkObj2.remark){
+                        $(`.field-remark-${topicId}`).show()
+                        $(`#remark-${topicId}`).val(remarkObj2.desp)
+                        if(remarkObj2.required){
+                            $(`#remark-${topicId}`).attr('data-required','1')
+                        }else{
+                            $(`#remark-${topicId}`).attr('data-required','0')
+                        }
+                    }
+                    if(remarkObj2.logic.length){
+                        remarkObj2.logic.map(item=>{
+                            let logic = $(`.form-item-${item}`).attr('data-count')
+                            $(`.form-item-${item}`).attr('data-count',logic*1+1)
+                            $(`.form-item-${item}`).removeClass('form-item-hide')
+                        })
+                    }
+                }
+                
+                
+
+            }else if(type === '3'){
+                if(item.content){
+                    $(`.form-item-${topicId}`).children(".field-rule").html('')
+                    $(`.form-item-${topicId}`).removeClass('form-item-hide')
+                    FormObject[`checkbox-${topicId}`] = item.content;
+                    let list = item.content.split(';')
+                    $(`input[name=checkbox-${topicId}]`).each(function(order){
+                        let content = $(`#checkbox-${topicId}-${order+1}`).attr('data-content')
+                        if(list.indexOf(content)>-1){
+                            $(`#checkbox-${topicId}-${order+1}`).attr("checked", 'checked');
+                        }
+                    })
+                }
+                if(item.remark){
+                    let remarkList = JSON.parse(item.remark)
+                    remarkList.map(item2=>{
+                        if(item2.remark){
+                            $(`.field-remark-${topicId}-${item2.order}`).show()
+                            $(`#remark-${topicId}-${item2.order}`).val(item2.desp)
+                        }
+                        FormObject[`remark-${topicId}_${item2.order}`] = JSON.stringify(item2)
+                        if(item2.required){
+                            $(`#remark-${topicId}-${item2.order}`).attr('data-required','1')
+                        }else{
+                            $(`#remark-${topicId}-${item2.order}`).attr('data-required','0')
+                        }
+                    })
+                    
+                }
+                
+
+            }else if(type === '4'){
+                if(item.content){
+                    $(`.form-item-${topicId}`).children(".field-rule").html('')
+                    $(`.form-item-${topicId}`).removeClass('form-item-hide')
+                    FormObject[`number-${topicId}`] = item.content;
+                    $(`#number-${topicId}`).val(item.content)
+                }
+                
+
+            }else if(type === '5'){
+                if(item.content){
+                    $(`.form-item-${topicId}`).children(".field-rule").html('')
+                    $(`.form-item-${topicId}`).removeClass('form-item-hide')
+                    FormObject[`textarea-${topicId}`] = item.content;
+                    $(`#textarea-${topicId}`).val(item.content)
+                }
+            
+
+            }else if(type === '6'){
+                if(item.content){
+                    $(`.form-item-${topicId}`).children(".field-rule").html('')
+                    $(`.form-item-${topicId}`).removeClass('form-item-hide')
+                    FormObject[`address-${topicId}`] = item.content;
+                    $(`#address-${topicId}`).val(item.content)
+                }
+                
+            }else if(type === '7'){
+                if(item.content){
+                    $(`.form-item-${topicId}`).children(".field-rule").html('')
+                    $(`.form-item-${topicId}`).removeClass('form-item-hide')
+                    FormObject[`date-${topicId}`] = item.content;
+                    $(`#date-${topicId}`).val(item.content)
+                }
+                
+
+            }else if(type === '8'){
+                if(item.content){
+                    $(`.form-item-${topicId}`).children(".field-rule").html('')
+                    $(`.form-item-${topicId}`).removeClass('form-item-hide')
+                    FormObject[`file-${topicId}`] = item.content;
+                    $(`#file-${topicId}`).css('backgroundImage','url(img/uploadOk.png)')
+                    $(`.deleteFile-${topicId}`).css('display','block')
+                }
+                
+            }
+        })
+        console.log(FormObject)
+    }
+
+    
+
+</script>
+<script>
+
     
     //下拉框
     $(document).on('click','.field-text-select',function(){
@@ -595,36 +850,69 @@
                     let order = e[0].order;
                     console.log(logic)
 
-                    FormObject[name] = e[0].label;
-                    console.log(FormObject)
 
-                    list.map(item=>{
-                        if(item.order!==order){
-                            let otherlogic = item.logic;
-                            otherlogic.length&&otherlogic.map(item=>{
-                                let el = $(`.form-item-${item}`).attr('data-count') - 1;
-                                el = el<0?0:el
-                                $(`.form-item-${item}`).attr('data-count',el)
-                                el===0&&$(`.form-item-${item}`).addClass('form-item-hide')
-                                topicAllList.map(e=>{
-                                    if(e.id===item){
-                                        e.isShow = false;
-                                    }
-                                })
-                            })
+                    if(order !== selectStatus.order&&selectStatus.order||undefined === selectStatus.order){
+                        selectStatus.order = order
+                        selectStatus.logic = logic
+
+                        FormObject[name] = e[0].label;
+                        console.log(FormObject)
+
+                        let remark = e[0].remark;
+                        let required = e[0].required;
+                        
+                        if(remark){
+                            $(`.field-remark-${topicId}`).show()
+                            $(`#remark-${topicId}`).val('')
+                            // FormObject[`remark-${topicId}_1`] = JSON.stringify({desp:'',required:required,logic:logic})
+                            FormObject[`remark-${topicId}_1`] = JSON.stringify({order:order,remark:remark,desp:'',required:required,logic:logic})
+                        }else{
+                            $(`.field-remark-${topicId}`).hide();
+                            $(`#remark-${topicId}`).val('')
+                            // FormObject[`remark-${topicId}_1`] = ''
+                            FormObject[`remark-${topicId}_1`] = JSON.stringify({order:order,remark:remark,desp:'',required:required,logic:logic})
                         }
-                    })
+                        if(required){
+                            $(`#remark-${topicId}`).addClass('remarkRed')
+                            $(`#remark-${topicId}`).attr('data-required','1')
+                            // $(`.remark-rule-${topicId}`).show();
+                            // $(`.remark-rule-${topicId}`).html('必填项');
+                            // $(`.remark-rule-${topicId}`).attr('data-required','1')
+                        }else{
+                            $(`#remark-${topicId}`).removeClass('remarkRed')
+                            $(`#remark-${topicId}`).attr('data-required','0')
+                            // $(`.remark-rule-${topicId}`).hide();
+                            // $(`.remark-rule-${topicId}`).html('');
+                            // $(`.remark-rule-${topicId}`).attr('data-required','0')
+                        }
 
-                    logic.length&&logic.map(item=>{
-                        let el = $(`.form-item-${item}`).attr('data-count')*1 + 1;
-                        $(`.form-item-${item}`).attr('data-count',el).removeClass('form-item-hide')
-                        topicAllList.map(e=>{
-                            if(e.id===item){
-                                e.isShow = true;
+                        list.map(item=>{
+                            if(item.order!==order){
+                                let otherlogic = item.logic;
+                                otherlogic.length&&otherlogic.map(item=>{
+                                    let el = $(`.form-item-${item}`).attr('data-count') - 1;
+                                    el = el<0?0:el
+                                    $(`.form-item-${item}`).attr('data-count',el)
+                                    el===0&&$(`.form-item-${item}`).addClass('form-item-hide')
+                                    topicAllList.map(e=>{
+                                        if(e.id===item){
+                                            e.isShow = false;
+                                        }
+                                    })
+                                })
                             }
                         })
-                    })
-                    
+
+                        logic.length&&logic.map(item=>{
+                            let el = $(`.form-item-${item}`).attr('data-count')*1 + 1;
+                            $(`.form-item-${item}`).attr('data-count',el).removeClass('form-item-hide')
+                            topicAllList.map(e=>{
+                                if(e.id===item){
+                                    e.isShow = true;
+                                }
+                            })
+                        })
+                    }
                 }
         });
     })
@@ -632,6 +920,8 @@
     //单选框
     $(document).on('click','.field-radio',function(){
         $(this).attr('data-check','1')
+
+        let that = $(this)
 
         let value = $(this).val()
         console.log(value)
@@ -644,44 +934,83 @@
 
         let content = $(this).attr('data-text')
 
-        FormObject[name] = content;
-        let radioList = $(`input:radio[name="${name}"]`).not(this)
-        console.log(radioList)
-        radioList.each(function() { 
-            if($(this).attr('data-check')==='1'){
-                let otherlogic = $(this).attr('data-logic');
-                otherlogic = JSON.parse(otherlogic);
-                console.log(otherlogic)
-                otherlogic.length&&otherlogic.map(item=>{
-                    let el = $(`.form-item-${item}`).attr('data-count') - 1;
-                    el = el<0?0:el;
-                    el===0&&$(`.form-item-${item}`).addClass('form-item-hide').attr('data-count','0')
-                    $(`.form-item-${item}`).attr('data-count',el)
-                    topicAllList.map(e=>{
-                        if(e.id===item){
-                            e.isShow = false;
-                        }
-                    })
-                    
-                })
-            }
-            $(this).attr('data-check','0');
-        });
+        let rule = JSON.parse(that.attr('data-rule'))
+        console.log(rule)
 
-        let logic = $(this).attr('data-logic');
-        logic = JSON.parse(logic)
-        console.log(logic)
-        logic.length&&logic.map(item=>{
-            let el = $(`.form-item-${item}`).attr('data-count')*1 + 1;
-            $(`.form-item-${item}`).attr('data-count',el).removeClass('form-item-hide')
-            topicAllList.map(e=>{
-                if(e.id===item){
-                    e.isShow = true;
+        let remark = rule.remark;
+        let required = rule.required;
+
+        let logic1 = rule.logic;
+        let order1 = rule.order;
+        console.log(logic1,order1)
+
+
+        if(order1 !== radioStatus.order&&radioStatus.order||undefined === radioStatus.order){
+            radioStatus.order = order1
+            radioStatus.logic = logic1
+            if(remark){
+                $(`.field-remark-${topicId}`).show()
+                $(`#remark-${topicId}`).val('')
+                // FormObject[`remark-${topicId}_1`] = JSON.stringify({desp:'',required:required,logic:rule.logic})
+                FormObject[`remark-${topicId}_1`] = JSON.stringify({order:order1,remark:remark,desp:'',required:required,logic:rule.logic})
+            }else{
+                $(`.field-remark-${topicId}`).hide();
+                $(`#remark-${topicId}`).val('')
+                // FormObject[`remark-${topicId}_1`] = ''
+                FormObject[`remark-${topicId}_1`] = JSON.stringify({order:order1,remark:remark,desp:'',required:required,logic:rule.logic})
+            }
+            if(required){
+                $(`#remark-${topicId}`).addClass('remarkRed')
+                $(`#remark-${topicId}`).attr('data-required','1')
+                // $(`.remark-rule-${topicId}`).show();
+                // $(`.remark-rule-${topicId}`).html('必填项');
+                // $(`.remark-rule-${topicId}`).attr('data-required','1')
+            }else{
+                $(`#remark-${topicId}`).removeClass('remarkRed')
+                $(`#remark-${topicId}`).attr('data-required','0')
+                // $(`.remark-rule-${topicId}`).hide();
+                // $(`.remark-rule-${topicId}`).html('');
+                // $(`.remark-rule-${topicId}`).attr('data-required','0')
+            }
+
+            FormObject[name] = content;
+            let radioList = $(`input:radio[name="${name}"]`).not(this)
+            console.log(radioList)
+            radioList.each(function() { 
+                if($(this).attr('data-check')==='1'){
+                    let otherlogic = $(this).attr('data-logic');
+                    otherlogic = JSON.parse(otherlogic);
+                    console.log(otherlogic)
+                    otherlogic.length&&otherlogic.map(item=>{
+                        let el = $(`.form-item-${item}`).attr('data-count') - 1;
+                        el = el<0?0:el;
+                        el===0&&$(`.form-item-${item}`).addClass('form-item-hide').attr('data-count','0')
+                        $(`.form-item-${item}`).attr('data-count',el)
+                        topicAllList.map(e=>{
+                            if(e.id===item){
+                                e.isShow = false;
+                            }
+                        })
+                        
+                    })
                 }
+                $(this).attr('data-check','0');
+            });
+
+            let logic = $(this).attr('data-logic');
+            logic = JSON.parse(logic)
+            console.log(logic)
+            logic.length&&logic.map(item=>{
+                let el = $(`.form-item-${item}`).attr('data-count')*1 + 1;
+                $(`.form-item-${item}`).attr('data-count',el).removeClass('form-item-hide')
+                topicAllList.map(e=>{
+                    if(e.id===item){
+                        e.isShow = true;
+                    }
+                })
             })
-        })
-        $(this).parent().parent().children(".field-rule").html('')
-        
+            $(this).parent().parent().children(".field-rule").html('')
+        }
     })
 
     //多选框
@@ -694,17 +1023,47 @@
         let name = $(this).attr('name')
         console.log(name)
 
+        let topicId = $(this).attr('data-id')
+
         let rule = JSON.parse(that.attr("data-rule"));
-        console.log('多选框',rule)
+        console.log(rule)
+
+        let rule2 = JSON.parse(that.attr("data-rule2"));
+        console.log('多选框规则',rule2)
+
 
         let logic = $(this).attr('data-logic');
         logic = JSON.parse(logic)
         console.log(logic)
 
+
+        let remark = rule2.remark;
+        let required = rule2.required;
+ 
+
         let list=[];
         let isCheck = $(this).prop('checked');
         console.log('是否选中',isCheck)
         if(isCheck){
+
+            if(remark){
+                $(`.field-remark-${topicId}-${rule2.order}`).show()
+                $(`#remark-${topicId}-${rule2.order}`).val('')
+                // FormObject[`remark-${topicId}_${rule2.order}`] = JSON.stringify({order:rule2.order,desp:'',required:required,logic:logic})
+                FormObject[`remark-${topicId}_${rule2.order}`] = JSON.stringify({remark:remark,order:rule2.order,desp:'',required:required,logic:logic})
+            }else{
+                FormObject[`remark-${topicId}_${rule2.order}`] = JSON.stringify({remark:remark,order:rule2.order,desp:'',required:required,logic:logic})
+
+            }
+
+            if(required){
+                $(`#remark-${topicId}-${rule2.order}`).addClass('remarkRed')
+                $(`#remark-${topicId}-${rule2.order}`).attr('data-required','1')
+                // $(`.remark-rule-${topicId}`).show();
+                // $(`.remark-rule-${topicId}`).html('必填项');
+                // $(`.remark-rule-${topicId}`).attr('data-required','1')
+            }
+
             logic.length&&logic.map(item=>{
                 let el = $(`.form-item-${item}`).attr('data-count')*1 + 1;
                 $(`.form-item-${item}`).attr('data-count',el).removeClass('form-item-hide')
@@ -715,6 +1074,17 @@
                 })
             })
         }else{
+
+            $(`.field-remark-${topicId}-${rule2.order}`).hide();
+            $(`#remark-${topicId}-${rule2.order}`).val('')
+            delete FormObject[`remark-${topicId}_${rule2.order}`]
+            // FormObject[`remark-${topicId}_${rule2.order}`] = ''
+
+            $(`#remark-${topicId}-${rule2.order}`).removeClass('remarkRed')
+            $(`#remark-${topicId}-${rule2.order}`).attr('data-required','0')
+
+
+
             logic.length&&logic.map(item=>{
                 let el = $(`.form-item-${item}`).attr('data-count')*1 - 1;
                 el = el<0?0:el
@@ -775,6 +1145,7 @@
             $(this).parent().parent().children(".field-rule").html('非数字值，请规范填写')
         }else{
             let num = Number(value)
+            let numReg = /[0-9]{1,1000}.[0-9]{4,1000}$/;
             if(!isNaN(rule.min)){
                 if(num<rule.min){
                     $(this).parent().parent().children(".field-rule").html(`数值范围为${rule.min}~${rule.max}`)
@@ -784,6 +1155,8 @@
                     $(this).parent().parent().children(".field-rule").html(`限制小数输入`)
                 }else if(rule.numbersetup.indexOf('3')<0&&num<0){
                     $(this).parent().parent().children(".field-rule").html(`限制负数输入`)
+                }else if(value.indexOf('.')>-1&&value.match(numReg)){
+                    $(this).parent().parent().children(".field-rule").html(`保留三位小数点`)
                 }else{
                     $(this).parent().parent().children(".field-rule").html('')
                 }
@@ -792,6 +1165,8 @@
                     $(this).parent().parent().children(".field-rule").html(`限制小数输入`)
                 }else if(rule.numbersetup.indexOf('3')<0&&num<0){
                     $(this).parent().parent().children(".field-rule").html(`限制负数输入`)
+                }else if(value.indexOf('.')>-1&&value.match(numReg)){
+                    $(this).parent().parent().children(".field-rule").html(`保留三位小数点`)
                 }else{
                     $(this).parent().parent().children(".field-rule").html('')
                 }
@@ -916,13 +1291,13 @@
                     if(format==='YYYY-MM-DD'){
                         that.val(`${e[0].value}-${e[1].value}-${e[2].value}`)
                         if(rule.min){
-                            let min = new Date(rule.min).getTime();
+                            let min = new Date(rule.min.replace(/-/g,'/')).getTime();
                             if(Number(rule.delay)>0){
-                                let newDate = moment(new Date()).format('YYYY-MM-DD')
+                                let newDate = moment(new Date()).format('YYYY/MM/DD')
                                 min = new Date(newDate).getTime() + rule.delay*3600*24*1000;
                             }
-                            let max = new Date(rule.max).getTime();
-                            let time = new Date(`${e[0].value}-${e[1].value*1<10?'0'+ e[1].value:e[1].value}-${e[2].value}`).getTime();
+                            let max = new Date(rule.max.replace(/-/g,'/')).getTime();
+                            let time = new Date(`${e[0].value}/${e[1].value*1<10?'0'+ e[1].value:e[1].value}/${e[2].value}`).getTime();
                             if(time<min||time>max){
                                 that.parent().parent().children(".field-rule").html(`时间限制范围${moment(min).format('YYYY-MM-DD')}~${rule.max}`)
                             }else{
@@ -936,10 +1311,10 @@
                     }else if(format==='YYYY-MM'){
                         that.val(`${e[0].value}-${e[1].value}`)
                         if(rule.min){
-                            let min = new Date(moment(rule.min).format('YYYY-MM-01')).getTime();
-                            let max = new Date(rule.max).getTime();
+                            let min = new Date(moment(rule.min).format('YYYY/MM/01')).getTime();
+                            let max = new Date(rule.max.replace(/-/g,'/')).getTime();
                             console.log(`${e[0].value}-${e[1].value}-01`)
-                            let nowTime = new Date(moment(`${e[0].value}-${e[1].value}-01`).format('YYYY-MM-01')).getTime();
+                            let nowTime = new Date(moment(`${e[0].value}-${e[1].value*1<10?'0'+ e[1].value:e[1].value}-01`).format('YYYY/MM/DD')).getTime();
                             console.log(min,nowTime,max)
                             if(nowTime<min||nowTime>max){
                                 that.parent().parent().children(".field-rule").html(`时间限制范围${moment(rule.min).format('YYYY-MM')}~${moment(rule.max).format('YYYY-MM')}`)
@@ -954,22 +1329,23 @@
 
                     }else if(format==='MM-DD'){
                         that.val(`${e[1].value}-${e[2].value}`)
-                        if(rule.min){
-                            let year = new Date().getFullYear();
-                            let month = new Date().getMonth()+1
+                        that.parent().parent().children(".field-rule").html('')
+                        console.log('月日')
+                        // if(rule.min){
+                        //     let year = new Date().getFullYear();
+                        //     let month = new Date().getMonth()+1
 
-                            let min = new Date(moment(rule.min).format('YYYY-MM-DD')).getTime();
-                            let max = new Date(rule.max).getTime();
-                            let nowTime = new Date(moment(`${year}-${e[1].value}-${e[2].value}`).format('YYYY-MM-DD')).getTime();
-                            console.log(year,month,min,nowTime,max)
-                            if(nowTime<min||nowTime>max){
-                                that.parent().parent().children(".field-rule").html(`时间限制范围${moment(rule.min).format('YYYY-MM-DD')}~${moment(rule.max).format('YYYY-MM-DD')}`)
-                            }else{
-                                that.parent().parent().children(".field-rule").html('')
-                            }
-                        }else{
-                            that.parent().parent().children(".field-rule").html('')
-                        }
+                        //     let min = new Date(moment(rule.min).format('YYYY/MM/DD')).getTime();
+                        //     let max = new Date(rule.max).getTime();
+                        //     let nowTime = new Date(moment(`${year}-${e[1].value}-${e[2].value}`).format('YYYY/MM/DD')).getTime();
+                        //     if(nowTime<min||nowTime>max){
+                        //         that.parent().parent().children(".field-rule").html(`时间限制范围${moment(rule.min).format('YYYY-MM-DD')}~${moment(rule.max).format('YYYY-MM-DD')}`)
+                        //     }else{
+                        //         that.parent().parent().children(".field-rule").html('')
+                        //     }
+                        // }else{
+                        //     that.parent().parent().children(".field-rule").html('')
+                        // }
 
                     }else if(format==='YYYY'){
                         that.val(`${e[0].value}`)
@@ -987,37 +1363,41 @@
                         }
                     }else if(format==='MM'){
                         that.val(`${e[1].value}`)
-                        if(rule.min){
-                            let min = new Date(moment(rule.min).format('YYYY-MM-01')).getTime();
-                            let max = new Date(rule.max).getTime();
-                            let nowTime = new Date(moment(`2020-${e[1].value}-01`).format('YYYY-MM-01')).getTime();
-                            console.log(min,nowTime,max)
-                            if(nowTime<min||nowTime>max){
-                                that.parent().parent().children(".field-rule").html(`时间限制范围${moment(rule.min).format('YYYY-MM')}~${moment(rule.max).format('YYYY-MM')}`)
-                            }else{
-                                that.parent().parent().children(".field-rule").html('')
-                            }
-                        }else{
-                            that.parent().parent().children(".field-rule").html('')
-                        }
+                        that.parent().parent().children(".field-rule").html('')
+                        // if(rule.min){
+                        //     let min = new Date(moment(rule.min).format('YYYY/MM/01')).getTime();
+                        //     let max = new Date(rule.max.replace(/-/g,'/')).getTime();
+                        //     let nowTime = new Date(moment(`2020-${e[1].value}-01`).format('YYYY/MM/01')).getTime();
+                        //     console.log(min,nowTime,max)
+                        //     if(nowTime<min||nowTime>max){
+                        //         that.parent().parent().children(".field-rule").html(`时间限制范围${moment(rule.min).format('YYYY-MM')}~${moment(rule.max).format('YYYY-MM')}`)
+                        //     }else{
+                        //         that.parent().parent().children(".field-rule").html('')
+                        //     }
+                        // }else{
+                        //     that.parent().parent().children(".field-rule").html('')
+                        // }
                     }else if(format==='DD'){
                         that.val(`${e[2].value}`)
-                        if(rule.min){
-                            let year = new Date().getFullYear();
-                            let month = new Date().getMonth()+1
+                        that.parent().parent().children(".field-rule").html('')
+                        console.log('日')
 
-                            let min = new Date(moment(rule.min).format('YYYY-MM-DD')).getTime();
-                            let max = new Date(rule.max).getTime();
-                            let nowTime = new Date(`${year}-${month}-${e[2].value}`).getTime();
+                        // if(rule.min){
+                        //     let year = new Date().getFullYear();
+                        //     let month = new Date().getMonth()+1
+
+                        //     let min = new Date(moment(rule.min).format('YYYY/MM/DD')).getTime();
+                        //     let max = new Date(rule.max.replace(/-/g,'/')).getTime();
+                        //     let nowTime = new Date(`${year}/${month}/${e[2].value}`).getTime();
                             
-                            if(nowTime<min||nowTime>max){
-                                that.parent().parent().children(".field-rule").html(`时间限制范围${moment(rule.min).format('YYYY-MM-DD')}~${moment(rule.max).format('YYYY-MM-DD')}`)
-                            }else{
-                                that.parent().parent().children(".field-rule").html('')
-                            }
-                        }else{
-                            that.parent().parent().children(".field-rule").html('')
-                        }
+                        //     if(nowTime<min||nowTime>max){
+                        //         that.parent().parent().children(".field-rule").html(`时间限制范围${moment(rule.min).format('YYYY-MM-DD')}~${moment(rule.max).format('YYYY-MM-DD')}`)
+                        //     }else{
+                        //         that.parent().parent().children(".field-rule").html('')
+                        //     }
+                        // }else{
+                        //     that.parent().parent().children(".field-rule").html('')
+                        // }
                     }
                     
                     
@@ -1045,6 +1425,7 @@
                         console.log(e);
                         that.val(e[0].value)
                         that.parent().parent().children(".field-rule").html('')
+                        console.log('月')
                     }
             });
         }
@@ -1105,7 +1486,9 @@
                     $(`.deleteFile-${topicId}`).css('display','block')
                     $(`.field-rule-${topicId}`).html('')
                     FormObject[`file-${topicId}`] = res.root.object[0].filePath
-                } 
+                }else{
+                    weui.topTips(res.errorMsg, 1500);
+                }
                 console.log(res); 
                 
             }, 
@@ -1143,8 +1526,45 @@
         $(`#file-${topicId}`).css('backgroundImage','url(img/upload.png)')
         $(this).css('display','none')
     })
+
+    //备注-必填
+    $(document).on('input','.field-remark',function(){
+        let that = $(this);
+        let value = that.val();
+        let id = that.attr("data-id");
+
+        let isRequired = that.attr('data-required')
+
+        let order = that.attr('data-order')
+        
+        
+        if(order){
+            let remarkObj = {};
+            remarkObj = JSON.parse(FormObject[`remark-${id}_${order}`]);
+            remarkObj.desp = value;
+            FormObject[`remark-${id}_${order}`] = JSON.stringify(remarkObj);
+        }else{
+            let remarkObj = {};
+            remarkObj = JSON.parse(FormObject[`remark-${id}_1`]);
+            remarkObj.desp = value;
+            FormObject[`remark-${id}_1`] = JSON.stringify(remarkObj);
+            // FormObject[`remark-${id}_1`] = JSON.stringify({desp:value,required:isRequired==='1'});
+        }
+        console.log(isRequired,order,FormObject)
+
+        if(value){
+            that.removeClass('remarkRed')
+        }else{
+            if(isRequired === '1'){
+                that.addClass('remarkRed')
+            }else{
+                that.removeClass('remarkRed')
+            }
+        }
+    })
 </script>
 <script>
+
     function submit(){
 
         let ruleList = [];
@@ -1157,35 +1577,80 @@
             weui.topTips('表单填写不规范或必填项没填', 1500);
             return;
         }
-        
-        
 
+        if($('.remarkRed').length){
+            weui.topTips('表单备注没填', 1500);
+            return;
+        }
+        let visibleIds = []
+        $('.form-item:visible').each(function() { 
+            let idStr = $(this).attr('data-id')
+            visibleIds.push(idStr)
+            
+        });
+        
+        console.log(visibleIds)
         console.log($('#form').serialize());
         let result = $('#form').serialize().split('&')
         result.map(item=>{
             if(item.indexOf('checkbox')<0&&item.indexOf('select')<0&&item.indexOf('radio')<0){
                 let list = item.split('=')
                 FormObject[list[0]] = list[1]||''
-                
-                
             }
-            
         })
+
         console.log(FormObject)
 
+        let list = [],remarkList = [],allFormData={};
+        for(let key in FormObject){
+            let regStr = /^remark-[0-9]{19}-[0-9]{1,2}$/;
+            if(regStr.test(key)){
+                // delete FormObject[key]
+            }
+            let regStr2 = /^remark-[0-9]{19}_/;
+            if(regStr2.test(key)){
+                remarkList.push({id:key.substring(7,26),remark:FormObject[key]})
+                // delete FormObject[key]
+            }
+            if(!regStr.test(key)&&!regStr2.test(key)){
+                allFormData[key] = FormObject[key]
+            }
+        }
 
-        let list = [];
-        for(let name in FormObject){
+        console.log(remarkList,FormObject,allFormData)
+        
+        for(let name in allFormData){
             let formName = name.split('-')[0];
             let formId = name.split('-')[1];
-            let content = FormObject[name]
+            let content = allFormData[name]
             if(formName==='checkbox'){
+                let arr2 = [];
+                remarkList.map(item=>{
+                    if(formId === item.id&&item.remark){
+                        arr2.push(JSON.parse(item.remark))
+                    }
+                })
+                
                 list.push({
                     "topicId": formId,
                     "content": content,
-                    "remark": ""
+                    "remark": arr2.length?JSON.stringify(arr2):''
+                })
+            }else if(formName==='radio'||formName==='select'){
+                let str = '';
+                remarkList.map(item=>{
+                    if(formId === item.id){
+                        str = item.remark
+            
+                    }
+                })
+                list.push({
+                    "topicId": formId,
+                    "content": content,
+                    "remark": str
                 })
             }else{
+                console.log(formId)
                 list.push({
                     "topicId": formId,
                     "content": decodeURI(String(content)),
@@ -1194,23 +1659,30 @@
             }
             
         }
-        let body = [];
+        let body = [],allBody=[];
         topicAllList.map(item=>{
             list.map(e=>{
                 if(e.topicId===item.id){
-                    if(item.isShow){
-                        body.push(e)
-                    }else{
-                        e.content = '';
-                        e.remark = '';
-                        body.push(e)
-                    }
+                    body.push(e)
                 }
                 
             })
         })
-        console.log(body)
-
+        
+        body.map(item=>{
+            if(visibleIds.indexOf(item.topicId)>-1){
+                allBody.push(item)
+            }else{
+                allBody.push({
+                    "topicId": item.topicId,
+                    "content": "",
+                    "remark": ""
+                })
+            }
+           
+        })
+        console.log(allBody)
+        // return
         let submitUrl = `${IP}/services/web/config/questionnaireFormAnswer/commitForm/${formId}/${userId}`;
         let submitLoading = weui.loading('提交中...');
         $.ajax({
@@ -1218,7 +1690,7 @@
             url:submitUrl,
             contentType:'application/json;charset=utf-8',
             dataType:'json',
-            data:JSON.stringify(body),      
+            data:JSON.stringify(allBody),      
             success:function(data){
                 console.log(data)
                 submitLoading.hide();
