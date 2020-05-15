@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="content-type" content="no-cache, must-revalidate" />
+    <meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>填报</title>
+    <link rel="stylesheet" type="text/css" href="css/weui.css" />
+    <link rel="stylesheet" type="text/css" href="css/validate.css">
+    <style>
+        html,body{
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin:0;
+        }
+        #app{
+            max-width: 500px;
+            min-height: calc(100% - 2px);
+            border: 1px solid #c0c0c0;
+            margin: 0 auto;
+            display: none;
+        }
+        .title{
+            border: 0px solid transparent;
+            font-size: 1.4rem;
+            text-align: center;
+            line-height: 2rem;
+            padding-top: 1rem;
+        }
+        .desp{
+            border: 0px solid transparent;
+            margin-top:0.5rem;
+            padding: 0.8rem;
+            font-size: 1rem;
+        }
+        .content-img{
+            width: 100%;
+        }
+        .middle{
+            border: 0px solid transparent;
+            text-align: center;
+            margin-top: 2rem;
+        } 
+        .status{
+            line-height: 2rem;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            font-family:'PingFang SC';
+            font-weight:400;
+            color:#B5B5B5
+        }
+        .look{
+            font-size: 0.8rem;
+            color:#00A0E9;
+            text-decoration: none;
+            display: none;
+        }
+        .foot{
+            width: 100%;
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+        .submitBtn{
+            width: 60%;
+            margin:0 20%;
+            height: 2.4rem;
+            border-radius: 1.2rem;
+            background: #635CEA;
+            text-align: center;
+            line-height: 2.4rem;
+            color: #fff;
+            cursor: pointer;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="title"></div>
+        <div class="desp"></div>
+        <div class="content">
+            <img class="content-img" src='' alt=""/>
+        </div>
+        <div class="middle">
+            <a class="look" onclick="lookList()">查看></a>
+        </div>
+        <div class="foot">
+            <div class="submitBtn" onclick="submit()">去填报</div>
+        </div>
+    </div>
+</body>
+<script>
+	
+</script>
+<script type="text/javascript" src="js/rolldate.js"></script>
+<script type="text/javascript" src="js/jquery.js?id=2"></script>
+<script type="text/javascript" src="js/zepto.js"></script>
+<script type="text/javascript" src="js/data.js"></script>
+<script type="text/javascript" src="js/weui.js"></script>
+<script type="text/javascript" src='js/moment.js?id=2'></script>
+<script>
+// alert('assssssssssssss')
+// let ossAddr = "http://ctyoss.chutianyun.gov.cn:8060/yq_fiberhome_test"
+// let imgslist = "[\"project/9/1/11/4/20200418023708755988.jpg\",\"project/9/1/11/4/20200418023708755564.jpg\",\"project/9/1/11/4/20200418023708755894.jpg\",\"project/9/1/11/4/20200418023708755404.jpg\"]"
+// let result = {
+// 	"status":1,
+// 	"root":{
+// 		"object":{
+// 			"content":"表单在网页中主要负责数据采集功能。一个表单有三个基本组成部分： 表单标签：这里面包含了处理表单数据所用CGI程序的URL以及数据提交到服务器的方法。 表单域：包含了文本框、密码框、隐藏域、多行文本框、复选框、单选框、下拉选择框和文件上传框等。 表单按钮：包括提交按钮、复位按钮和一般按钮；用于将数据传送到服务器上的CGI脚本或者取消输入，还可以用表单按钮来控制其他定义了处理脚本的处理工作。",
+// 			"createDate":"2020-04-18 14:37:38",
+// 			"createUserId":"1045",
+// 			"createUserName":"通信企业管理员",
+// 			"id":"1251399528631881728",
+// 			"imgs":"[]",
+// 			"isDelete":false,
+// 			"isTop":false,
+// 			"joinNum":0,
+// 			"joinerNum":0,
+// 			"lastUpdateDate":"2020-04-18 15:18:33",
+// 			"lastUpdateUserId":"1045",
+// 			"lastUpdateUserName":"通信企业管理员",
+// 			"name":"表单测试",
+// 			"offlineTime":"2020-04-18 15:16:19",
+// 			"offlineTimeDate":"2020-04-18 15:18:33",
+// 			"period":"NL",
+// 			"publishTime":"2020-04-18 15:18:33",
+// 			"status":1,
+// 			"tenantId":"02000000",
+// 			"topicNum":19,
+// 			"topics":[
+// 				{
+// 					"content":"[{\"order\":1,\"content\":\"1、飞机\",\"logic\":[\"1251405995200073728\"],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":2,\"content\":\"2、高铁\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":3,\"content\":\"3、轮船\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":4,\"content\":\"4、大巴\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":5,\"content\":\"5、自驾\",\"logic\":[\"1251407959312945152\"],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]}]",
+// 					"createDate":"2020-04-18 14:56:51",
+// 					"createUserId":"1045",
+// 					"createUserName":"通信企业管理员",
+// 					"formId":"1251399528631881728",
+// 					"id":"1251404366799294464",
+// 					"isDelete":false,
+// 					"isRequiredQuestions":true,
+// 					"isShow":true,
+// 					"lastUpdateDate":"2020-04-18 15:01:14",
+// 					"lastUpdateUserId":"1045",
+// 					"lastUpdateUserName":"通信企业管理员",
+// 					"name":"这是一个单选下拉必填项题目",
+// 					"orderNum":1,
+// 					"tenantId":"02000000",
+// 					"type":1,
+// 					"typeDetailLimit":"{}"
+// 				},
+// 				{
+// 					"content":"[{\"order\":1,\"content\":\"1、轮船\",\"logic\":[\"1251405995200073728\",\"1251407959312945152\"],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":2,\"content\":\"2、飞机\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":3,\"content\":\"3、汽车\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":4,\"content\":\"4、高铁\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]}]",
+// 					"createDate":"2020-04-18 14:58:55",
+// 					"createUserId":"1045",
+// 					"createUserName":"通信企业管理员",
+// 					"formId":"1251399528631881728",
+// 					"id":"1251404884850364416",
+// 					"isDelete":false,
+// 					"isRequiredQuestions":true,
+// 					"isShow":true,
+// 					"lastUpdateDate":"2020-04-18 14:58:55",
+// 					"lastUpdateUserId":"1045",
+// 					"lastUpdateUserName":"通信企业管理员",
+// 					"name":"这是一个单选必填项题目",
+// 					"orderNum":2,
+// 					"tenantId":"02000000",
+// 					"type":2,
+// 					"typeDetailLimit":"{}"
+// 				},
+// 				{
+// 					"content":"[{\"order\":1,\"content\":\"1、唱歌\",\"logic\":[\"1251406430136815616\",\"1251406353121005568\",\"1251406504434716672\"],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":2,\"content\":\"2、跳舞\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":3,\"content\":\"3、书法\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":4,\"content\":\"4、游泳\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":5,\"content\":\"5、旅游\",\"logic\":[],\"remark\":false,\"required\":false,\"NO\":[]},{\"order\":6,\"content\":\"6、画画\",\"logic\":[],\"remark\":false,\"required\":false,\"NO\":[]}]",
+// 					"createDate":"2020-04-18 15:00:56",
+// 					"createUserId":"1045",
+// 					"createUserName":"通信企业管理员",
+// 					"formId":"1251399528631881728",
+// 					"id":"1251405394177282048",
+// 					"isDelete":false,
+// 					"isRequiredQuestions":true,
+// 					"isShow":true,
+// 					"lastUpdateDate":"2020-04-18 15:00:56",
+// 					"lastUpdateUserId":"1045",
+// 					"lastUpdateUserName":"通信企业管理员",
+// 					"name":"这是一个多选必填项题目",
+// 					"orderNum":3,
+// 					"tenantId":"02000000",
+// 					"type":3,
+// 					"typeDetailLimit":"{\"min\":3,\"max\":5}"
+// 				},
+// 				{
+// 					"createDate":"2020-04-18 15:01:59",
+// 					"createUserId":"1045",
+// 					"createUserName":"通信企业管理员",
+// 					"formId":"1251399528631881728",
+// 					"id":"1251405657667653632",
+// 					"isDelete":false,
+// 					"isRequiredQuestions":false,
+// 					"isShow":true,
+// 					"lastUpdateDate":"2020-04-18 15:01:59",
+// 					"lastUpdateUserId":"1045",
+// 					"lastUpdateUserName":"通信企业管理员",
+// 					"name":"这是一个数字题目",
+// 					"orderNum":4,
+// 					"tenantId":"02000000",
+// 					"type":4,
+// 					"typeDetailLimit":"{\"min\":\"-100000\",\"max\":\"100000\",\"numbersetup\":[\"1\",\"2\",\"3\"]}"
+// 				},
+// 				{
+// 					"content":"员工与共同生活的家属近14天内是否有发热、咳嗽、胸闷、呼吸困难、乏力、腹泻、呕吐等不适症状？",
+// 					"createDate":"2020-04-18 15:02:28",
+// 					"createUserId":"1045",
+// 					"createUserName":"通信企业管理员",
+// 					"formId":"1251399528631881728",
+// 					"id":"1251405778690101248",
+// 					"isDelete":false,
+// 					"isRequiredQuestions":true,
+// 					"isShow":true,
+// 					"lastUpdateDate":"2020-04-18 15:02:28",
+// 					"lastUpdateUserId":"1045",
+// 					"lastUpdateUserName":"通信企业管理员",
+// 					"name":"这是一道问答题目",
+// 					"orderNum":5,
+// 					"tenantId":"02000000",
+// 					"type":5,
+// 					"typeDetailLimit":"{'max':200}"
+// 				},
+// 				{
+// 					"createDate":"2020-04-18 15:02:49",
+// 					"createUserId":"1045",
+// 					"createUserName":"通信企业管理员",
+// 					"formId":"1251399528631881728",
+// 					"id":"1251405868502732800",
+// 					"isDelete":false,
+// 					"isRequiredQuestions":false,
+// 					"isShow":true,
+// 					"lastUpdateDate":"2020-04-18 15:02:49",
+// 					"lastUpdateUserId":"1045",
+// 					"lastUpdateUserName":"通信企业管理员",
+// 					"name":"这是一道城市题目",
+// 					"orderNum":6,
+// 					"tenantId":"02000000",
+// 					"type":6,
+// 					"typeDetailLimit":"{'min':2,'provinceLimit':0,'includeAll':1}"
+// 				},
+// 				{
+// 					"createDate":"2020-04-18 15:03:19",
+// 					"createUserId":"1045",
+// 					"createUserName":"通信企业管理员",
+// 					"formId":"1251399528631881728",
+// 					"id":"1251405995200073728",
+// 					"isDelete":false,
+// 					"isRequiredQuestions":false,
+// 					"isShow":false,
+// 					"lastUpdateDate":"2020-04-18 15:03:19",
+// 					"lastUpdateUserId":"1045",
+// 					"lastUpdateUserName":"通信企业管理员",
+// 					"name":"这是一道日期题目",
+// 					"orderNum":7,
+// 					"tenantId":"02000000",
+// 					"type":7,
+// 					"typeDetailLimit":"{\"wirtesetup\":[\"1\",\"2\"],\"format\":\"yyyy-MM-dd\",\"min\":\"2020-04-18\",\"max\":\"2020-05-31\",\"delay\":5}"
+// 				},
+// 				{
+// 					"createDate":"2020-04-18 15:03:52",
+// 					"createUserId":"1045",
+// 					"createUserName":"通信企业管理员",
+// 					"formId":"1251399528631881728",
+// 					"id":"1251406130462183424",
+// 					"isDelete":false,
+// 					"isRequiredQuestions":false,
+// 					"isShow":true,
+// 					"lastUpdateDate":"2020-04-18 15:03:52",
+// 					"lastUpdateUserId":"1045",
+// 					"lastUpdateUserName":"通信企业管理员",
+// 					"name":"这是一道文件上传题目",
+// 					"orderNum":8,
+// 					"tenantId":"02000000",
+// 					"type":8,
+// 					"typeDetailLimit":"{\"max\":10,\"type\":[\"jpg,jpeg,png,gif\",\"word,excel,powerpoint,pdf\",\"mp3,mp4\",\"zip,rar,7z\"]}"
+// 				},
+// 				{
+// 					"content":"[{\"order\":1,\"content\":\"是\",\"logic\":[\"1251407013967155200\",\"1251407219131535360\"],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":2,\"content\":\"否\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]}]",
+// 					"createDate":"2020-04-18 15:04:22",
+// 					"createUserId":"1045",
+// 					"createUserName":"通信企业管理员",
+// 					"formId":"1251399528631881728",
+// 					"id":"1251406260154257408",
+// 					"isDelete":false,
+// 					"isRequiredQuestions":true,
+// 					"isShow":true,
+// 					"lastUpdateDate":"2020-04-18 15:04:22",
+// 					"lastUpdateUserId":"1045",
+// 					"lastUpdateUserName":"通信企业管理员",
+// 					"name":"员工与共同生活的家属近14天内是否有发热、咳嗽、胸闷、呼吸困难、乏力、腹泻、呕吐等不适症状",
+// 					"orderNum":9,
+// 					"tenantId":"02000000",
+// 					"type":2,
+// 					"typeDetailLimit":"{}"
+// 				},
+// 				{
+// 					"content":"[{\"order\":1,\"content\":\"是\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":2,\"content\":\"否\",\"logic\":[\"1251407959312945152\",\"1251407219131535360\"],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]}]",
+// 					"createDate":"2020-04-18 15:04:45",
+// 					"createUserId":"1045",
+// 					"createUserName":"通信企业管理员",
+// 					"formId":"1251399528631881728",
+// 					"id":"1251406353121005568",
+// 					"isDelete":false,
+// 					"isRequiredQuestions":true,
+// 					"isShow":false,
+// 					"lastUpdateDate":"2020-04-18 15:04:45",
+// 					"lastUpdateUserId":"1045",
+// 					"lastUpdateUserName":"通信企业管理员",
+// 					"name":"员工或共同生活的家属近14天内是否去过医院等高风场所？",
+// 					"orderNum":10,
+// 					"tenantId":"02000000",
+// 					"type":2,
+// 					"typeDetailLimit":"{}"
+// 				},
+// 				{
+// 					"content":"[{\"order\":1,\"content\":\"是\",\"logic\":[\"1251407959312945152\",\"1251408140238442496\"],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":2,\"content\":\"否\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]}]",
+// 					"createDate":"2020-04-18 15:05:03",
+// 					"createUserId":"1045",
+// 					"createUserName":"通信企业管理员",
+// 					"formId":"1251399528631881728",
+// 					"id":"1251406430136815616",
+// 					"isDelete":false,
+// 					"isRequiredQuestions":true,
+// 					"isShow":false,
+// 					"lastUpdateDate":"2020-04-18 15:05:03",
+// 					"lastUpdateUserId":"1045",
+// 					"lastUpdateUserName":"通信企业管理员",
+// 					"name":"员工或共同生活的家属近14天内是否接触过有“发热、干咳、胸闷、呼吸困难、乏力、腹泻、呕吐”等不适症状（含新冠肺炎确诊、疑似病例）的人？",
+// 					"orderNum":11,
+// 					"tenantId":"02000000",
+// 					"type":2,
+// 					"typeDetailLimit":"{}"
+// 				},
+// 				{
+// 					"content":"[{\"order\":1,\"content\":\"是\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":2,\"content\":\"否\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]}]",
+// 					"createDate":"2020-04-18 15:05:21",
+// 					"createUserId":"1045",
+// 					"createUserName":"通信企业管理员",
+// 					"formId":"1251399528631881728",
+// 					"id":"1251406504434716672",
+// 					"isDelete":false,
+// 					"isRequiredQuestions":true,
+// 					"isShow":false,
+// 					"lastUpdateDate":"2020-04-18 15:05:21",
+// 					"lastUpdateUserId":"1045",
+// 					"lastUpdateUserName":"通信企业管理员",
+// 					"name":"员工或共同生活的家属是否是新冠肺炎确诊患者或疑似患者？是否是确诊患者或疑似患者的密切接触者？",
+// 					"orderNum":12,
+// 					"tenantId":"02000000",
+// 					"type":2,
+// 					"typeDetailLimit":"{}"
+// 				},
+// 				{
+// 					"content":"[{\"order\":1,\"content\":\"是\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":2,\"content\":\"否\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]}]",
+// 					"createDate":"2020-04-18 15:05:41",
+// 					"createUserId":"1045",
+// 					"createUserName":"通信企业管理员",
+// 					"formId":"1251399528631881728",
+// 					"id":"1251406591323918336",
+// 					"isDelete":false,
+// 					"isRequiredQuestions":true,
+// 					"isShow":true,
+// 					"lastUpdateDate":"2020-04-18 15:05:41",
+// 					"lastUpdateUserId":"1045",
+// 					"lastUpdateUserName":"通信企业管理员",
+// 					"name":"员工是否有湖北健康码或其他省的健康绿码？",
+// 					"orderNum":13,
+// 					"tenantId":"02000000",
+// 					"type":2,
+// 					"typeDetailLimit":"{}"
+// 				},
+// 				{
+// 					"content":"[{\"order\":1,\"content\":\"健康\",\"logic\":[\"1251408140238442496\",\"1251407959312945152\",\"1251407321329946624\",\"1251407219131535360\"],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":2,\"content\":\"异常\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]}]",
+// 					"createDate":"2020-04-18 15:06:09",
+// 					"createUserId":"1045",
+// 					"createUserName":"通信企业管理员",
+// 					"formId":"1251399528631881728",
+// 					"id":"1251406706340122624",
+// 					"isDelete":false,
+// 					"isRequiredQuestions":true,
+// 					"isShow":false,
+// 					"lastUpdateDate":"2020-04-18 15:06:09",
+// 					"lastUpdateUserId":"1045",
+// 					"lastUpdateUserName":"通信企业管理员",
+// 					"name":"健康状况",
+// 					"orderNum":14,
+// 					"tenantId":"02000000",
+// 					"type":1,
+// 					"typeDetailLimit":"{}"
+// 				},
+// 				{
+// 					"content":"[{\"order\":1,\"content\":\"现场\",\"logic\":[\"1251406706340122624\"],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":2,\"content\":\"远程\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":3,\"content\":\"请假\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":4,\"content\":\"未复工\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":5,\"content\":\"出差\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":6,\"content\":\"放假\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":7,\"content\":\"调休\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":8,\"content\":\"隔离\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]}]",
+// 					"createDate":"2020-04-18 15:07:22",
+// 					"createUserId":"1045",
+// 					"createUserName":"通信企业管理员",
+// 					"formId":"1251399528631881728",
+// 					"id":"1251407013967155200",
+// 					"isDelete":false,
+// 					"isRequiredQuestions":true,
+// 					"isShow":false,
+// 					"lastUpdateDate":"2020-04-18 15:07:22",
+// 					"lastUpdateUserId":"1045",
+// 					"lastUpdateUserName":"通信企业管理员",
+// 					"name":"当日办公状态",
+// 					"orderNum":15,
+// 					"tenantId":"02000000",
+// 					"type":1,
+// 					"typeDetailLimit":"{}"
+// 				},
+// 				{
+// 					"content":"王**",
+// 					"createDate":"2020-04-18 15:08:11",
+// 					"createUserId":"1045",
+// 					"createUserName":"通信企业管理员",
+// 					"formId":"1251399528631881728",
+// 					"id":"1251407219131535360",
+// 					"isDelete":false,
+// 					"isRequiredQuestions":true,
+// 					"isShow":false,
+// 					"lastUpdateDate":"2020-04-18 15:08:11",
+// 					"lastUpdateUserId":"1045",
+// 					"lastUpdateUserName":"通信企业管理员",
+// 					"name":"姓名",
+// 					"orderNum":16,
+// 					"tenantId":"02000000",
+// 					"type":5,
+// 					"typeDetailLimit":"{'max':30}"
+// 				},
+// 				{
+// 					"createDate":"2020-04-18 15:08:35",
+// 					"createUserId":"1045",
+// 					"createUserName":"通信企业管理员",
+// 					"formId":"1251399528631881728",
+// 					"id":"1251407321329946624",
+// 					"isDelete":false,
+// 					"isRequiredQuestions":false,
+// 					"isShow":false,
+// 					"lastUpdateDate":"2020-04-18 15:08:35",
+// 					"lastUpdateUserId":"1045",
+// 					"lastUpdateUserName":"通信企业管理员",
+// 					"name":"住址地址",
+// 					"orderNum":17,
+// 					"tenantId":"02000000",
+// 					"type":6,
+// 					"typeDetailLimit":"{'min':2,'provinceLimit':0,'includeAll':1}"
+// 				},
+// 				{
+// 					"content":"[{\"order\":1,\"content\":\"父母\",\"logic\":[\"1251407321329946624\"],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":2,\"content\":\"家人\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":3,\"content\":\"儿女\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":4,\"content\":\"亲戚\",\"logic\":[],\"remark\":false,\"required\":false,\"exclusive\":false,\"NO\":[]},{\"order\":5,\"content\":\"朋友\",\"logic\":[],\"remark\":false,\"required\":false,\"NO\":[]},{\"order\":6,\"content\":\"邻居\",\"logic\":[],\"remark\":false,\"required\":false,\"NO\":[]},{\"order\":7,\"content\":\"其他\",\"logic\":[],\"remark\":false,\"required\":false,\"NO\":[]}]",
+// 					"createDate":"2020-04-18 15:11:08",
+// 					"createUserId":"1045",
+// 					"createUserName":"通信企业管理员",
+// 					"formId":"1251399528631881728",
+// 					"id":"1251407959312945152",
+// 					"isDelete":false,
+// 					"isRequiredQuestions":true,
+// 					"isShow":false,
+// 					"lastUpdateDate":"2020-04-18 15:11:08",
+// 					"lastUpdateUserId":"1045",
+// 					"lastUpdateUserName":"通信企业管理员",
+// 					"name":"你最近与谁接触过？",
+// 					"orderNum":18,
+// 					"tenantId":"02000000",
+// 					"type":3,
+// 					"typeDetailLimit":"{\"min\":1,\"max\":6}"
+// 				},
+// 				{
+// 					"createDate":"2020-04-18 15:11:51",
+// 					"createUserId":"1045",
+// 					"createUserName":"通信企业管理员",
+// 					"formId":"1251399528631881728",
+// 					"id":"1251408140238442496",
+// 					"isDelete":false,
+// 					"isRequiredQuestions":true,
+// 					"isShow":false,
+// 					"lastUpdateDate":"2020-04-18 15:11:51",
+// 					"lastUpdateUserId":"1045",
+// 					"lastUpdateUserName":"通信企业管理员",
+// 					"name":"你今天体温多少度？",
+// 					"orderNum":19,
+// 					"tenantId":"02000000",
+// 					"type":4,
+// 					"typeDetailLimit":"{\"min\":\"32\",\"max\":\"42\",\"numbersetup\":[\"1\",\"2\"]}"
+// 				}
+// 			]
+// 		}
+// 	}
+// }        
+            
+//             search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+
+            var params111 = {};
+            var search111 = '?formId=1250722340382633984&userId=10001';
+        
+        
+            var result2 = {
+	"status":1,
+	"root":{
+		"object":{
+			"ossAddr":"http://ctyoss.chutianyun.gov.cn:8060/yq_fiberhome_test",
+			"form":{
+				"content":"",
+				"createDate":"2020-04-27 06:01:36",
+				"createUserId":"1045",
+				"createUserName":"通信企业管理员",
+				"id":"1254681527502643200",
+				"imgs":"[]",
+				"isDelete":false,
+				"isTop":false,
+				"joinNum":10,
+				"joinerNum":1,
+				"lastUpdateDate":"2020-04-27 06:01:36",
+				"lastUpdateUserId":"1045",
+				"lastUpdateUserName":"通信企业管理员",
+				"name":"城市位置",
+				"offlineTimeDate":"2020-04-27 08:02:26",
+				"period":"NL",
+				"status":1,
+				"tenantId":"02000000",
+				"topicNum":1,
+				"topics":[
+					{
+						"content":"1111",
+						"createDate":"2020-04-27 08:02:26",
+						"createUserId":"1045",
+						"createUserName":"通信企业管理员",
+						"formId":"1254681527502643200",
+						"id":"1254714697698648064",
+						"isDelete":false,
+						"isRequiredQuestions":true,
+						"isShow":true,
+						"lastUpdateDate":"2020-04-27 08:02:26",
+						"lastUpdateUserId":"1045",
+						"lastUpdateUserName":"通信企业管理员",
+						"name":"1",
+						"orderNum":1,
+						"tenantId":"02000000",
+						"type":5,
+						"typeDetailLimit":"{'max':100}"
+					}
+				]
+			},
+			"hasJoinForm":true
+		}
+	}
+}
+
+        var ossAddr = '';
+        var formData = {};//总表单数据
+		var formDetail = {};
+		alert('00000000000000000')
+        function getFormData(){
+            var DataLoading = weui.loading('数据请求中...');
+            // fetch('http://wanghg.top/php/html/list.php').then(function(res){
+            //     res.json().then(data=>{
+                    // if(data.status === 1){
+						// DataLoading.hide();
+						// alert('0000000')
+                        // formData = result2.root.object;
+                        // ossAddr = formData.ossAddr;
+                        // formDetail = formData.form;
+                        // // setFormData(formDetail)
+                        // $('#app').show()
+                        // formData.hasJoinForm?$('.look').show():null;
+                    // }else{
+                    //     console.log(data)
+                    //     DataLoading.hide();
+                    //     // formData = data.root.object;
+                    //     // sessionStorage.setItem('errorMsg',formData.msg);
+                    //     // sessionStorage.setItem('hasJoinForm',formData.hasJoinForm?1:0);
+                    //     // window.location.href = 'finished.html?ToAPP=1';
+                    //     window.location.href = `${IP}/services/app/static/cicth5/form/finished.html?formId=${params.formId}&userId=${params.userId}&ToAPP=1`
+
+                        
+                    // }
+                // })
+            // }).catch(error=>{
+            //     // DataLoading.hide();
+                
+			// })
+			// var url = `http://wanghg.top/php/html/list.php`;
+                var url = 'http://wanghg.top/php/html/list.php'
+			$.ajax({
+            type:'get',
+            url:url,
+            contentType:'application/json;charset=utf-8',
+            dataType:'json',
+            // data:JSON.stringify(body),      
+            success:function(data){
+				console.log(data)
+				DataLoading.hide();
+						alert('0000000')
+                        // formData = result2.root.object;
+                        // ossAddr = formData.ossAddr;
+                        // formDetail = formData.form;
+                        // // setFormData(formDetail)
+                        // $('#app').show()
+                        // formData.hasJoinForm?$('.look').show():null;
+                
+            },
+            error:function(error){
+				DataLoading.hide();
+				alert('ggggggg')
+            }
+        }); 
+        }
+		getFormData()
+        // function setFormData(data){
+		// 	alert(data.name)
+        //     $('.title').html(data.name);
+        //     $('.desp').html(data.content);
+        //     if(data.imgs!==''||data.imgs!=='[]'){
+        //         let imgs = []
+		// 		imgs = JSON.parse(data.imgs)
+        //         let imgStr = '';
+        //         imgs.map(item=>{
+        //             imgStr = imgStr + `<img class="content-img" src="${ossAddr+'/'+item}" alt=""/>`
+        //         })
+        //         $('.content').html(imgStr)
+        //     }
+
+        // }
+        // function submit(){
+        //     window.location.href = 'form.html';
+        // }
+        
+
+        // function lookList(){
+        // }
+
+        // setFormData(result2.root.object.form)
+</script>
+</html>

@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="content-type" content="no-cache, must-revalidate" />
+    <meta http-equiv="expires" content="0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>填报</title>
+    <link rel="stylesheet" type="text/css" href="css/weui.css" />
+    <link rel="stylesheet" type="text/css" href="css/validate.css">
+
+    <style>
+        html,body{
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin:0;
+        }
+        #app{
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+            border: 1px solid #c0c0c0;
+            min-height:calc(100% - 2px);
+        }
+        header>img{
+            width: 100%;
+        }
+        #form{
+            height: 100%;
+            padding: 0.5rem 1rem;
+            margin-bottom: 5rem;
+        }
+        .form-item{
+            padding-bottom: 1.4rem;
+            position: relative;
+        }
+        .form-item-show{
+            display: block;
+        }
+        .form-item-hide{
+            display: none;
+        }
+        .filed-rule{
+            width: calc(100% - 1rem);
+            position: absolute;
+            left: 0;
+            bottom: 6px;
+            height: 1rem;
+            margin: 0 0.5rem;
+            font-size: 0.75rem;
+            line-height: 1rem;
+            color: #ff0000;
+            text-indent: 1rem;
+        }
+        .field-icon{
+            display: block;
+            float: left;
+            height: 1rem;
+            margin: 0.6rem 0;
+            padding-right:0.6rem;
+            border-left: 0.2rem solid #635CEA;
+        }
+        .field-name{
+            width: calc(100% - 1rem);
+            display: block;
+            float: left;
+            margin: 0.6rem 0;
+            line-height: 1.2rem;
+        }
+        .field-area{
+            text-align: right;
+            font-size: 1rem;
+            font-family:PingFang SC;
+            font-weight:400;
+            color:rgba(181,181,181,1);
+            padding: 0.3rem;
+        }
+        .field-text{
+            display:inline-block;
+            width: 100%;
+            font-size:16px;
+            font-family:PingFang SC;
+            font-weight:bold;
+            color:rgba(0,0,0,1);
+            line-height:24px;
+            height: 36px;
+            padding: 6px 5px;
+            line-height: 1.42857143;
+            background-color: #fff;
+            background-image: none;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            outline: none;
+            -webkit-appearance: none;
+            border-radius: 0;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+        }
+        .field-text-date{
+            border: 1px solid #e0e0e0;
+            border-radius: 18px;
+            padding-left: 40px;
+            background-image: url('img/icon_day.png');
+            background-size: 16px 20px;
+            background-position: 10px 6px;
+            background-repeat: no-repeat;
+        }
+        .field-text-address{
+            padding-left: 40px;
+            background-image: url('img/icon_address.png');
+            background-size: 16px 20px;
+            background-position: 10px 6px;
+            background-repeat: no-repeat;
+        }
+        .field-text-select{
+            border: 1px solid #e0e0e0;
+            border-radius: 18px;
+            padding-left: 20px;
+            background-image: url('img/down.png');
+            background-size: 16px 20px;
+            background-position: 96% 7px;
+            background-repeat: no-repeat;
+        }
+        .field-txt{
+            width: calc(100% - 20px);
+            outline: none;
+            border-radius: 0.4rem;
+            resize: none;
+            padding: 10px;
+            border-color: #e0e0e0;
+            -webkit-appearance: none;
+            font-size:16px;
+            font-family:PingFang SC;
+            font-weight:bold;
+            color:rgba(0,0,0,1);
+            line-height:24px;
+        }
+        .filed-div{
+            padding: 0.3rem 0.4rem;
+        }
+        .field-radio{
+            position: absolute;
+            clip: rect(0, 0, 0, 0);
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            background-color: transparent;
+        }
+        .field-radio + label::before {
+            content: " ";
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 18px;
+            width: 20px;
+            height: 20px;
+            margin-right: .4em;
+            border-radius: 50%;
+            background: url('img/checkNo.png');
+            background-size:20px 20px;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            background-color: transparent;
+        }
+
+        .field-radio:checked + label::before {
+            content: " "; 
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 18px;
+            width: 20px;
+            height: 20px;
+            margin-right: .4em;
+            border-radius: 50%;
+            background: url('img/checkYes.png') center center no-repeat;;
+            background-size:20px 20px;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            background-color: transparent;
+        }
+        .field-checkbox{
+            position: absolute;
+            clip: rect(0, 0, 0, 0);
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            background-color: transparent;
+        }
+        .field-checkbox + label::before {
+            content: " ";
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 18px;
+            width: 20px;
+            height: 20px;
+            margin-right: .4em;
+            /* border-radius: 50%; */
+            background: url('img/checkboxNo.png');
+            background-size:20px 20px;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            background-color: transparent;
+        }
+
+        .field-checkbox:checked + label::before {
+            content: " "; 
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 18px;
+            width: 20px;
+            height: 20px;
+            margin-right: .4em;
+            /* border-radius: 50%; */
+            background: url('img/checkboxYes.png') center center no-repeat;;
+            background-size:20px 20px;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            background-color: transparent;
+        }
+        input:-webkit-autofill {-webkit-box-shadow:0 0 0px 100px white inset;}
+        input::-webkit-input-placeholder{
+            color:#e0e0e0;
+            font-size: 0.8rem;
+            text-indent: 0rem;
+            font-weight: normal;
+        }
+        input::-moz-placeholder{   /* Mozilla Firefox 19+ */
+            color:#e0e0e0;
+            font-size: 0.8rem;
+            text-indent: 0rem;
+            font-weight: normal;
+        }
+        input:-moz-placeholder{    /* Mozilla Firefox 4 to 18 */
+            color:#e0e0e0;
+            font-size: 0.8rem;
+            text-indent: 0rem;
+            font-weight: normal;
+        }
+        input:-ms-input-placeholder{  /* Internet Explorer 10-11 */ 
+            color:#e0e0e0;
+            font-size: 0.8rem;
+            text-indent: 0rem;
+            font-weight: normal;
+        }
+        textarea::-webkit-input-placeholder{
+            color:#e0e0e0;
+            font-size: 0.8rem;
+            text-indent: 0rem;
+            font-weight: normal;
+        }
+        footer{
+            width: 100%;
+            padding: 1rem 0;
+            position: absolute;
+            bottom: 0;
+        }
+        .submitBtn{
+            width: 60%;
+            margin:0 20%;
+            height: 2.4rem;
+            border-radius: 1.2rem;
+            background: #635CEA;
+            text-align: center;
+            line-height: 2.4rem;
+            color: #fff;
+        }
+        .field-file{
+            width: 100px;
+            height: 70px;
+            padding: 0;
+            margin: 0;
+            background: #fff;
+            border: none;
+            background-image: url('img/upload.png');
+            background-size:70px 70px;
+            background-position:30px 0;
+            background-repeat: no-repeat;
+        }
+        input[type="file" i]::-webkit-file-upload-button {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <header><img src='img/img_bg.png' alt=""/></header>
+        <form id="form" onsubmit="return false" action="#" method="post">
+            <div class="form-item">
+                <span class="field-icon"></span>
+                <span class="field-name">2、上传附件</span><br/>
+                <div class="filed-div">
+                    <input type="file" id="file-2-1" name="file" class="field-text field-file" />
+                </div>
+            </div>
+        </form>
+        <footer>
+            <div class="submitBtn" onclick="submit()">完成并提交</div>
+        </footer>
+    </div>
+</body>
+
+<script type="text/javascript" src="js/rolldate.js"></script>
+<script> 
+    document.write("<s"+"cript type='text/javascript' src='js/jquery.js?id="+Math.random()+"'></scr"+"ipt>"); 
+    </script>
+<!-- <script type="text/javascript" src="js/jquery.js?id=3"></script> -->
+<script type="text/javascript" src="js/zepto.js"></script>
+<script type="text/javascript" src="js/data.js"></script>
+<script type="text/javascript" src="js/weui.js"></script>
+<script type="text/javascript">
+
+        let IP = 'http://10.110.200.62:443/';     //2.6版本开发环境
+        //let IP =  'http://10.128.151.108:443/';     //2.6版本测试环境
+        //let IP =  'http://10.128.151.13:443/';     //2.6版本测试环境
+        let formId = '1248134408026910720';
+        let userId = '123456';
+        let url = `${IP}services/web/config/questionnaireForm/getDetailByFormIdFromCache/${formId}/18513`
+
+        function getTopicData(){
+            fetch(url).then(function(res){
+                console.log(res)
+                res.blob().then(data=>{
+                    console.log(data)
+                })
+            }).catch(error=>{
+                console.log(error)
+            })
+        }
+        // getTopicData()
+        
+        alert('0000000000');
+</script>
+<script>
+
+</script>
+<script>
+
+    //下拉框
+    var topicList1 = [                    {
+                        "content": "[{\"content\":\"111\",\"logic\":[\"1245640517476859904\",\"1242736031555366912\"],\"remark\":\"选项备注\",\"order\":1,\"required\":true},{\"content\":\"22\",\"remark\":\"选项备注\",\"order\":2,\"required\":true},{\"content\":\"333\",\"remark\":\"选项备注\",\"order\":3,\"required\":true}]",
+                        "createDate": "2020-04-02 16:31:31",
+                        "formId": "1245556087176527872",
+                        "id": "01",
+                        "isDelete": false,
+                        "isRequiredQuestions": true,
+                        "isShow": true,
+                        "lastUpdateDate": "2020-04-03 09:48:01",
+                        "name": "这是一个下拉框必填项题目",
+                        "orderNum": 15,
+                        "type": 1,
+                        "typeDetailLimit": ""
+                    },
+                    {
+                        "content": "[{\"content\":\"111\",\"remark\":\"选项备注\",\"order\":1,\"required\":true},{\"content\":\"22\",\"remark\":\"选项备注\",\"order\":2,\"required\":true},{\"content\":\"333\",\"remark\":\"选项备注\",\"order\":3,\"required\":true}]",
+                        "createDate": "2020-03-25 11:22:12",
+                        "formId": "1245556087176527872",
+                        "id": "02",
+                        "isDelete": false,
+                        "isRequiredQuestions":false,
+                        "isShow":false,
+                        "lastUpdateDate": "2020-04-02 17:30:37",
+                        "lastUpdateUserId": "1045",
+                        "lastUpdateUserName": "通信企业管理员",
+                        "name": "这是一个下拉框题目",
+                        "orderNum": 16,
+                        "tenantId": "02000000",
+                        "type": 1,
+                        "typeDetailLimit": ""
+                    }]
+    topicList1.map(item=>{
+        item.content = JSON.parse(item.content)
+    })
+
+    //单选框
+    var topicList2 = [                    {
+                        "content": "[{\"content\":\"111\",\"logic\":[\"1245640517476859904\",\"1242736031555366912\"],\"remark\":\"选项备注\",\"order\":1,\"required\":true},{\"content\":\"22\",\"remark\":\"选项备注\",\"order\":2,\"required\":true},{\"content\":\"333\",\"remark\":\"选项备注\",\"order\":3,\"required\":true}]",
+                        "createDate": "2020-04-02 16:31:31",
+                        "formId": "1245556087176527872",
+                        "id": "03",
+                        "isDelete": false,
+                        "isRequiredQuestions": true,
+                        "isShow": true,
+                        "lastUpdateDate": "2020-04-03 09:48:01",
+                        "name": "这是一个单选必填项题目",
+                        "orderNum": 3,
+                        "type": 1,
+                        "typeDetailLimit": ""
+                    },
+                    {
+                        "content": "[{\"content\":\"111\",\"remark\":\"选项备注\",\"order\":1,\"required\":true},{\"content\":\"22\",\"remark\":\"选项备注\",\"order\":2,\"required\":true},{\"content\":\"333\",\"remark\":\"选项备注\",\"order\":3,\"required\":true}]",
+                        "createDate": "2020-03-25 11:22:12",
+                        "formId": "1245556087176527872",
+                        "id": "04",
+                        "isDelete": false,
+                        "isRequiredQuestions":false,
+                        "isShow":false,
+                        "lastUpdateDate": "2020-04-02 17:30:37",
+                        "lastUpdateUserId": "1045",
+                        "lastUpdateUserName": "通信企业管理员",
+                        "name": "这是一个单选题目",
+                        "orderNum": 4,
+                        "tenantId": "02000000",
+                        "type": 1,
+                        "typeDetailLimit": ""
+                    }]
+    topicList2.map(item=>{
+        item.content = JSON.parse(item.content)
+    })
+
+    //多选框
+    var topicList3 = [{
+                        "content": "[{\"content\":\"111\",\"logic\":[\"1245640517476859904\",\"1242736031555366912\"],\"remark\":\"选项备注\",\"order\":1,\"required\":true},{\"content\":\"22\",\"remark\":\"选项备注\",\"order\":2,\"required\":true},{\"content\":\"333\",\"remark\":\"选项备注\",\"order\":3,\"required\":true}]",
+                        "createDate": "2020-04-02 16:31:31",
+                        "formId": "1245556087176527872",
+                        "id": "05",
+                        "isDelete": false,
+                        "isRequiredQuestions": true,
+                        "isShow": true,
+                        "lastUpdateDate": "2020-04-03 09:48:01",
+                        "name": "这是一个多选必填项题目",
+                        "orderNum": 5,
+                        "type": 3,
+                        "typeDetailLimit": '{"min":1,"max":2}'
+                    },
+                    {
+                        "content": "[{\"content\":\"111\",\"remark\":\"选项备注\",\"order\":1,\"required\":true},{\"content\":\"22\",\"remark\":\"选项备注\",\"order\":2,\"required\":true},{\"content\":\"333\",\"remark\":\"选项备注\",\"order\":3,\"required\":true}]",
+                        "createDate": "2020-03-25 11:22:12",
+                        "formId": "1245556087176527872",
+                        "id": "06",
+                        "isDelete": false,
+                        "isRequiredQuestions":false,
+                        "isShow":false,
+                        "lastUpdateDate": "2020-04-02 17:30:37",
+                        "lastUpdateUserId": "1045",
+                        "lastUpdateUserName": "通信企业管理员",
+                        "name": "这是一个多选题目",
+                        "orderNum": 6,
+                        "tenantId": "02000000",
+                        "type": 3,
+                        "typeDetailLimit": '{"min":1,"max":2}'
+                    }]
+    topicList3.map(item=>{
+        item.content = JSON.parse(item.content)
+    })
+
+    //数字
+    var topicList4 = [{
+                        "content": "",
+                        "createDate": "2020-04-02 16:31:31",
+                        "formId": "1245556087176527872",
+                        "id": "07",
+                        "isDelete": false,
+                        "isRequiredQuestions": true,
+                        "isShow": true,
+                        "lastUpdateDate": "2020-04-03 09:48:01",
+                        "name": "这是一个数字题目【数值范围-100~200、允许小数、允许负数】",
+                        "orderNum": 7,
+                        "type": 4,
+                        "typeDetailLimit": `{"min":-100,"max":200,"numberset":["1","2","3"]}`
+                    },
+                    {
+                        "content": "",
+                        "createDate": "2020-03-25 11:22:12",
+                        "formId": "1245556087176527872",
+                        "id": "08",
+                        "isDelete": false,
+                        "isRequiredQuestions":false,
+                        "isShow":false,
+                        "lastUpdateDate": "2020-04-02 17:30:37",
+                        "lastUpdateUserId": "1045",
+                        "lastUpdateUserName": "通信企业管理员",
+                        "name": "这是一个数字题目【数值范围0~+∞、不允许小数】",
+                        "orderNum": 8,
+                        "tenantId": "02000000",
+                        "type": 4,
+                        "typeDetailLimit": `{"min":"0","max":"+∞","numberset":[]}`
+                    },
+                    {
+                        "content": "",
+                        "createDate": "2020-03-25 11:22:12",
+                        "formId": "1245556087176527872",
+                        "id": "09",
+                        "isDelete": false,
+                        "isRequiredQuestions":false,
+                        "isShow": true,
+                        "lastUpdateDate": "2020-04-02 17:30:37",
+                        "lastUpdateUserId": "1045",
+                        "lastUpdateUserName": "通信企业管理员",
+                        "name": "这是一个数字题目【数值范围-∞~+∞、允许小数】",
+                        "orderNum": 9,
+                        "tenantId": "02000000",
+                        "type": 4,
+                        "typeDetailLimit": `{"min":"-∞","max":"+∞","numberset":["2","3"]}`
+                    }
+                ]
+    
+    //问答
+    var topicList5 = [
+                    {   "content": "预填内容预填内容预填内容预填内容预填内容预填内容预填内容预填内容预填内容预填内容",
+                        "createDate": "2020-04-02 16:31:31",
+                        "formId": "1245556087176527872",
+                        "id": "10",
+                        "isDelete": false,
+                        "isRequiredQuestions": true,
+                        "isShow": true,
+                        "lastUpdateDate": "2020-04-03 09:48:01",
+                        "name": "这是一个问答必填项题目【限制字数200】",
+                        "orderNum": 10,
+                        "type": 5,
+                        "typeDetailLimit": `{"max":200}`
+                    },
+                    {
+                        "content": "预填内容预填内容预填内容预填内容预填内容预填内容预填内容预填内容预填内容预填内容",
+                        "createDate": "2020-03-25 11:22:12",
+                        "formId": "1245556087176527872",
+                        "id": "11",
+                        "isDelete": false,
+                        "isRequiredQuestions":false,
+                        "isShow":false,
+                        "lastUpdateDate": "2020-04-02 17:30:37",
+                        "lastUpdateUserId": "1045",
+                        "lastUpdateUserName": "通信企业管理员",
+                        "name": "这是一个问答题目【限制字数100】",
+                        "orderNum": 11,
+                        "tenantId": "02000000",
+                        "type": 5,
+                        "typeDetailLimit": `{"max":100}`
+                    },
+        ]
+
+    //城市
+    var topicList6 = [
+                    {   "content": "",
+                        "createDate": "2020-04-02 16:31:31",
+                        "formId": "1245556087176527872",
+                        "id": "12",
+                        "isDelete": false,
+                        "isRequiredQuestions": true,
+                        "isShow": true,
+                        "lastUpdateDate": "2020-04-03 09:48:01",
+                        "name": "这是一个城市必填项题目【可选国外城市】",
+                        "orderNum": 10,
+                        "type": 6,
+                        "typeDetailLimit": `{"out":true}`
+                    },
+                    {
+                        "content": "",
+                        "createDate": "2020-03-25 11:22:12",
+                        "formId": "1245556087176527872",
+                        "id": "13",
+                        "isDelete": false,
+                        "isRequiredQuestions":false,
+                        "isShow":false,
+                        "lastUpdateDate": "2020-04-02 17:30:37",
+                        "lastUpdateUserId": "1045",
+                        "lastUpdateUserName": "通信企业管理员",
+                        "name": "这是一个城市题目",
+                        "orderNum": 11,
+                        "tenantId": "02000000",
+                        "type": 6,
+                        "typeDetailLimit": `{"out":false}`
+                    },
+        ]
+    //日期
+    var topicList7 = [
+                    {   "content": "",
+                        "createDate": "2020-04-02 16:31:31",
+                        "formId": "1245556087176527872",
+                        "id": "14",
+                        "isDelete": false,
+                        "isRequiredQuestions": true,
+                        "isShow": true,
+                        "lastUpdateDate": "2020-04-03 09:48:01",
+                        "name": "这是一个日期必填题目【格式：MM-DD】",
+                        "orderNum": 12,
+                        "type": 7,
+                        "typeDetailLimit": `{"format":"MM-DD"}`
+                    },
+                    {
+                        "content": "",
+                        "createDate": "2020-03-25 11:22:12",
+                        "formId": "1245556087176527872",
+                        "id": "15",
+                        "isDelete": false,
+                        "isRequiredQuestions":false,
+                        "isShow":false,
+                        "lastUpdateDate": "2020-04-02 17:30:37",
+                        "lastUpdateUserId": "1045",
+                        "lastUpdateUserName": "通信企业管理员",
+                        "name": "这是一个日期题目【格式：YYYY-MM-DD】",
+                        "orderNum": 13,
+                        "tenantId": "02000000",
+                        "type": 7,
+                        "typeDetailLimit": `{"format":"YYYY-MM-DD"}`
+                    },
+                    {
+                        "content": "",
+                        "createDate": "2020-03-25 11:22:12",
+                        "formId": "1245556087176527872",
+                        "id": "16",
+                        "isDelete": false,
+                        "isRequiredQuestions":false,
+                        "isShow":false,
+                        "lastUpdateDate": "2020-04-02 17:30:37",
+                        "lastUpdateUserId": "1045",
+                        "lastUpdateUserName": "通信企业管理员",
+                        "name": "这是一个日期题目【格式：DD】",
+                        "orderNum": 14,
+                        "tenantId": "02000000",
+                        "type": 7,
+                        "typeDetailLimit": `{"format":"DD"}`
+                    },
+        ]
+        alert('111111111111')
+
+    console.log(topicList7)
+    // 下拉框
+    function fieldItem1(data){
+        return data.map(item=>{
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}">
+                        <span class="field-icon"></span>
+                        <span class="field-name">${item.orderNum}、${item.name}</span><br/>
+                        <div class="filed-div">
+                            <input name='select' id="select" data-id="${item.id}" readonly="readonly" unselectable="on" class="field-text field-text-select" placeholder="请选择"/>
+                        </div>
+                        <div class="filed-rule">${item.isRequiredQuestions?'必填项':''}</div>
+                    </div>`
+        })
+    }
+
+    //单选框
+
+    function fieldItem2(data){
+    return data.map(item=>{
+        let optionList = item.content;
+        let option = optionItem2(item,optionList).join('')
+        return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}">
+                    <span class="field-icon"></span>
+                    <span class="field-name">${item.orderNum}、${item.name}</span><br/>
+                    ${option}
+                    <div class="filed-rule">${item.isRequiredQuestions?'必填项':''}</div>
+                </div>`
+    })
+        
+    }
+    function optionItem2(item,data){
+        return data.map(e=>{
+                return `<div class="filed-div">
+                            <input type="radio" id="radio*${item.orderNum}-${e.order}" name="radio*${item.orderNum}" class="field-radio" value="${e.order}"/><label for="radio*${item.orderNum}-${e.order}">${e.content}</label><br/>
+                        </div>`
+                })
+    }
+
+    //多选框
+    function fieldItem3(data){
+        return data.map(item=>{
+            let optionList = item.content;
+            let option = ''
+            let rule = JSON.parse(item.typeDetailLimit)
+            
+            // let ruleObj = {...rule,isRequiredQuestions:item.isRequiredQuestions}
+            // rule = JSON.stringify()
+            // let option = optionItem3(item,optionList).join('')
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}">
+                        <span class="field-icon"></span>
+                        <span class="field-name">${item.orderNum}、${item.name}</span><br/>
+                        ${option}
+                        <div class="filed-rule">${item.isRequiredQuestions?'必填项':''}</div>
+                    </div>`
+        })
+        
+    }
+    function optionItem3(item,data){
+        let rule = JSON.parse(item.typeDetailLimit);
+        rule.isRequiredQuestions = item.isRequiredQuestions;
+        let ruleStr = JSON.stringify(rule)
+        return data.map(e=>{
+                return `<div class="filed-div">
+                            <input type="checkbox" data-rule='${ruleStr}' id="checkbox*${item.orderNum}-${e.order}" name="checkbox*${item.orderNum}" class="field-checkbox" value="${e.order}"><label for="checkbox*${item.orderNum}-${e.order}">${e.content}</label><br/>
+                        </div>`
+                })
+    }
+
+    //数字类型
+    function fieldItem4(data){
+        
+        return data.map(item=>{
+            let rule = JSON.parse(item.typeDetailLimit)
+            rule.isRequiredQuestions = item.isRequiredQuestions;
+            let ruleStr = JSON.stringify(rule)
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}">
+                        <span class="field-icon"></span>
+                        <span class="field-name">${item.orderNum}、${item.name}</span><br/>
+                        <div class="filed-div">
+                            <input type="text" name='number' data-rule='${ruleStr}' class="field-text field-text-number" placeholder="请输入..."/>
+                        </div>
+                        <div class="filed-rule">${item.isRequiredQuestions?'必填项':''}</div>
+                    </div>`
+        })
+        
+    }
+
+    //问答
+    function fieldItem5(data){
+        return data.map(item=>{
+            let rule = JSON.parse(item.typeDetailLimit)
+            rule.isRequiredQuestions = item.isRequiredQuestions;
+            let ruleStr = JSON.stringify(rule)
+            let height = Math.ceil(rule.max/18)
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}">
+                        <span class="field-icon"></span>
+                        <span class="field-name">${item.orderNum}、${item.name}</span><br/>
+                        <div class="filed-div">
+                            <textarea name='textarea${height}' class="field-txt" rows="${height}" data-rule='${ruleStr}' placeholder="请输入...">${item.content}</textarea>
+                        </div>
+                        <div class="filed-rule">${item.content?'':item.isRequiredQuestions?'必填项':''}</div>
+                    </div>`
+        })
+        
+    }
+
+    //城市
+    function fieldItem6(data){
+        return data.map(item=>{
+            let rule = JSON.parse(item.typeDetailLimit)
+            let out = rule.out?`<div class="field-area">海外地区填写</div>`:''
+            let height = Math.ceil(rule.max/18)
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}">
+                        <span class="field-icon"></span>
+                        <span class="field-name">${item.orderNum}、${item.name}</span><br/>
+                        <div class="filed-div">
+                            <input type="text" name='address${item.orderNum}' id="address${item.orderNum}" readonly="readonly" unselectable="on" class="field-text field-text-address" placeholder="省/市/区/详细地址"/>
+                            ${out}
+                        </div>
+                        <div class="filed-rule">${item.content?'':item.isRequiredQuestions?'必填项':''}</div>
+                    </div>`
+        })
+        
+    }
+
+    //日期
+    function fieldItem7(data){
+        return data.map(item=>{
+            // let rule = JSON.parse(item.typeDetailLimit)
+            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}">
+                        <span class="field-icon"></span>
+                        <span class="field-name">${item.orderNum}、${item.name}</span><br/>
+                        <div class="filed-div">
+                            <input type="text" name='date${item.orderNum}' data-rule='${item.typeDetailLimit}' id="date${item.orderNum}" readonly="readonly" unselectable="on" class="field-text field-text-date"/>
+                        </div>
+                        <div class="filed-rule">${item.isRequiredQuestions?'必填项':''}</div>
+                    </div>`
+        })
+        
+    }
+
+    alert('2222222222222')
+   
+    $('#form').append(fieldItem2(topicList2).join(''))
+    $('#form').append(fieldItem3(topicList3).join(''))
+    $('#form').append(fieldItem4(topicList4).join(''))
+    $('#form').append(fieldItem5(topicList5).join(''))
+    $('#form').append(fieldItem6(topicList6).join(''))
+    $('#form').append(fieldItem7(topicList7).join(''))
+    $('#form').append(fieldItem1(topicList1).join(''))
+
+
+</script>
+
+<script>
+    
+    //数字
+    $(document).on('input','.field-text-number',function(){
+        let that = $(this);
+        let value = that.val();
+        let rule = JSON.parse(that.attr("data-rule"));
+        console.log('数字',rule)
+        if(value===""){
+            if(rule.isRequiredQuestions){
+                $(this).parent().parent().children(".filed-rule").html('必填项');
+            }else{
+                $(this).parent().parent().children(".filed-rule").html('');
+            }
+            
+        }else if(isNaN(value)){
+            $(this).parent().parent().children(".filed-rule").html('非数字值，请规范填写')
+        }else{
+            let num = Number(value)
+            if(!isNaN(rule.min)){
+                if(num<rule.min){
+                    $(this).parent().parent().children(".filed-rule").html(`数值范围为${rule.min}~${rule.max}`)
+                }else if(num>rule.max){
+                    $(this).parent().parent().children(".filed-rule").html(`数值范围为${rule.min}~${rule.max}`)
+                }else if(rule.numberset.indexOf('2')<0&&String(value).indexOf('.')>-1){
+                    $(this).parent().parent().children(".filed-rule").html(`限制小数输入`)
+                }else if(rule.numberset.indexOf('3')<0&&num<0){
+                    $(this).parent().parent().children(".filed-rule").html(`限制负数输入`)
+                }else{
+                    $(this).parent().parent().children(".filed-rule").html('')
+                }
+            }else{
+                if(rule.numberset.indexOf('2')<0&&String(value).indexOf('.')>-1){
+                    $(this).parent().parent().children(".filed-rule").html(`限制小数输入`)
+                }else if(rule.numberset.indexOf('3')<0&&num<0){
+                    $(this).parent().parent().children(".filed-rule").html(`限制负数输入`)
+                }else{
+                    $(this).parent().parent().children(".filed-rule").html('')
+                }
+            }
+        }
+    })
+
+    //问答
+    $(document).on('input','.field-txt',function(){
+        let that = $(this);
+        let value = that.val();
+        let rule = that.attr("data-rule");
+        rule = JSON.parse(rule)
+        if(value.length>rule.max){
+            $(this).parent().parent().children(".filed-rule").html(`字数限制${rule.max}字`)
+        }else{
+            if(rule.isRequiredQuestions&&value===""){
+                $(this).parent().parent().children(".filed-rule").html('必填项')
+            }else{
+                $(this).parent().parent().children(".filed-rule").html('')
+            }
+        }
+    })
+
+    //下拉框
+    $(document).on('click','.field-text-select',function(){
+        let that = $(this)
+        let topicId = that.attr("data-id")
+        console.log(topicId)
+        let list = topicList1.filter(item=>{return item.id===topicId})[0].content
+        list.map(item=>{
+            item.label = item.content;
+            item.value = item.order
+        })
+        weui.picker(list, 
+            {
+                onChange: function (e) {
+                    console.log(e);
+                },
+                onConfirm: function (e) {
+                    console.log(e);
+                    that.val(e[0].label)
+                    that.parent().parent().children(".filed-rule").html('')
+                }
+        });
+    })
+
+    //单选框
+    $(document).on('click','.field-radio',function(){
+        let value = $(this).val()
+        console.log(value)
+        $(this).parent().parent().children(".filed-rule").html('')
+        
+    })
+
+    //多选框
+    $(document).on('click','.field-checkbox',function(){
+        let that = $(this)
+        let value = $(this).val()
+        console.log(value)
+        let name = $(this).attr('name')
+        console.log(name)
+        let rule = JSON.parse(that.attr("data-rule"));
+        console.log('多选框',rule)
+        let list=[];
+        $(`input[name='${name}']:checked`).each(function() { 
+            list.push($(this).val());
+        });
+        if(list.length){
+            if(list.length<rule.min){
+                $(this).parent().parent().children(".filed-rule").html(`最少选择${rule.min}项`)
+            }else if(list.length>rule.max){
+                $(this).parent().parent().children(".filed-rule").html(`最多选择${rule.max}项`)
+            }else{
+                $(this).parent().parent().children(".filed-rule").html('')
+            }
+           
+        }else{
+            if(rule.isRequiredQuestions){
+                $(this).parent().parent().children(".filed-rule").html('必填项')
+            }else{
+                $(this).parent().parent().children(".filed-rule").html('')
+            }
+            
+        }
+        
+        
+    })
+
+    //日期
+    $(document).on('click','.field-text-date',function(){
+        let that = $(this)
+        let id = $(this).attr('id')
+        let rule = $(this).attr('data-rule')
+        rule = JSON.parse(rule)
+        console.log(rule)
+        // new Rolldate({
+        //     el: `.field-text-date`,
+        //     format: 'DD',
+        //     beginYear: 2000,
+        //     endYear: 2100
+        // })
+        weui.datePicker({
+            start:2000,
+            end:2020,
+            // end: new Date(),
+            defaultValue: [new Date().getFullYear(), new Date().getMonth()+1, new Date().getDate()],
+            // defaultValue: [new Date().getMonth()+1, new Date().getDate()],
+            // defaultValue: [new Date().getFullYear(), new Date().getMonth()+1, new Date().getDate()],
+            depth:3,
+            onChange: function (e) {
+                console.log(e);
+                
+            },
+            onConfirm: function (e) {
+                console.log(e);
+                if(rule.format==='YYYY-MM-DD'){
+                    that.val(`${e[0].value}-${e[1].value}-${e[2].value}`)
+                }else if(rule.format==='YYYY-MM'){
+                    that.val(`${e[0].value}-${e[1].value}`)
+                }else if(rule.format==='MM-DD'){
+                    that.val(`${e[1].value}-${e[2].value}`)
+                }else if(rule.format==='YYYY'){
+                    that.val(`${e[0].value}`)
+                }else if(rule.format==='MM'){
+                    that.val(`${e[1].value}`)
+                }else if(rule.format==='DD'){
+                    that.val(`${e[2].value}`)
+                }
+                that.parent().parent().children(".filed-rule").html('')
+            }
+        });
+        if(rule.format==='YYYY-MM'){
+
+            $(".weui-picker__group").eq(2).hide()
+
+        }else if(rule.format==='MM-DD'){
+
+            $(".weui-picker__group").eq(0).hide()
+
+        }else if(rule.format==='YYYY'){
+
+            $(".weui-picker__group").eq(1).hide()
+            $(".weui-picker__group").eq(2).hide()
+
+        }else if(rule.format==='MM'){
+
+            $(".weui-picker__group").eq(0).hide()
+            $(".weui-picker__group").eq(2).hide()
+
+        }else if(rule.format==='DD'){
+            console.log('111111111')
+            $(".weui-picker__group").eq(0).hide()
+            $(".weui-picker__group").eq(1).hide()
+
+        }
+        
+        
+        
+    })
+
+    //城市
+    $(document).on('click','.field-text-address',function(){
+        let that = $(this)
+        let value = $(this).val()
+        weui.picker(chinaCityList, 
+            {
+                defaultValue: ['110000','110100','110101'],
+                onChange: function (e) {
+                    console.log(e);
+                },
+                onConfirm: function (e) {
+                    console.log(e);  
+                    if(e.length===1){
+                        that.val(e[0].label)
+                    }else if(e.length===2){
+                        that.val(`${e[0].label} ${e[1].label}`)
+                    }else if(e.length===3){
+                        that.val(`${e[0].label} ${e[1].label} ${e[2].label}`)
+                    }  
+                    that.parent().parent().children(".filed-rule").html('')      
+                }
+            }
+        );
+       
+        
+    })
+
+    //海外国家
+    $(document).on('click','.field-area',function(){
+        let that = $(this)
+        // let value = $(this).val()
+        weui.picker(country, 
+            {
+                defaultValue: ['1'],
+                onChange: function (e) {
+                    console.log(e);
+                },
+                onConfirm: function (e) {
+                    that.prev().val(e[0].label)
+                    that.parent().parent().children(".filed-rule").html('')   
+                }
+            }
+        );
+        
+        
+    })
+
+    //附件
+    $(document).on('change','.field-file',function(){
+        let fileObj = $(this)[0].files[0];
+        console.log(fileObj)
+        let formData = new FormData();
+        formData.append("file", fileObj);
+        $.ajax({ 
+        url:"http://10.110.200.62:443/services/web/file/upload/AttachmentUpload/project", 
+        type:"post", 
+        mode: 'no-cors',
+        data:formData, 
+        processData:false, 
+        contentType:false, 
+        success:function(res){ 
+            if(res){ 
+            alert("上传成功！"); 
+            } 
+            console.log(res); 
+            
+        }, 
+        error:function(err){ 
+            alert("网络连接失败,稍后重试",err); 
+        } 
+        
+        }) 
+    })
+</script>
+<script>
+    function submit(){
+    console.log($('#form').serialize())
+    let FormObject = {};
+    let result = $('#form').serialize().split('&')
+    result.map(item=>{
+        let list = item.split('=')
+        FormObject[list[0]] = list[1]||''
+    })
+    console.log(FormObject)
+    let loading = weui.loading('提交中...');
+    setTimeout(()=>{
+        loading.hide();
+    },1000)
+
+    setTimeout(()=>{
+        weui.toast('提交成功', 1000);
+    },1500)
+}
+</script>
+</html>

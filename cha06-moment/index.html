@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src='http://cdn.staticfile.org/moment.js/2.24.0/moment.min.js'></script>
+</head>
+<body>
+    
+</body>
+
+<script>
+    let list = [0,1,2,3,4,5,6,7]
+    list.splice(2,1)
+    console.log(list)
+    let time = new Date('2020-4')
+    console.log(time)
+    console.log(moment(time).format('YYYY-MM-DD'))
+    let a = '2020-4-11'
+    console.log(a.substring(0,4))
+    console.log(moment(a).format('YYYY-MM-03'))
+
+    let imgStr = "['activity/20200301054143203113.jpg','activity/20200301054143203113.jpg','activity/20200301054143203113.jpg']"
+    console.log(eval("("+imgStr+")"))
+    let imgArr = eval("("+imgStr+")")
+    console.log(JSON.stringify(imgArr))
+
+    let imgStr2 = '["activity/20200301054143203113.jpg"]'
+    console.log(eval("("+imgStr2+")"))
+</script>
+</html>
