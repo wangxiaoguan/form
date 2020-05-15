@@ -134,7 +134,19 @@
         input:-webkit-autofill {-webkit-box-shadow:0 0 0px 100px #fff inset;}
 		input[type="number"]{
 			-moz-appearance:none;
-		}
+        }
+        #page>ul>li{
+            display: none
+        }
+        .xl-prevPage{
+            display: inline-block !important;
+        }
+        .xl-active{
+            display: inline-block !important;
+        }
+        .xl-nextPage{
+            display: inline-block !important;
+        }
     </style>
 </head>
 <body>
@@ -162,8 +174,8 @@
         new Paging('page', {
             nowPage: nowPage, // 当前页码
             pageNum: pageNum, // 总页码
-            buttonNum: 4, //要展示的页码数量
-            canJump: 1,// 是否能跳转。0=不显示（默认），1=显示
+            buttonNum: 1, //要展示的页码数量
+            canJump: 0,// 是否能跳转。0=不显示（默认），1=显示
             showOne: 1,//只有一页时，是否显示。0=不显示,1=显示（默认）
             callback: function (num) { //回调函数
                 console.log(num);
@@ -178,7 +190,7 @@
 
 
         // var IP = 'http://10.128.151.108:443';
-        // var search = '?formId=1259810649712390144&userId=10001'
+        // var search = '?formId=1260457002848649216&userId=10001'
         // search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
 

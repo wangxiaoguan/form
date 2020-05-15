@@ -45,13 +45,22 @@
             /* position: absolute; */
             position: relative;
             left: 0;
-            bottom: -2px;
+            bottom: 6px;
             height: 1.6rem;
             margin: 0 0.5rem;
             font-size: 0.75rem;
             line-height: 1.6rem;
             color: #ff0000;
             text-indent: 1rem;
+        }
+        .field-rule-select{
+            bottom: 6px;
+        }
+        .field-rule-radio{
+            bottom: 16px;
+        }
+        .field-rule-checkbox{
+            bottom: 16px;
         }
         .remark-rule{
             width: calc(100% - 1rem);
@@ -345,7 +354,7 @@
             border-radius: 50%;
             background: #fff;
             position: absolute;
-            top: 28px;
+            top: 50px;
             left: 64px;
             background-image: url('img/deleteFile.png');
             background-size:24px 24px;
@@ -364,11 +373,14 @@
             border-color: #ff0000;
             box-shadow: 0px 0px 6px #e74040;;
         }
+        .isRequired{
+            color: #ff0000;
+        }
     </style>
 </head>
 <body>
     <div id="app">
-        <header><img src='img/img_bg.png' alt=""/></header>
+        <!-- <header><img src='img/img_bg.png' alt=""/></header> -->
         <form id="form" onsubmit="return false" action="#" method="post">
         </form>
         <footer>
@@ -386,7 +398,7 @@
         var params = {};
 
         // let IP = 'http://10.128.151.108:443';
-        // let search = '?formId=1260512257036681216&userId=10001'
+        // let search = '?formId=1260133759028326400&userId=10001'
         // search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
         var IP = location.origin;
@@ -479,11 +491,12 @@
     function fieldItem1(data){
         return data.map(item=>{
             return `<div class="form-item form-item-${item.isShow?'show':'hide'} form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
-                        <div class="field-name">${setNum(item.orderNum)}.${item.name}</div><br/>
+                        <div class="field-name">${setNum(item.orderNum)}.${item.name}</div>
+                        <div class="field-rule field-rule-select">${item.isRequiredQuestions?'必做题':''}</div><br/>
                         <div class="field-div field-div-select">
                             <input name='select-${item.id}' id="select-${item.id}" data-id="${item.id}" readonly="readonly" unselectable="on" class="field-text field-text-select" placeholder="请选择"/>
                         </div>
-                        <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
+                        
                         <div class="field-div field-div-remark field-remark-${item.id}">
                             <span class="beizhu">备注：</span><input name='remark-${item.id}-1' id="remark-${item.id}" data-id="${item.id}" class="field-remark field-text-remark"/>
                         </div>
@@ -496,9 +509,10 @@
             let optionList = item.content;
             let option = optionItem2(item,optionList).join('')
             return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
-                        <div class="field-name field-div-radio">${setNum(item.orderNum)}.${item.name}</div><br/>
+                        <div class="field-name field-div-radio">${setNum(item.orderNum)}.${item.name}</div>
+                        <div class="field-rule field-rule-radio">${item.isRequiredQuestions?'必做题':''}</div><br/>
                         ${option}
-                        <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
+                        
                         <div class="field-div field-div-remark field-remark-${item.id}">
                             <span class="beizhu">备注：</span><input name='remark-${item.id}-1' id="remark-${item.id}" data-id="${item.id}" class="field-remark field-text-remark"/>
                         </div>
@@ -520,9 +534,10 @@
             let optionList = item.content;
             let option = optionItem3(item,optionList).join('')
             return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name field-div-checkbox">${setNum(item.orderNum)}.${item.name}</span><br/>
+                        <div class="field-name field-div-checkbox">${setNum(item.orderNum)}.${item.name}</div>
+                        <div class="field-rule field-rule-checkbox">${item.isRequiredQuestions?'必做题':''}</div><br/>
                         ${option}
-                        <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
+                        
                     </div>`
         })
         
@@ -549,11 +564,11 @@
             rule.isRequiredQuestions = item.isRequiredQuestions;
             let ruleStr = JSON.stringify(rule)
             return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
+                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span>
+                        <div class="field-rule">${item.isRequiredQuestions?'必做题':''}</div><br/>
                         <div class="field-div">
                             <input type="text" name='number-${item.id}' id='number-${item.id}' data-rule='${ruleStr}' class="field-text field-text-number" placeholder="请输入数字（只保留小数点后三位）"/>
                         </div>
-                        <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
                     </div>`
         })
         
@@ -567,11 +582,12 @@
             let ruleStr = JSON.stringify(rule)
             // let height = Math.ceil(rule.max/18)
             return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
+                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span>
+                        <div class="field-rule">${item.content?'':item.isRequiredQuestions?'必做题':''}</div><br/>
                         <div class="field-div">
                             <textarea name='textarea-${item.id}' id='textarea-${item.id}' class="field-txt" rows="6" data-rule='${ruleStr}' placeholder="请填写">${item.content||''}</textarea>
                         </div>
-                        <div class="field-rule">${item.content?'':item.isRequiredQuestions?'必填项':''}</div>
+                        
                     </div>`
         })
         
@@ -585,12 +601,12 @@
             let height = Math.ceil(rule.max/18)
             let ruleStr = JSON.stringify(rule)
             return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
+                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span>
+                        <div class="field-rule">${item.content?'':item.isRequiredQuestions?'必做题':''}</div><br/>
                         <div class="field-div">
                             <input type="text" name='address-${item.id}' id="address-${item.id}" data-rule='${ruleStr}' readonly="readonly" unselectable="on" class="field-text field-text-address" placeholder="省/市/区/详细地址"/>
                             ${includeAll}
                         </div>
-                        <div class="field-rule">${item.content?'':item.isRequiredQuestions?'必填项':''}</div>
                     </div>`
         })
         
@@ -600,11 +616,11 @@
     function fieldItem7(data){
         return data.map(item=>{
             return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
+                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span>
+                        <div class="field-rule">${item.content?'':item.isRequiredQuestions?'必做题':''}</div><br/>
                         <div class="field-div">
                             <input type="text" name='date-${item.id}' data-rule='${item.typeDetailLimit}' id="date-${item.id}"  placeholder="请选择日期" readonly="readonly" unselectable="on" class="field-text field-text-date"/>
                         </div>
-                        <div class="field-rule">${item.isRequiredQuestions?'必填项':''}</div>
                     </div>`
         })
         
@@ -629,22 +645,23 @@
                 acceptType = acceptType + 'application/x-zip-compressed'
             }
             return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span><br/>
+                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span>
+                        <div class="field-rule field-rule-${item.id}">${item.isRequiredQuestions?'必做题':''}</div><br/>
                         <div class="field-div">
                             <input type="file" id="file-${item.id}" accept="${acceptType}" data-id="${item.id}"  name="file-${item.id}" data-rule='${item.typeDetailLimit}' class="field-text field-file" />
                             <div class='deleteFile deleteFile-${item.id}' data-rule="${item.isRequiredQuestions}" data-id="${item.id}"></div>
                         </div>
-                        <div class="field-rule field-rule-${item.id}">${item.isRequiredQuestions?'必填项':''}</div>
+                        
                     </div>`
         })
         
     }
     //题目设置
-    function setNum(num){
+    function setNum(num,item){
         if(num>9){
-            return `<span class="orderNum">*${num}</span>`
+            return `<span class="orderNum">${num}</span>`
         }else{
-            return `<span class="orderNum">*0${num}</span>`
+            return `<span class="orderNum">0${num}</span>`
         }
     }
 
@@ -804,6 +821,7 @@
                 onConfirm: function (e) {
                     console.log(e);
                     that.val(e[0].label)
+                    $(`.orderNum-${topicId}`).removeClass('isRequired')
                     that.parent().parent().children(".field-rule").html('')
                     let logic = e[0].logic;
                     let order = e[0].order;
@@ -827,7 +845,7 @@
                         $(`#remark-${topicId}`).addClass('remarkRed')
                         $(`#remark-${topicId}`).attr('data-required','1')
                         // $(`.remark-rule-${topicId}`).show();
-                        // $(`.remark-rule-${topicId}`).html('必填项');
+                        // $(`.remark-rule-${topicId}`).html('必做题');
                         // $(`.remark-rule-${topicId}`).attr('data-required','1')
                     }else{
                         $(`#remark-${topicId}`).removeClass('remarkRed')
@@ -903,7 +921,7 @@
             $(`#remark-${topicId}`).addClass('remarkRed')
             $(`#remark-${topicId}`).attr('data-required','1')
             // $(`.remark-rule-${topicId}`).show();
-            // $(`.remark-rule-${topicId}`).html('必填项');
+            // $(`.remark-rule-${topicId}`).html('必做题');
             // $(`.remark-rule-${topicId}`).attr('data-required','1')
         }else{
             $(`#remark-${topicId}`).removeClass('remarkRed')
@@ -949,6 +967,7 @@
                 }
             })
         })
+        $(`.orderNum-${topicId}`).removeClass('isRequired')
         $(this).parent().parent().children(".field-rule").html('')
         
     })
@@ -996,7 +1015,7 @@
                 $(`#remark-${topicId}-${rule2.order}`).addClass('remarkRed')
                 $(`#remark-${topicId}-${rule2.order}`).attr('data-required','1')
                 // $(`.remark-rule-${topicId}`).show();
-                // $(`.remark-rule-${topicId}`).html('必填项');
+                // $(`.remark-rule-${topicId}`).html('必做题');
                 // $(`.remark-rule-${topicId}`).attr('data-required','1')
             }
 
@@ -1051,10 +1070,12 @@
             }else{
                 $(this).parent().parent().children(".field-rule").html('')
             }
+            $(`.orderNum-${topicId}`).removeClass('isRequired')
            
         }else{
             if(rule.isRequiredQuestions){
-                $(this).parent().parent().children(".field-rule").html('必填项')
+                $(`.orderNum-${topicId}`).addClass('isRequired')
+                $(this).parent().parent().children(".field-rule").html('必做题')
             }else{
                 $(this).parent().parent().children(".field-rule").html('')
             }
@@ -1072,7 +1093,7 @@
         console.log('数字',rule)
         if(value===""){
             if(rule.isRequiredQuestions){
-                $(this).parent().parent().children(".field-rule").html('必填项');
+                $(this).parent().parent().children(".field-rule").html('必做题');
             }else{
                 $(this).parent().parent().children(".field-rule").html('');
             }
@@ -1120,7 +1141,7 @@
             $(this).parent().parent().children(".field-rule").html(`字数限制${rule.max}字`)
         }else{
             if(rule.isRequiredQuestions&&value===""){
-                $(this).parent().parent().children(".field-rule").html('必填项')
+                $(this).parent().parent().children(".field-rule").html('必做题')
             }else{
                 $(this).parent().parent().children(".field-rule").html('')
             }
@@ -1445,7 +1466,7 @@
         let rule = $(this).attr("data-rule");
         console.log(rule)
         if(rule==='true'){
-            $(`.field-rule-${topicId}`).html('必填项')
+            $(`.field-rule-${topicId}`).html('必做题')
         }
         FormObject[`file-${topicId}`] = '';
         $(`#file-${topicId}`).css('backgroundImage','url(img/upload.png)')
@@ -1499,7 +1520,7 @@
         });
         console.log(ruleList)
         if(ruleList.length){
-            weui.topTips('表单填写不规范或必填项没填', 1500);
+            weui.topTips('表单填写不规范或必做题没填', 1500);
             return;
         }
 
