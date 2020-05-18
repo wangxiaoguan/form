@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>jdate demo</title>
+<title>rolldate demo</title>
 
 <link href="css/bootstrap.css" rel="stylesheet">
 <style type="text/css">
@@ -39,17 +38,9 @@
 <body>
 <div class="jumbotron">
 <div class="container">
-<h1>jdate 多格式、功能强大的移动端日期选择插件</h1>
-
-<div>
-<b>此版特色：</b><br>
-1，拥有和rolldate完全一样的功能；<br>
-2，体积更小，兼容性更强；<br>
-<b>不足之处：</b><br>
-1，滑动较慢；<br>
-<br>
-<b>此版更适合滑动天数少的情况(比如限制只能滑动几天)，或者兼容性要求高的情况，一般情况更推荐使用rolldate。</b>
-</div>
+<h1>rolldate 多格式、功能强大的移动端日期选择插件</h1>
+<p>此为rolldate 3.0新版，使用better-scroll替换了iscroll,旧版请点击
+<a href="https://weijhfly.github.io/rolldate-index2.html">返回旧版</a></p>
 </div>
 </div>
 <div class="container">
@@ -177,6 +168,14 @@
 </div>
 </div>
 </div>
+<h4><strong>不传el</strong></h4>
+<div class="row">
+<div class="form-group clearfix">
+<div class="col-xs-6">
+<input readonly class="form-control" type="text" id="date-group9-1" placeholder="不传el">
+</div>
+</div>
+</div>
 <h4><strong>其他示例</strong></h4>
 <div class="row">
 <div class="form-group clearfix">
@@ -186,81 +185,80 @@
 </div>
 </div>
 </div>
-<script src="js/jquery.js"></script>
 <script>
 		window.onload = function() {
 
 			// 格式
-			new Jdate({
+			new Rolldate({
 				el: '#date-group1-1',
 				format: 'YYYY-MM',
 				beginYear: 2000,
 				endYear: 2100
 			})
-			new Jdate({
+			new Rolldate({
 				el: '#date-group1-2',
 				format: 'YYYY-MM-DD',
 				beginYear: 2000,
 				endYear: 2100
 			})
-			new Jdate({
+			new Rolldate({
 				el: '#date-group1-3',
 				format: 'YYYY-MM-DD hh'
 			})
-			new Jdate({
+			new Rolldate({
 				el: '#date-group1-4',
 				format: 'YYYY-MM-DD hh:mm',
 				beginYear: 2000,
 				endYear: 2100
 			})
-			new Jdate({
+			new Rolldate({
 				el: '#date-group1-5',
 				format: 'YYYY-MM-DD hh:mm:ss',
 				beginYear: 2000,
 				endYear: 2100
 			})
-			new Jdate({
+			new Rolldate({
 				el: '#date-group1-6',
 				format: 'hh:mm'
 			})
-			new Jdate({
+			new Rolldate({
 				el: '#date-group1-7',
 				format: 'hh:mm:ss'
 			})
-			new Jdate({
+			new Rolldate({
 				el: '#date-group1-8',
 				format: 'YYYY',
 				beginYear: 2000,
 				endYear: 2100
 			})
-			new Jdate({
+			new Rolldate({
 				el: '#date-group1-9',
 				format: 'MM'
 			})
-			new Jdate({
+			new Rolldate({
 				el: '#date-group1-10',
 				format: 'DD'
 			})
-			new Jdate({
+			new Rolldate({
 				el: '#date-group1-11',
 				format: 'hh'
 			})
-			new Jdate({
+			new Rolldate({
 				el: '#date-group1-12',
 				format: 'mm'
 			})
-			new Jdate({
+			new Rolldate({
 				el: '#date-group1-13',
 				format: 'ss'
 			})
-			new Jdate({
+			new Rolldate({
 				el: '#date-group1-14',
 				format: 'YYYY/DD'
 			})
 			/* 回调函数
 			 * tips:	在vue及其他mvvm框架中使用时，在confirm中修改v-model绑定的数据即可
 			 */
-			new Jdate({
+			new Rolldate({
 				el: '#date-group2-1',
 				format: 'YYYY-MM-DD',
 				beginYear: 2000,
@@ -268,7 +266,8 @@
 				init: function() {
 					console.log('插件开始触发');
 				},
-				moveEnd: function() {
+				moveEnd: function(scroll) {
+					console.log(scroll)
 					console.log('滚动结束');
 				},
 				confirm: function(date) {
@@ -279,7 +278,7 @@
 					console.log('插件运行取消');
 				}
 			})
-			new Jdate({
+			new Rolldate({
 				el: '#date-group2-2',
 				format: 'YYYY-MM-DD',
 				beginYear: 2000,
@@ -291,7 +290,7 @@
 					}
 				}
 			})
-			new Jdate({
+			new Rolldate({
 				el: '#date-group2-3',
 				format: 'YYYY-MM-DD',
 				beginYear: 2000,
@@ -313,7 +312,7 @@
 				sec: '秒'
 			};
 			// 如果某个值未修改可不传 以上同 var lang = {title:'自定义标题'} 允许传空串
-			new Jdate({
+			new Rolldate({
 				el: '#date-group3-1',
 				format: 'YYYY-MM-DD',
 				beginYear: 2000,
@@ -322,7 +321,7 @@
 			})
 
 			// 设置默认日期 内部使用document.getElementById('date').bindDate = new Date('2019/05/13');
-			new Jdate({
+			new Rolldate({
 				el: '#date-group4-1',
 				format: 'YYYY-MM-DD',
 				beginYear: 2000,
@@ -331,7 +330,7 @@
 			})
 
 			// el传dom对象，只支持单个
-			new Jdate({
+			new Rolldate({
 				el: document.getElementById('date-group5-1'),
 				format: 'YYYY-MM-DD',
 				beginYear: 2000,
@@ -339,20 +338,30 @@
 			})
 
 			// 分钟按指定数分隔
-			new Jdate({
+			new Rolldate({
 				el: '#date-group6-1',
 				format: 'hh:mm',
-				minStep: 1
+				minStep: 5
 			})
 			// 使用原生click
-			new Jdate({
+			new Rolldate({
 				el: '#date-group7-1',
 				trigger: 'click'
+			})
+			// 不传el
+			var el = document.getElementById('date-group9-1');
+			el.addEventListener('click', function() {
+				rd.show();
+			})
+			var rd = new Rolldate({
+				confirm: function(date) {
+					el.value = date;
+				}
 			})
 
 			// 其他示例
 			//日期判断
-			new Jdate({
+			new Rolldate({
 				el: '#date-group8-1',
 				format: 'YYYY-MM-DD',
 				beginYear: 2000,
@@ -370,6 +379,5 @@
 			})
 		}
 	</script>
-<script type="text/javascript" src="js/jdate.js"></script>
-</body>
+<script type="text/javascript" src="js/rolldate.js"></script></body>
 </html>

@@ -4,6 +4,7 @@
   background: red;
   border: 1px solid #aaa;
   box-shadow: inset 6px 6px 6px 6px #4ac75f;
+  color: #aaa;
 }
 .father .son {
   width: 50px;
