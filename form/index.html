@@ -101,7 +101,7 @@
         var params = {};
 
         // let IP = 'http://10.128.151.108:443';
-        // let search = '?formId=1260747263570722816&userId=10001'
+        // let search = '?formId=1262260388381634560&userId=10001'
         // search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
 
@@ -181,7 +181,8 @@
             document.getElementById('desp').innerHTML = data.content.replace(/<>/g,'')
             if(data.imgs!==''||data.imgs!=='[]'){
                 let imgs = []
-                imgs = JSON.parse(data.imgs)
+                // imgs = JSON.parse(data.imgs)
+                imgs = eval("("+data.imgs+")")
                 let imgStr = '';
                 imgs.map(item=>{
                     imgStr = imgStr + `<img class="content-img" src="${ossAddr+'/'+item}" alt=""/>`
