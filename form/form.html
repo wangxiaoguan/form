@@ -398,7 +398,8 @@
         var params = {};
 
         // let IP = 'http://10.128.151.108:443';
-        // let search = '?formId=1260133759028326400&userId=10001'
+        // let IP = 'https://test.cictsj.com:30000'
+        // let search = '?formId=26651577020318769&userId=10003'
         // search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
         var IP = location.origin;
@@ -1550,8 +1551,12 @@
             }
             let regStr2 = /^remark-[0-9]{19}_/;
             if(regStr2.test(key)){
-                remarkList.push({id:key.substring(7,26),remark:FormObject[key]})
+                console.log(key)
+                // remarkList.push({id:key.substring(7,26),remark:FormObject[key]})
                 // delete FormObject[key]
+            }
+            if(key.indexOf('remark')>-1&&key.indexOf('_')>-1&&FormObject[key]){
+                remarkList.push({id:key.substring(7,24),remark:FormObject[key]})
             }
             if(!regStr.test(key)&&!regStr2.test(key)){
                 allFormData[key] = FormObject[key]
@@ -1590,7 +1595,7 @@
                     "content": content,
                     "remark": str
                 })
-            }else{
+            }else if(formName!=='checkbox'&&formName!=='radio'&&formName!=='select'&&formName!=='remark'){
                 console.log(formId)
                 list.push({
                     "topicId": formId,
