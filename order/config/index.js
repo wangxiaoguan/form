@@ -1,3 +1,5 @@
+
+let env = process.env.NODE_ENV === 'development'
 const config = {
   projectName: 'h5App',
   date: '2019-12-2',
@@ -68,7 +70,7 @@ const config = {
     }
   },
   h5: {
-    publicPath: './',
+    publicPath: env?'/':'./',
     staticDirectory: 'static',
     esnextModules: ['taro-ui'],
     devServer: {port: 8080,host: "localhost"},
