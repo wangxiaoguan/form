@@ -399,11 +399,11 @@
 
         // let IP = 'http://10.128.151.108:443';
         // let IP = 'https://test.cictsj.com:30000'
-        // let search = '?formId=26651577020318769&userId=10003'
+        // let search = '?formId=1262260388381634560&userId=10003'
         // search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
-        var IP = location.origin;
-        location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+        // var IP = location.origin;
+        // location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
         var formId = params.formId;
         var userId = params.userId;
@@ -436,6 +436,8 @@
                         getTopicList(topicAllList)
                         setLastAnswer(lastJoinAnswer)
                         $('#app').show()
+                    }else if(data.status === 0){
+                        window.location.href = `${IP}/services/app/static/cicth5/form/finished.html?formId=${params.formId}&userId=${params.userId}&ToAPP=1`
                     }else{
                         DataLoading.hide();
                         let loading = weui.loading("系统异常");
