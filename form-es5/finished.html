@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="content-type" content="no-cache, must-revalidate" />
+    <meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>填报</title>
+    <style>
+        html,body{
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin:0;
+        }
+        #app{
+            width: 100%;
+            height: 100%;
+        }
+        header>img{
+            width: 100%;
+        }
+        .middle{
+            border: 0px solid transparent;
+            text-align: center;
+        }
+        .middle>img{
+            width: 80px;
+            margin-top: 40%;
+        }
+        .status{
+            line-height: 2rem;
+            font-size: 1rem;
+            margin-top: 1rem;
+            font-family:'PingFang SC';
+            font-weight:400;
+            color:#B5B5B5
+        }
+        .look{
+            font-size: 0.8rem;
+            color:#00A0E9;
+            text-decoration: none;
+            display: none;
+        }
+        footer{
+            width: 100%;
+            padding: 2rem 0;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+        .submitBtn{
+            width: 60%;
+            margin:0 20%;
+            height: 2.4rem;
+            border-radius: 1.2rem;
+            background: #635CEA;
+            text-align: center;
+            line-height: 2.4rem;
+            color: #fff;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- <header><img src='img/img_bg.png' alt=""/></header> -->
+        <div class="middle">
+            <img src='img/formdown.png' alt=""/>
+            <div class="status"></div>
+            <a class="look" onclick="lookList()">查看填写历史></a>
+        </div>
+        <footer>
+            <!-- <div class="submitBtn" onclick="submit()">返回</div> -->
+        </footer>
+    </div>
+</body>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script>
+
+        var params = {};
+
+        // let IP = 'http://10.110.200.62:443';
+        // let search = '?formId=1250359681335099392&userId=10001'
+        // search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+
+        var IP = location.origin;
+        location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+
+        
+        var url = `${IP}/services/web/config/questionnaireForm/getDetailByFormIdFromCache/${params.formId}/${params.userId}`;
+        function getFormData(){
+            fetch(url).then(function(res){
+                res.json().then(data=>{
+                    if(data.status === 0){
+                        let formData = data.root.object;
+                        let errorMsg = formData.msg;
+                        let hasJoinForm = formData.hasJoinForm;
+                        console.log(errorMsg,hasJoinForm)
+                        $('.status').html(errorMsg)
+                        hasJoinForm&&$('.look').show()
+                    }
+                })
+            }).catch(error=>{
+                DataLoading.hide();
+                
+            })
+        }
+        getFormData()
+        function lookList(){
+            window.location.href = `${IP}/services/app/static/cicth5/form/list.html?formId=${params.formId}&userId=${params.userId}`
+        }
+
+</script>
+</html>
