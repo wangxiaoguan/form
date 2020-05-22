@@ -59,22 +59,22 @@
 <script type="text/javascript" src="js/weui.js"></script>
 <script type="text/javascript" src='js/moment.js'></script>
 <!-- <script type='text/javascript' src='http://www.jq22.com/demo/jqueryxlpaging201908112211/xlPaging.js'></script> -->
-<script type="text/javascript" src="http://www.jq22.com/demo/jqueryxlpaging201908112211/xlPaging.js"></script>
+<!-- <script type="text/javascript" src="http://www.jq22.com/demo/jqueryxlpaging201908112211/xlPaging.js"></script> -->
 <script>
 
-    function toPage(nowPage,pageNum){
-        new Paging('page', {
-            nowPage: nowPage, // 当前页码
-            pageNum: pageNum, // 总页码
-            buttonNum: 4, //要展示的页码数量
-            canJump: 1,// 是否能跳转。0=不显示（默认），1=显示
-            showOne: 1,//只有一页时，是否显示。0=不显示,1=显示（默认）
-            callback: function (num) { //回调函数
-                console.log(num);
-                getFormData(num)
-            }
-        })
-    }
+    // function toPage(nowPage,pageNum){
+    //     new Paging('page', {
+    //         nowPage: nowPage, // 当前页码
+    //         pageNum: pageNum, // 总页码
+    //         buttonNum: 4, //要展示的页码数量
+    //         canJump: 1,// 是否能跳转。0=不显示（默认），1=显示
+    //         showOne: 1,//只有一页时，是否显示。0=不显示,1=显示（默认）
+    //         callback: function (num) { //回调函数
+    //             console.log(num);
+    //             getFormData(num)
+    //         }
+    //     })
+    // }
     // toPage(1,1)
 </script>
 <script>
@@ -84,15 +84,20 @@
             let params = {};
 
 
-            // let IP = 'http://10.110.200.62:443';
-            // let search = '?formId=1250722340382633984&userId=10001'
-            // search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+            let IP = 'https://test.cictsj.com:30000/';
+            let search = '?formId=1261101933682790400&userId=48941&createDate=2020-05-18 10:58:06'
+            search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
 
-            let IP = location.origin;
-            location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+            // let IP = location.origin;
+            // location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
 
             console.log(params)
+            alert(params.formId)
+            alert(params.userId)
+            alert(params.createDate)
+
+            // return;
             
             let url = `${IP}/services/web/config/questionnaireFormAnswer/getAnswersByUserAndFormIdAndTime/${params.formId}/${params.userId}/${params.createDate}`;
             let DataLoading = weui.loading('数据请求中...');
