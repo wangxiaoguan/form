@@ -338,16 +338,28 @@
             height: 70px;
             padding: 0;
             margin: 0;
-            background: #fff;
+            background-color: #fff !important;
             border: none;
             background-image: url('img/upload.png');
             background-size:70px 70px;
             background-position:0 0;
             background-repeat: no-repeat;
+            font-size: 12px;
+            color:hsl(0, 0%, 100%)
+        }
+        .field-file>input[type="button"]{
+            display: none
         }
         input[type="file" i]::-webkit-file-upload-button {
             display: none;
+            width: 0;
+            height: 0;
+            position: relative;
+            z-index:-1000;
+            opacity: 0;
+            filter:alpha(opacity=0);
         }
+
         .deleteFile{
             width: 24px;
             height: 24px;
@@ -397,19 +409,19 @@
 <script>
         var params = {};
 
-        let IP = 'http://10.128.151.108:443';
-        // let IP = 'https://test.cictsj.com:30000'
-        let search = '?formId=1262260388381634560&userId=10003'
-        search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+        // var IP = 'http://10.128.151.108:443';
+        // // var IP = 'https://test.cictsj.com:30000'
+        // var search = '?formId=1263664214585778176&userId=10008'
+        // search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
 
-        // var IP = location.origin;
-        // location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+        var IP = location.origin;
+        location.search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
 
         var formId = params.formId;
         var userId = params.userId;
         
         
-        var url = `${IP}/services/web/config/questionnaireForm/getDetailByFormIdFromCache/${formId}/${userId}`;
+        var url = IP + "/services/web/config/questionnaireForm/getDetailByFormIdFromCache/" + formId + "/" + userId;
         var formData = {};//总表单数据
         var topicAllList = [];//总题目列表
         var FormObject = {};//提交表单数据
@@ -424,9 +436,13 @@
         var lastJoinAnswer = [];//上次填写的答案
         
         function getFormData(){
-            let DataLoading = weui.loading('数据请求中...');
-            fetch(url).then(function(res){
-                res.json().then(data=>{
+            var DataLoading = weui.loading('数据请求中...');
+            $.ajax({
+                type: 'get',
+                url: url,
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                success: function success(data) {
                     if(data.status === 1){
                         DataLoading.hide();
                         formData = data.root.object;
@@ -437,204 +453,149 @@
                         setLastAnswer(lastJoinAnswer)
                         $('#app').show()
                     }else if(data.status === 0){
-                        window.location.href = `${IP}/services/app/static/cicth5/form/finished.html?formId=${params.formId}&userId=${params.userId}&ToAPP=1`
+                        window.location.href = IP + "/services/app/static/cicth5/form/finished.html?formId=" + params.formId + "&userId=" + params.userId + "&ToAPP=1";
                     }else{
                         DataLoading.hide();
-                        let loading = weui.loading("系统异常");
-                        setTimeout(()=>{
-                            loading.hide();
+                        var otherloading = weui.loading("系统异常");
+                        setTimeout(function(){
+                            otherloading.hide();
                         },3500)
                     }
-                })
-            }).catch(error=>{
-                DataLoading.hide();
-                
-            })
-        }
-
-        function getTopicList(topicAllList){
-            
-            topicAllList.map(item=>{
-                if(item.type === 1){
-                    item.content = JSON.parse(item.content)
-                    topicList1.push(item)
-                    $('#form').append(fieldItem1([item]).join(''))
-                }else if(item.type === 2){
-                    item.content = JSON.parse(item.content)
-                    topicList2.push(item)
-                    $('#form').append(fieldItem2([item]).join(''))
-                }else if(item.type === 3){
-                    item.content = JSON.parse(item.content)
-                    topicList3.push(item)
-                    $('#form').append(fieldItem3([item]).join(''))
-                }else if(item.type === 4){
-                    topicList4.push(item)
-                    $('#form').append(fieldItem4([item]).join(''))
-                }else if(item.type === 5){
-                    topicList5.push(item)
-                    $('#form').append(fieldItem5([item]).join(''))
-                }else if(item.type === 6){
-                    topicList6.push(item)
-                    $('#form').append(fieldItem6([item]).join(''))
-                }else if(item.type === 7){
-                    topicList7.push(item)
-                    $('#form').append(fieldItem7([item]).join(''))
-                }else if(item.type === 8){
-                    topicList8.push(item)
-                    $('#form').append(fieldItem8([item]).join(''))
+                },
+                error: function error(_error) {
+                    
+                    DataLoading.hide();
                 }
-            })
-        
-        }
-        getFormData()
-</script>
-<script>
+            });
 
-    //下拉框
-    function fieldItem1(data){
-        return data.map(item=>{
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'} form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
-                        <div class="field-name">${setNum(item.orderNum)}.${item.name}</div>
-                        <div class="field-rule field-rule-select">${item.isRequiredQuestions?'必做题':''}</div><br/>
-                        <div class="field-div field-div-select">
-                            <input name='select-${item.id}' id="select-${item.id}" data-id="${item.id}" readonly="readonly" unselectable="on" class="field-text field-text-select" placeholder="请选择"/>
-                        </div>
+        }
+
+
+        getFormData()
+                    //题目设置
+        function setNum(num) {
+            if (num > 9) {
+                return "<span class=\"orderNum\">" + num + "</span>";
+            } else {
+                return "<span class=\"orderNum\">0" + num + "</span>";
+            }
+        }
+
+
+
+
+
+    // 下拉框
+    function fieldItem1(item){
+        // return data.map(function(item){
+        //     return `<div class="form-item form-item-${item.isShow?'show':'hide'} form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
+        //                 <div class="field-name">${setNum(item.orderNum)}.${item.name}</div>
+        //                 <div class="field-rule field-rule-select">${item.isRequiredQuestions?'必做题':''}</div><br/>
+        //                 <div class="field-div field-div-select">
+        //                     <input name='select-${item.id}' id="select-${item.id}" data-id="${item.id}" readonly="readonly" unselectable="on" class="field-text field-text-select" placeholder="请选择"/>
+        //                 </div>
                         
-                        <div class="field-div field-div-remark field-remark-${item.id}">
-                            <span class="beizhu">备注：</span><input name='remark-${item.id}-1' id="remark-${item.id}" data-id="${item.id}" class="field-remark field-text-remark"/>
-                        </div>
-                    </div>`
-        })
+        //                 <div class="field-div field-div-remark field-remark-${item.id}">
+        //                     <span class="beizhu">备注：</span><input name='remark-${item.id}-1' id="remark-${item.id}" data-id="${item.id}" class="field-remark field-text-remark"/>
+        //                 </div>
+        //             </div>`
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + " form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><div class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</div><div class=\"field-rule field-rule-select\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div><br/><div class=\"field-div field-div-select\"><input type=\"text\" name=\'select-" + item.id + "\' id=\"select-" + item.id + "\" data-id=\"" + item.id + "\" readonly=\"readonly\" unselectable=\"on\" class=\"field-text field-text-select\" placeholder=\"\u8BF7\u9009\u62E9\"/></div><div class=\"field-div field-div-remark field-remark-" + item.id + "\"><span class=\"beizhu\">\u5907\u6CE8\uFF1A</span><input name=\"remark-" + item.id + "-1\" id=\"remark-" + item.id + "\" data-id=\"" + item.id + "\" class=\"field-remark field-text-remark\"/></div></div>";
+        // })
     }
+
     //单选框
     function fieldItem2(data){
-        return data.map(item=>{
-            let optionList = item.content;
-            let option = optionItem2(item,optionList).join('')
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
-                        <div class="field-name field-div-radio">${setNum(item.orderNum)}.${item.name}</div>
-                        <div class="field-rule field-rule-radio">${item.isRequiredQuestions?'必做题':''}</div><br/>
-                        ${option}
-                        
-                        <div class="field-div field-div-remark field-remark-${item.id}">
-                            <span class="beizhu">备注：</span><input name='remark-${item.id}-1' id="remark-${item.id}" data-id="${item.id}" class="field-remark field-text-remark"/>
-                        </div>
-                    </div>`
+        return data.map(function(item){
+            var optionList = item.content;
+            var option = optionItem2(item,optionList).join('')
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><div class=\"field-name field-div-radio\">" + setNum(item.orderNum) + "." + item.name + "</div><div class=\"field-rule field-rule-radio\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div><br/>" + option + "<div class=\"field-div field-div-remark field-remark-" + item.id + "\"><span class=\"beizhu\">\u5907\u6CE8\uFF1A</span><input name='remark-" + item.id + "-1' id=\"remark-" + item.id + "\" data-id=\"" + item.id + "\" class=\"field-remark field-text-remark\"/></div></div>";
         })
         
     }
     function optionItem2(item,data){
-        return data.map(e=>{
-                return `<div class="field-div field-div-option">
-                            <input type="radio" data-logic='${JSON.stringify(e.logic)}' data-rule='${JSON.stringify(e)}' data-text='${e.content}' data-id='${item.id}' id="radio-${item.id}-${e.order}" name="radio-${item.id}" class="field-radio" value="${e.order}"/><label for="radio-${item.id}-${e.order}">${e.content}</label><br/>
-                        </div>`
+        return data.map(function(e){
+                return "<div class=\"field-div field-div-option\"><input type=\"radio\" data-logic='" + JSON.stringify(e.logic) + "' data-rule='" + JSON.stringify(e) + "' data-text='" + e.content + "' data-id='" + item.id + "' id=\"radio-" + item.id + "-" + e.order + "\" name=\"radio-" + item.id + "\" class=\"field-radio\" value=\"" + e.order + "\"/><label for=\"radio-" + item.id + "-" + e.order + "\">" + e.content + "</label><br/></div>";
                 })
     }
 
     //多选框
     function fieldItem3(data){
-        return data.map(item=>{
-            let optionList = item.content;
-            let option = optionItem3(item,optionList).join('')
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
-                        <div class="field-name field-div-checkbox">${setNum(item.orderNum)}.${item.name}</div>
-                        <div class="field-rule field-rule-checkbox">${item.isRequiredQuestions?'必做题':''}</div><br/>
-                        ${option}
-                        
-                    </div>`
+        return data.map(function(item){
+            var optionList = item.content;
+            var option = optionItem3(item,optionList).join('')
+            // return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
+            //             <div class="field-name field-div-checkbox">${setNum(item.orderNum)}.${item.name}</div>
+            //             <div class="field-rule field-rule-checkbox">${item.isRequiredQuestions?'必做题':''}</div><br/>
+            //             ${option}
+            //         </div>`
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><div class=\"field-name field-div-checkbox\">" + setNum(item.orderNum) + "." + item.name + "</div><div class=\"field-rule field-rule-checkbox\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div><br/>" + option + "</div>";
         })
         
     }
     function optionItem3(item,data){
-        let rule = JSON.parse(item.typeDetailLimit)
+        var rule = JSON.parse(item.typeDetailLimit)
         rule.isRequiredQuestions = item.isRequiredQuestions;
-        let ruleStr = JSON.stringify(rule)
-        return data.map(e=>{
-                return `<div class="field-div field-div-option">
-                            <input type="checkbox" data-rule='${ruleStr}' data-rule2='${JSON.stringify(e)}' data-content='${e.content}' data-id="${item.id}" data-logic='${JSON.stringify(e.logic)}'' id="checkbox-${item.id}-${e.order}" name="checkbox-${item.id}" class="field-checkbox" value="${e.order}"><label for="checkbox-${item.id}-${e.order}" class="checkbox-${item.id}-${e.order}">${e.content}</label><br/>
-                            <div class="field-div field-div-remark field-remark-${item.id}-${e.order}">
-                                <span class="beizhu">备注：</span><input name='remark-${item.id}-${e.order}' data-order='${e.order}' data-rule='${JSON.stringify(e)}' id="remark-${item.id}-${e.order}" data-id="${item.id}"  class="field-remark field-text-remark"/>
-                            </div>
-                        </div>`
+        var ruleStr = JSON.stringify(rule)
+        return data.map(function(e){
+                return "<div class=\"field-div field-div-option\"><input type=\"checkbox\" data-rule='" + ruleStr + "' data-rule2='" + JSON.stringify(e) + "' data-content='" + e.content + "' data-id=\"" + item.id + "\" data-logic='" + JSON.stringify(e.logic) + "'' id=\"checkbox-" + item.id + "-" + e.order + "\" name=\"checkbox-" + item.id + "\" class=\"field-checkbox\" value=\"" + e.order + "\"><label for=\"checkbox-" + item.id + "-" + e.order + "\" class=\"checkbox-" + item.id + "-" + e.order + "\">" + e.content + "</label><br/><div class=\"field-div field-div-remark field-remark-" + item.id + "-" + e.order + "\"><span class=\"beizhu\">\u5907\u6CE8\uFF1A</span><input name='remark-" + item.id + "-" + e.order + "' data-order='" + e.order + "' data-rule='" + JSON.stringify(e) + "' id=\"remark-" + item.id + "-" + e.order + "\" data-id=\"" + item.id + "\"  class=\"field-remark field-text-remark\"/></div></div>";
                 })
     }
 
-    //数字类型
-    function fieldItem4(data){
-        
-        return data.map(item=>{
-            let rule = JSON.parse(item.typeDetailLimit)
+        //多选框
+        function fieldItem3(item){
+                var optionList = item.content;
+                var option = optionItem3(item,optionList)
+                return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><div class=\"field-name field-div-checkbox\">" + setNum(item.orderNum) + "." + item.name + "</div><div class=\"field-rule field-rule-checkbox\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div><br/>" + option + "</div>";
+        }
+        function optionItem3(item,data){
+            var rule = eval("("+item.typeDetailLimit+")")
+            console.log(item,data)
             rule.isRequiredQuestions = item.isRequiredQuestions;
-            let ruleStr = JSON.stringify(rule)
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span>
-                        <div class="field-rule">${item.isRequiredQuestions?'必做题':''}</div><br/>
-                        <div class="field-div">
-                            <input type="text" name='number-${item.id}' id='number-${item.id}' data-rule='${ruleStr}' class="field-text field-text-number" placeholder="请输入数字（只保留小数点后三位）"/>
-                        </div>
-                    </div>`
-        })
-        
-    }
-
-    //问答
-    function fieldItem5(data){
-        return data.map(item=>{
-            let rule = eval("("+item.typeDetailLimit+")");
+            var ruleStr = JSON.stringify(rule)
+            var optionStr = "";
+            data.map(function(e){
+                    optionStr = optionStr +  "<div class=\"field-div field-div-option\"><input type=\"checkbox\" data-rule=\'" + ruleStr + "\' data-rule2=\'" + JSON.stringify(e) + "\' data-content=\'" + e.content + "\' data-id=\"" + item.id + "\" data-logic=\'" + JSON.stringify(e.logic) + "\' id=\"checkbox-" + item.id + "-" + e.order + "\" name=\"checkbox-" + item.id + "\" class=\"field-checkbox\" value=\"" + e.order + "\"><label for=\"checkbox-" + item.id + "-" + e.order + "\" class=\"checkbox-" + item.id + "-" + e.order + "\">" + e.content + "</label><br/><div class=\"field-div field-div-remark field-remark-" + item.id + "-" + e.order + "\"><span class=\"beizhu\">\u5907\u6CE8\uFF1A</span><input name=\'remark-" + item.id + "-" + e.order + "\' data-order=\'" + e.order + "\' data-rule=\'" + JSON.stringify(e) + "\' id=\"remark-" + item.id + "-" + e.order + "\" data-id=\"" + item.id + "\"  class=\"field-remark field-text-remark\"/></div></div>";
+                    })
+            return optionStr
+        }
+        //数字类型
+        function fieldItem4(item){
+            var rule = JSON.parse(item.typeDetailLimit)
             rule.isRequiredQuestions = item.isRequiredQuestions;
-            let ruleStr = JSON.stringify(rule)
-            // let height = Math.ceil(rule.max/18)
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span>
-                        <div class="field-rule">${item.content?'':item.isRequiredQuestions?'必做题':''}</div><br/>
-                        <div class="field-div">
-                            <textarea name='textarea-${item.id}' id='textarea-${item.id}' class="field-txt" rows="6" data-rule='${ruleStr}' placeholder="请填写">${item.content||''}</textarea>
-                        </div>
-                        
-                    </div>`
-        })
-        
-    }
+            var ruleStr = JSON.stringify(rule)
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div><br/><div class=\"field-div\"><input type=\"text\" name='number-" + item.id + "' id=\'number-" + item.id + "\' data-rule=\'" + ruleStr + "\' class=\"field-text field-text-number\" placeholder=\"\u8BF7\u8F93\u5165\u6570\u5B57\uFF08\u53EA\u4FDD\u7559\u5C0F\u6570\u70B9\u540E\u4E09\u4F4D\uFF09\"/></div></div>";
+            
+        }
 
-    //城市
-    function fieldItem6(data){
-        return data.map(item=>{
-            let rule = eval("("+item.typeDetailLimit+")");
-            let includeAll = rule.includeAll?`<div class="field-area">海外地区填写></div>`:''
-            let height = Math.ceil(rule.max/18)
-            let ruleStr = JSON.stringify(rule)
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span>
-                        <div class="field-rule">${item.content?'':item.isRequiredQuestions?'必做题':''}</div><br/>
-                        <div class="field-div">
-                            <input type="text" name='address-${item.id}' id="address-${item.id}" data-rule='${ruleStr}' readonly="readonly" unselectable="on" class="field-text field-text-address" placeholder="省/市/区/详细地址"/>
-                            ${includeAll}
-                        </div>
-                    </div>`
-        })
-        
-    }
+        //问答
+        function fieldItem5(item){
+            var rule = eval("("+item.typeDetailLimit+")");
+            rule.isRequiredQuestions = item.isRequiredQuestions;
+            var ruleStr = JSON.stringify(rule)
+
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.content ? '' : item.isRequiredQuestions ? '必做题' : '') + "</div><br/><div class=\"field-div\"><textarea name=\'textarea-" + item.id + "\' id=\'textarea-" + item.id + "\' class=\"field-txt\" rows=\"6\" data-rule=\'" + ruleStr + "\' placeholder=\"\u8BF7\u586B\u5199\">" + (item.content || '') + "</textarea></div></div>";
+            
+        }
+        //城市
+        function fieldItem6(item){
+            var rule = eval("("+item.typeDetailLimit+")");
+            var includeAll = rule.includeAll?"<div class=\"field-area\">\u6D77\u5916\u5730\u533A\u586B\u5199></div>":''
+            var height = Math.ceil(rule.max/18)
+            var ruleStr = JSON.stringify(rule)
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.content ? '' : item.isRequiredQuestions ? '必做题' : '') + "</div><br/><div class=\"field-div\"><input type=\"text\" name=\'address-" + item.id + "\' id=\"address-" + item.id + "\" data-rule=\'" + ruleStr + "\' readonly=\"readonly\" unselectable=\"on\" class=\"field-text field-text-address\" placeholder=\"\u7701/\u5E02/\u533A/\u8BE6\u7EC6\u5730\u5740\"/>" + includeAll + "</div></div>";
+        }
 
     //日期
-    function fieldItem7(data){
-        return data.map(item=>{
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span>
-                        <div class="field-rule">${item.content?'':item.isRequiredQuestions?'必做题':''}</div><br/>
-                        <div class="field-div">
-                            <input type="text" name='date-${item.id}' data-rule='${item.typeDetailLimit}' id="date-${item.id}"  placeholder="请选择日期" readonly="readonly" unselectable="on" class="field-text field-text-date"/>
-                        </div>
-                    </div>`
-        })
+    function fieldItem7(item){
+        return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.content ? "" : item.isRequiredQuestions ? '必做题' : '') + "</div><br/><div class=\"field-div\"><input type=\"text\" name=\"date-" + item.id + "\" data-rule=\'" + item.typeDetailLimit + "\' id=\"date-" + item.id + "\"  placeholder=\"\u8BF7\u9009\u62E9\u65E5\u671F\" readonly=\"readonly\" unselectable=\"on\" class=\"field-text field-text-date\"/></div></div>";
         
     }
 
     //附件
     function fieldItem8(data){
-        return data.map(item=>{
-            let rule = JSON.parse(item.typeDetailLimit).type;
-            console.log(rule)
-            let acceptType = '';
+        return data.map(function(item){
+            var rule = JSON.parse(item.typeDetailLimit).type;
+            var acceptType = '';
             if(rule.indexOf('jpg,jpeg,png,gif')>-1){
                 acceptType = acceptType + 'image/jpeg,jpeg,image/png,image/gif'
             }
@@ -647,53 +608,86 @@
             if(rule.indexOf('zip,rar,7z')>-1){
                 acceptType = acceptType + 'application/x-zip-compressed'
             }
-            return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
-                        <span class="field-name">${setNum(item.orderNum)}.${item.name}</span>
-                        <div class="field-rule field-rule-${item.id}">${item.isRequiredQuestions?'必做题':''}</div><br/>
-                        <div class="field-div">
-                            <input type="file" id="file-${item.id}" accept="${acceptType}" data-id="${item.id}"  name="file-${item.id}" data-rule='${item.typeDetailLimit}' class="field-text field-file" />
-                            <div class='deleteFile deleteFile-${item.id}' data-rule="${item.isRequiredQuestions}" data-id="${item.id}"></div>
-                        </div>
-                        
-                    </div>`
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule field-rule-" + item.id + "\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div><br/><div class=\"field-div\"><input type=\"file\" title=\"\" id=\"file-" + item.id + "\" accept=\"" + acceptType + "\" data-id=\"" + item.id + "\"  name=\"file-" + item.id + "\" data-rule=\'" + item.typeDetailLimit + "\' class=\"field-text field-file\" /><div class=\'deleteFile deleteFile-" + item.id + "\' data-rule=\"" + item.isRequiredQuestions + "\" data-id=\"" + item.id + "\"></div></div></div>";
         })
         
     }
-    //题目设置
-    function setNum(num,item){
-        if(num>9){
-            return `<span class="orderNum">${num}</span>`
-        }else{
-            return `<span class="orderNum">0${num}</span>`
+
+    function getTopicList(topicAllList){
+            topicAllList.map(function(item){
+                if(item.type === 1){
+                    // item.content = JSON.parse(item.content)
+                    item.content = eval("("+item.content+")")
+                    topicList1.push(item)
+                    $('#form').append(fieldItem1(item))
+                }else if(item.type === 2){
+                    // item.content = JSON.parse(item.content)
+                    item.content = eval("("+item.content+")")
+                    topicList2.push(item)
+                    $('#form').append(fieldItem2([item]).join(''))
+                }else if(item.type === 3){
+                    // item.content = JSON.parse(item.content)
+                    item.content = eval("("+item.content+")")
+                    topicList3.push(item)
+                    $('#form').append(fieldItem3(item))
+                }else if(item.type === 4){
+                    topicList4.push(item)
+                    $('#form').append(fieldItem4(item))
+                }else if(item.type === 5){
+                    topicList5.push(item)
+                    $('#form').append(fieldItem5(item))
+                }else if(item.type === 6){
+                    topicList6.push(item)
+                   
+                    $('#form').append(fieldItem6(item))
+                }else if(item.type === 7){
+                    topicList7.push(item)
+                    $('#form').append(fieldItem7(item))
+                }else if(item.type === 8){
+                    topicList8.push(item)
+                    $('#form').append(fieldItem8([item]).join(''))
+                }
+            })
+            
         }
-    }
 
    
-
 
 </script>
 <script>
     function setLastAnswer(data){
-        data.map(item=>{
+        data.map(function(item){
             console.log(item)
-            let topicId = item.topicId;
-            let type = $(`.form-item-${topicId}`).attr("data-type")
-            $(`.form-item-${topicId}`).children(".field-rule").html('')
+
+            var topicId = item.topicId;
+            var type = $(".form-item-" + topicId).attr("data-type");
+            $(".form-item-" + topicId).children(".field-rule").html('');
+
             if(type === '1'){
                 if(item.content){
-                    $(`.form-item-${topicId}`).show()
-                    FormObject[`select-${topicId}`] = item.content;
-                    $(`#select-${topicId}`).val(item.content)
+                    $(".form-item-" + topicId).show();
+                    FormObject["select-" + topicId] = item.content;
+                    $("#select-" + topicId).val(item.content);
                 }
                 if(item.remark){
-                    FormObject[`remark-${topicId}_1`] = item.remark
-                    let remarkObj = JSON.parse(item.remark)
-                    $(`.field-remark-${topicId}`).show()
-                    $(`#remark-${topicId}`).val(remarkObj.desp)
-                    if(remarkObj.required){
-                        $(`#remark-${topicId}`).attr('data-required','1')
-                    }else{
-                        $(`#remark-${topicId}`).attr('data-required','0')
+                    // FormObject[`remark-${topicId}_1`] = item.remark
+                    // let remarkObj = JSON.parse(item.remark)
+                    // $(`.field-remark-${topicId}`).show()
+                    // $(`#remark-${topicId}`).val(remarkObj.desp)
+                    // if(remarkObj.required){
+                    //     $(`#remark-${topicId}`).attr('data-required','1')
+                    // }else{
+                    //     $(`#remark-${topicId}`).attr('data-required','0')
+                    // }
+                    FormObject["remark-" + topicId + "_1"] = item.remark;
+                    var remarkObj = JSON.parse(item.remark);
+                    $(".field-remark-" + topicId).show();
+                    $("#remark-" + topicId).val(remarkObj.desp);
+
+                    if (remarkObj.required) {
+                        $("#remark-" + topicId).attr('data-required', '1');
+                    } else {
+                        $("#remark-" + topicId).attr('data-required', '0');
                     }
                     
                 }
@@ -701,52 +695,91 @@
 
             }else if(type === '2'){
                 if(item.content){
-                    $(`.form-item-${topicId}`).show()
-                    FormObject[`radio-${topicId}`] = item.content;
-                    let content = item.content
-                    $(`input[name=radio-${topicId}]`).each(function(order){
-                        let text = $(`#radio-${topicId}-${order+1}`).attr('data-text')
-                        if(content===text){
-                            $(`#radio-${topicId}-${order+1}`).attr("checked", 'checked');
-                        }
+                    // $(`.form-item-${topicId}`).show()
+                    // FormObject[`radio-${topicId}`] = item.content;
+                    // let content = item.content
+                    // $(`input[name=radio-${topicId}]`).each(function(order){
+                    //     let text = $(`#radio-${topicId}-${order+1}`).attr('data-text')
+                    //     if(content===text){
+                    //         $(`#radio-${topicId}-${order+1}`).attr("checked", 'checked');
+                    //     }
                         
-                    })
+                    // })
+                    $(".form-item-" + topicId).show();
+                    FormObject["radio-" + topicId] = item.content;
+                    var content = item.content;
+                    $("input[name=radio-" + topicId + "]").each(function (order) {
+                        var text = $("#radio-" + topicId + "-" + (order + 1)).attr('data-text');
+
+                        if (content === text) {
+                            $("#radio-" + topicId + "-" + (order + 1)).attr("checked", 'checked');
+                        }
+                    });
                 }
                 if(item.remark){
-                    FormObject[`remark-${topicId}_1`] = item.remark
-                    let remarkObj = JSON.parse(item.remark)
-                    $(`.field-remark-${topicId}`).show()
-                    $(`#remark-${topicId}`).val(remarkObj.desp)
-                    if(remarkObj.required){
-                        $(`#remark-${topicId}`).attr('data-required','1')
-                    }else{
-                        $(`#remark-${topicId}`).attr('data-required','0')
+                    // FormObject[`remark-${topicId}_1`] = item.remark
+                    // let remarkObj = JSON.parse(item.remark)
+                    // $(`.field-remark-${topicId}`).show()
+                    // $(`#remark-${topicId}`).val(remarkObj.desp)
+                    // if(remarkObj.required){
+                    //     $(`#remark-${topicId}`).attr('data-required','1')
+                    // }else{
+                    //     $(`#remark-${topicId}`).attr('data-required','0')
+                    // }
+                    FormObject["remark-" + topicId + "_1"] = item.remark;
+                    var remarkObj = JSON.parse(item.remark);
+                    $(".field-remark-" + topicId).show();
+                    $("#remark-" + topicId).val(remarkObj.desp);
+
+                    if (remarkObj.required) {
+                        $("#remark-" + topicId).attr('data-required', '1');
+                    } else {
+                        $("#remark-" + topicId).attr('data-required', '0');
                     }
                 }
                 
 
             }else if(type === '3'){
                 if(item.content){
-                    $(`.form-item-${topicId}`).show()
-                    FormObject[`checkbox-${topicId}`] = item.content;
-                    let list = item.content.split(';')
-                    $(`input[name=checkbox-${topicId}]`).each(function(order){
-                        let content = $(`#checkbox-${topicId}-${order+1}`).attr('data-content')
-                        if(list.indexOf(content)>-1){
-                            $(`#checkbox-${topicId}-${order+1}`).attr("checked", 'checked');
+                    // $(`.form-item-${topicId}`).show()
+                    // FormObject[`checkbox-${topicId}`] = item.content;
+                    // let list = item.content.split(';')
+                    // $(`input[name=checkbox-${topicId}]`).each(function(order){
+                    //     let content = $(`#checkbox-${topicId}-${order+1}`).attr('data-content')
+                    //     if(list.indexOf(content)>-1){
+                    //         $(`#checkbox-${topicId}-${order+1}`).attr("checked", 'checked');
+                    //     }
+                    // })
+                    $(".form-item-" + topicId).show();
+                    FormObject["checkbox-" + topicId] = item.content;
+                    var list = item.content.split(';');
+                    $("input[name=checkbox-" + topicId + "]").each(function (order) {
+                        var content = $("#checkbox-" + topicId + "-" + (order + 1)).attr('data-content');
+
+                        if (list.indexOf(content) > -1) {
+                            $("#checkbox-" + topicId + "-" + (order + 1)).attr("checked", 'checked');
                         }
-                    })
+                    });
                 }
                 if(item.remark){
-                    let remarkList = JSON.parse(item.remark)
-                    remarkList.map(item2=>{
-                        $(`.field-remark-${topicId}-${item2.order}`).show()
-                        $(`#remark-${topicId}-${item2.order}`).val(item2.desp)
-                        FormObject[`remark-${topicId}_${item2.order}`] = JSON.stringify(item2)
-                        if(item2.required){
-                            $(`#remark-${topicId}-${item2.order}`).attr('data-required','1')
-                        }else{
-                            $(`#remark-${topicId}-${item2.order}`).attr('data-required','0')
+                    var remarkList = JSON.parse(item.remark)
+                    remarkList.map(function(item2){
+                        // $(`.field-remark-${topicId}-${item2.order}`).show()
+                        // $(`#remark-${topicId}-${item2.order}`).val(item2.desp)
+                        // FormObject[`remark-${topicId}_${item2.order}`] = JSON.stringify(item2)
+                        // if(item2.required){
+                        //     $(`#remark-${topicId}-${item2.order}`).attr('data-required','1')
+                        // }else{
+                        //     $(`#remark-${topicId}-${item2.order}`).attr('data-required','0')
+                        // }
+                        $(".field-remark-" + topicId + "-" + item2.order).show();
+                        $("#remark-" + topicId + "-" + item2.order).val(item2.desp);
+                        FormObject["remark-" + topicId + "_" + item2.order] = JSON.stringify(item2);
+
+                        if (item2.required) {
+                            $("#remark-" + topicId + "-" + item2.order).attr('data-required', '1');
+                        } else {
+                            $("#remark-" + topicId + "-" + item2.order).attr('data-required', '0');
                         }
                     })
                     
@@ -755,135 +788,178 @@
 
             }else if(type === '4'){
                 if(item.content){
-                    $(`.form-item-${topicId}`).show()
-                    FormObject[`number-${topicId}`] = item.content;
-                    $(`#number-${topicId}`).val(item.content)
+                    $(".form-item-" + topicId).show();
+                    FormObject["number-" + topicId] = item.content;
+                    $("#number-" + topicId).val(item.content);
                 }
                 
 
             }else if(type === '5'){
                 if(item.content){
-                    $(`.form-item-${topicId}`).show()
-                    FormObject[`textarea-${topicId}`] = item.content;
-                    $(`#textarea-${topicId}`).val(item.content)
+                    $(".form-item-" + topicId).show();
+                    FormObject["textarea-" + topicId] = item.content;
+                    $("#textarea-" + topicId).val(item.content);
                 }
             
 
             }else if(type === '6'){
                 if(item.content){
-                    $(`.form-item-${topicId}`).show()
-                    FormObject[`address-${topicId}`] = item.content;
-                    $(`#address-${topicId}`).val(item.content)
+                    $(".form-item-" + topicId).show();
+                    FormObject["address-" + topicId] = item.content;
+                    $("#address-" + topicId).val(item.content);
                 }
                 
             }else if(type === '7'){
                 if(item.content){
-                    $(`.form-item-${topicId}`).show()
-                    FormObject[`date-${topicId}`] = item.content;
-                    $(`#date-${topicId}`).val(item.content)
+                    $(".form-item-" + topicId).show();
+                    FormObject["date-" + topicId] = item.content;
+                    $("#date-" + topicId).val(item.content);
                 }
                 
 
             }else if(type === '8'){
                 if(item.content){
-                    $(`.form-item-${topicId}`).show()
-                    FormObject[`file-${topicId}`] = item.content;
-                    $(`#file-${topicId}`).css('backgroundImage','url(img/uploadOk.png)')
-                    $(`.deleteFile-${topicId}`).css('display','block')
+                    $(".form-item-" + topicId).show();
+                    FormObject["file-" + topicId] = item.content;
+                    $("#file-" + topicId).css('backgroundImage', 'url(img/uploadOk.png)');
+                    $(".deleteFile-" + topicId).css('display', 'block');
                 }
                 
             }
         })
-        console.log(FormObject)
     }
-
-    
 
 </script>
 <script>
     
     //下拉框
     $(document).on('click','.field-text-select',function(){
-        let that = $(this)
-        let topicId = that.attr("data-id")
-        console.log(topicId)
-        let name = $(this).attr('name')
-        console.log(name)
-        let list = topicList1.filter(item=>{return item.id===topicId})[0].content;
-        console.log(list)
-        list.map(item=>{
+        // let that = $(this)
+        // let topicId = that.attr("data-id")
+        // let name = $(this).attr('name')
+        // let list = topicList1.filter(item=>{return item.id===topicId})[0].content;
+
+        var that = $(this);
+        var topicId = that.attr("data-id");
+        var name = $(this).attr('name');
+        var list = topicList1.filter(function (item) {
+            return item.id === topicId;
+        })[0].content;
+
+        list.map(function (item) {
             item.label = item.content;
             item.value = item.order;
             item.logic = item.logic || [];
-        })
+        });
         weui.picker(list, 
             {
                 onChange: function (e) {
                     console.log(e);
                 },
                 onConfirm: function (e) {
-                    console.log(e);
+
                     that.val(e[0].label)
-                    $(`.orderNum-${topicId}`).removeClass('isRequired')
+
+                    $(".orderNum-" + topicId).removeClass('isRequired');
                     that.parent().parent().children(".field-rule").html('')
-                    let logic = e[0].logic;
-                    let order = e[0].order;
+                    var logic = e[0].logic;
+                    var order = e[0].order;
                     console.log(logic)
 
                     FormObject[name] = e[0].label;
                     console.log(FormObject)
 
-                    let remark = e[0].remark;
-                    let required = e[0].required;
-                    if(remark){
-                        $(`.field-remark-${topicId}`).show()
-                        $(`#remark-${topicId}`).val('')
-                        FormObject[`remark-${topicId}_1`] = JSON.stringify({desp:'',required:required,logic:logic})
-                    }else{
-                        $(`.field-remark-${topicId}`).hide();
-                        $(`#remark-${topicId}`).val('')
-                        FormObject[`remark-${topicId}_1`] = ''
-                    }
-                    if(required){
-                        $(`#remark-${topicId}`).addClass('remarkRed')
-                        $(`#remark-${topicId}`).attr('data-required','1')
-                        // $(`.remark-rule-${topicId}`).show();
-                        // $(`.remark-rule-${topicId}`).html('必做题');
-                        // $(`.remark-rule-${topicId}`).attr('data-required','1')
-                    }else{
-                        $(`#remark-${topicId}`).removeClass('remarkRed')
-                        $(`#remark-${topicId}`).attr('data-required','0')
-                        // $(`.remark-rule-${topicId}`).hide();
-                        // $(`.remark-rule-${topicId}`).html('');
-                        // $(`.remark-rule-${topicId}`).attr('data-required','0')
+                    var remark = e[0].remark;
+                    var required = e[0].required;
+                    // if(remark){
+                    //     $(`.field-remark-${topicId}`).show()
+                    //     $(`#remark-${topicId}`).val('')
+                    //     FormObject[`remark-${topicId}_1`] = JSON.stringify({desp:'',required:required,logic:logic})
+                    // }else{
+                    //     $(`.field-remark-${topicId}`).hide();
+                    //     $(`#remark-${topicId}`).val('')
+                    //     FormObject[`remark-${topicId}_1`] = ''
+                    // }
+                    // if(required){
+                    //     $(`#remark-${topicId}`).addClass('remarkRed')
+                    //     $(`#remark-${topicId}`).attr('data-required','1')
+                    // }else{
+                    //     $(`#remark-${topicId}`).removeClass('remarkRed')
+                    //     $(`#remark-${topicId}`).attr('data-required','0')
+                    // }
+                    if (remark) {
+                        $(".field-remark-" + topicId).show();
+                        $("#remark-" + topicId).val('');
+                        FormObject["remark-" + topicId + "_1"] = JSON.stringify({
+                            desp: '',
+                            required: required,
+                            logic: logic
+                        });
+                    } else {
+                        $(".field-remark-" + topicId).hide();
+                        $("#remark-" + topicId).val('');
+                        FormObject["remark-" + topicId + "_1"] = '';
                     }
 
-                    list.map(item=>{
-                        if(item.order!==order){
-                            let otherlogic = item.logic;
-                            otherlogic.length&&otherlogic.map(item=>{
-                                let el = $(`.form-item-${item}`).attr('data-count') - 1;
-                                el = el<0?0:el
-                                $(`.form-item-${item}`).attr('data-count',el)
-                                el===0&&$(`.form-item-${item}`).addClass('form-item-hide')
-                                topicAllList.map(e=>{
-                                    if(e.id===item){
-                                        e.isShow = false;
+                    if (required) {
+                        $("#remark-" + topicId).addClass('remarkRed');
+                        $("#remark-" + topicId).attr('data-required', '1');
+                    } else {
+                        $("#remark-" + topicId).removeClass('remarkRed');
+                        $("#remark-" + topicId).attr('data-required', '0');
+                    }
+
+                    // list.map(item=>{
+                    //     if(item.order!==order){
+                    //         let otherlogic = item.logic;
+                    //         otherlogic.length&&otherlogic.map(item=>{
+                    //             let el = $(`.form-item-${item}`).attr('data-count') - 1;
+                    //             el = el<0?0:el
+                    //             $(`.form-item-${item}`).attr('data-count',el)
+                    //             el===0&&$(`.form-item-${item}`).addClass('form-item-hide')
+                    //             topicAllList.map(e=>{
+                    //                 if(e.id===item){
+                    //                     e.isShow = false;
+                    //                 }
+                    //             })
+                    //         })
+                    //     }
+                    // })
+                    list.map(function (item) {
+                        if (item.order !== order) {
+                            var otherlogic = item.logic;
+                            otherlogic.length && otherlogic.map(function (item2) {
+                                var el = $(".form-item-" + item2).attr('data-count') - 1;
+                                el = el < 0 ? 0 : el;
+                                $(".form-item-" + item2).attr('data-count', el);
+                                el === 0 && $(".form-item-" + item2).addClass('form-item-hide');
+                                topicAllList.map(function (e) {
+                                    if (e.id === item2) {
+                                    e.isShow = false;
                                     }
-                                })
-                            })
+                                });
+                            });
                         }
-                    })
+                    });
 
-                    logic.length&&logic.map(item=>{
-                        let el = $(`.form-item-${item}`).attr('data-count')*1 + 1;
-                        $(`.form-item-${item}`).attr('data-count',el).removeClass('form-item-hide')
-                        topicAllList.map(e=>{
-                            if(e.id===item){
-                                e.isShow = true;
+                    // logic.length&&logic.map(item=>{
+                    //     let el = $(`.form-item-${item}`).attr('data-count')*1 + 1;
+                    //     $(`.form-item-${item}`).attr('data-count',el).removeClass('form-item-hide')
+                    //     topicAllList.map(e=>{
+                    //         if(e.id===item){
+                    //             e.isShow = true;
+                    //         }
+                    //     })
+                    // })
+                    logic.length && logic.map(function (item) {
+                        var el = $(".form-item-" + item).attr('data-count') * 1 + 1;
+                        $(".form-item-" + item).attr('data-count', el).removeClass('form-item-hide');
+                        topicAllList.map(function (e) {
+                            if (e.id === item) {
+                            e.isShow = true;
                             }
-                        })
-                    })
+                        });
+                    });
                     
                 }
         });
@@ -893,191 +969,255 @@
     $(document).on('click','.field-radio',function(){
         $(this).attr('data-check','1')
 
-        let that = $(this)
+        var that = $(this)
 
-        let value = $(this).val()
-        console.log(value)
+        var value = $(this).val()
 
-        let topicId = $(this).attr('data-id');
-        console.log(topicId)
+        var topicId = $(this).attr('data-id');
 
-        let name = $(this).attr('name');
-        console.log(name)
+        var name = $(this).attr('name');
 
-        let content = $(this).attr('data-text')
+        var content = $(this).attr('data-text')
 
-        let rule = JSON.parse(that.attr('data-rule'))
-        console.log(rule)
+        var rule = JSON.parse(that.attr('data-rule'))
 
-        let remark = rule.remark;
-        let required = rule.required;
-        if(remark){
-            $(`.field-remark-${topicId}`).show()
-            $(`#remark-${topicId}`).val('')
-            FormObject[`remark-${topicId}_1`] = JSON.stringify({desp:'',required:required,logic:rule.logic})
-        }else{
-            $(`.field-remark-${topicId}`).hide();
-            $(`#remark-${topicId}`).val('')
-            FormObject[`remark-${topicId}_1`] = ''
+        var remark = rule.remark;
+        var required = rule.required;
+        // if(remark){
+        //     $(`.field-remark-${topicId}`).show()
+        //     $(`#remark-${topicId}`).val('')
+        //     FormObject[`remark-${topicId}_1`] = JSON.stringify({desp:'',required:required,logic:rule.logic})
+        // }else{
+        //     $(`.field-remark-${topicId}`).hide();
+        //     $(`#remark-${topicId}`).val('')
+        //     FormObject[`remark-${topicId}_1`] = ''
+        // }
+        // if(required){
+        //     $(`#remark-${topicId}`).addClass('remarkRed')
+        //     $(`#remark-${topicId}`).attr('data-required','1')
+        // }else{
+        //     $(`#remark-${topicId}`).removeClass('remarkRed')
+        //     $(`#remark-${topicId}`).attr('data-required','0')
+        // }
+        if (remark) {
+            $(".field-remark-" + topicId).show();
+            $("#remark-" + topicId).val('');
+            FormObject["remark-" + topicId + "_1"] = JSON.stringify({
+                desp: '',
+                required: required,
+                logic: rule.logic
+            });
+        } else {
+            $(".field-remark-" + topicId).hide();
+            $("#remark-" + topicId).val('');
+            FormObject["remark-" + topicId + "_1"] = '';
         }
-        if(required){
-            $(`#remark-${topicId}`).addClass('remarkRed')
-            $(`#remark-${topicId}`).attr('data-required','1')
-            // $(`.remark-rule-${topicId}`).show();
-            // $(`.remark-rule-${topicId}`).html('必做题');
-            // $(`.remark-rule-${topicId}`).attr('data-required','1')
-        }else{
-            $(`#remark-${topicId}`).removeClass('remarkRed')
-            $(`#remark-${topicId}`).attr('data-required','0')
-            // $(`.remark-rule-${topicId}`).hide();
-            // $(`.remark-rule-${topicId}`).html('');
-            // $(`.remark-rule-${topicId}`).attr('data-required','0')
+
+        if (required) {
+            $("#remark-" + topicId).addClass('remarkRed');
+            $("#remark-" + topicId).attr('data-required', '1');
+        } else {
+            $("#remark-" + topicId).removeClass('remarkRed');
+            $("#remark-" + topicId).attr('data-required', '0');
         }
 
         FormObject[name] = content;
-        let radioList = $(`input:radio[name="${name}"]`).not(this)
-        console.log(radioList)
+        var radioList = $("input:radio[name=\"" + name + "\"]").not(this)
+
         radioList.each(function() { 
             if($(this).attr('data-check')==='1'){
-                let otherlogic = $(this).attr('data-logic');
+                var otherlogic = $(this).attr('data-logic');
                 otherlogic = JSON.parse(otherlogic);
-                console.log(otherlogic)
-                otherlogic.length&&otherlogic.map(item=>{
-                    let el = $(`.form-item-${item}`).attr('data-count') - 1;
-                    el = el<0?0:el;
-                    el===0&&$(`.form-item-${item}`).addClass('form-item-hide').attr('data-count','0')
-                    $(`.form-item-${item}`).attr('data-count',el)
-                    topicAllList.map(e=>{
-                        if(e.id===item){
-                            e.isShow = false;
-                        }
-                    })
+                // otherlogic.length&&otherlogic.map(item=>{
+                //     let el = $(`.form-item-${item}`).attr('data-count') - 1;
+                //     el = el<0?0:el;
+                //     el===0&&$(`.form-item-${item}`).addClass('form-item-hide').attr('data-count','0')
+                //     $(`.form-item-${item}`).attr('data-count',el)
+                //     topicAllList.map(e=>{
+                //         if(e.id===item){
+                //             e.isShow = false;
+                //         }
+                //     })
                     
-                })
+                // })
+                otherlogic.length && otherlogic.map(function (item) {
+                    var el = $(".form-item-" + item).attr('data-count') - 1;
+                    el = el < 0 ? 0 : el;
+                    el === 0 && $(".form-item-" + item).addClass('form-item-hide').attr('data-count', '0');
+                    $(".form-item-" + item).attr('data-count', el);
+                    topicAllList.map(function (e) {
+                        if (e.id === item) {
+                        e.isShow = false;
+                        }
+                    });
+                });
             }
             $(this).attr('data-check','0');
         });
 
-        let logic = $(this).attr('data-logic');
+        var logic = $(this).attr('data-logic');
         logic = JSON.parse(logic)
-        console.log(logic)
-        logic.length&&logic.map(item=>{
-            let el = $(`.form-item-${item}`).attr('data-count')*1 + 1;
-            $(`.form-item-${item}`).attr('data-count',el).removeClass('form-item-hide')
-            topicAllList.map(e=>{
-                if(e.id===item){
-                    e.isShow = true;
+
+        // logic.length&&logic.map(item=>{
+        //     let el = $(`.form-item-${item}`).attr('data-count')*1 + 1;
+        //     $(`.form-item-${item}`).attr('data-count',el).removeClass('form-item-hide')
+        //     topicAllList.map(e=>{
+        //         if(e.id===item){
+        //             e.isShow = true;
+        //         }
+        //     })
+        // })
+        logic.length && logic.map(function (item) {
+            var el = $(".form-item-" + item).attr('data-count') * 1 + 1;
+            $(".form-item-" + item).attr('data-count', el).removeClass('form-item-hide');
+            topicAllList.map(function (e) {
+                if (e.id === item) {
+                e.isShow = true;
                 }
-            })
-        })
-        $(`.orderNum-${topicId}`).removeClass('isRequired')
+            });
+        });
+        $(".orderNum-" + topicId).removeClass('isRequired');
         $(this).parent().parent().children(".field-rule").html('')
         
     })
 
     //多选框
     $(document).on('click','.field-checkbox',function(){
-        let that = $(this)
+        var that = $(this)
 
-        let value = $(this).val()
-        console.log(value)
+        var value = $(this).val()
 
-        let name = $(this).attr('name')
-        console.log(name)
+        var name = $(this).attr('name')
 
-        let topicId = $(this).attr('data-id')
+        var topicId = $(this).attr('data-id')
 
-        let rule = JSON.parse(that.attr("data-rule"));
-        console.log(rule)
+        var rule = JSON.parse(that.attr("data-rule"));
 
-        let rule2 = JSON.parse(that.attr("data-rule2"));
-        console.log('多选框规则',rule2)
+        var rule2 = JSON.parse(that.attr("data-rule2"));
 
 
-        let logic = $(this).attr('data-logic');
+        var logic = $(this).attr('data-logic');
         logic = JSON.parse(logic)
-        console.log(logic)
 
 
-        let remark = rule2.remark;
-        let required = rule2.required;
+        var remark = rule2.remark;
+        var required = rule2.required;
  
 
-        let list=[];
-        let isCheck = $(this).prop('checked');
-        console.log('是否选中',isCheck)
+        var list=[];
+        var isCheck = $(this).prop('checked');
         if(isCheck){
 
-            if(remark){
-                $(`.field-remark-${topicId}-${rule2.order}`).show()
-                $(`#remark-${topicId}-${rule2.order}`).val('')
-                FormObject[`remark-${topicId}_${rule2.order}`] = JSON.stringify({order:rule2.order,desp:'',required:required,logic:logic})
+            // if(remark){
+            //     $(`.field-remark-${topicId}-${rule2.order}`).show()
+            //     $(`#remark-${topicId}-${rule2.order}`).val('')
+            //     FormObject[`remark-${topicId}_${rule2.order}`] = JSON.stringify({order:rule2.order,desp:'',required:required,logic:logic})
+            // }
+
+            // if(required){
+            //     $(`#remark-${topicId}-${rule2.order}`).addClass('remarkRed')
+            //     $(`#remark-${topicId}-${rule2.order}`).attr('data-required','1')
+            // }
+            if (remark) {
+                $(".field-remark-" + topicId + "-" + rule2.order).show();
+                $("#remark-" + topicId + "-" + rule2.order).val('');
+                FormObject["remark-" + topicId + "_" + rule2.order] = JSON.stringify({
+                    order: rule2.order,
+                    desp: '',
+                    required: required,
+                    logic: logic
+                });
             }
 
-            if(required){
-                $(`#remark-${topicId}-${rule2.order}`).addClass('remarkRed')
-                $(`#remark-${topicId}-${rule2.order}`).attr('data-required','1')
-                // $(`.remark-rule-${topicId}`).show();
-                // $(`.remark-rule-${topicId}`).html('必做题');
-                // $(`.remark-rule-${topicId}`).attr('data-required','1')
+            if (required) {
+                $("#remark-" + topicId + "-" + rule2.order).addClass('remarkRed');
+                $("#remark-" + topicId + "-" + rule2.order).attr('data-required', '1');
             }
 
-            logic.length&&logic.map(item=>{
-                let el = $(`.form-item-${item}`).attr('data-count')*1 + 1;
-                $(`.form-item-${item}`).attr('data-count',el).removeClass('form-item-hide')
-                topicAllList.map(e=>{
-                    if(e.id===item){
-                        e.isShow = true;
+            // logic.length&&logic.map(item=>{
+            //     let el = $(`.form-item-${item}`).attr('data-count')*1 + 1;
+            //     $(`.form-item-${item}`).attr('data-count',el).removeClass('form-item-hide')
+            //     topicAllList.map(e=>{
+            //         if(e.id===item){
+            //             e.isShow = true;
+            //         }
+            //     })
+            // })
+            logic.length && logic.map(function (item) {
+                var el = $(".form-item-" + item).attr('data-count') * 1 + 1;
+                $(".form-item-" + item).attr('data-count', el).removeClass('form-item-hide');
+                topicAllList.map(function (e) {
+                    if (e.id === item) {
+                    e.isShow = true;
                     }
-                })
-            })
+                });
+            });
         }else{
 
-            $(`.field-remark-${topicId}-${rule2.order}`).hide();
-            $(`#remark-${topicId}-${rule2.order}`).val('')
-            delete FormObject[`remark-${topicId}_${rule2.order}`]
-            // FormObject[`remark-${topicId}_${rule2.order}`] = ''
+            // $(`.field-remark-${topicId}-${rule2.order}`).hide();
+            // $(`#remark-${topicId}-${rule2.order}`).val('')
+            // delete FormObject[`remark-${topicId}_${rule2.order}`]
 
-            $(`#remark-${topicId}-${rule2.order}`).removeClass('remarkRed')
-            $(`#remark-${topicId}-${rule2.order}`).attr('data-required','0')
+            // $(`#remark-${topicId}-${rule2.order}`).removeClass('remarkRed')
+            // $(`#remark-${topicId}-${rule2.order}`).attr('data-required','0')
+
+            $(".field-remark-" + topicId + "-" + rule2.order).hide();
+            $("#remark-" + topicId + "-" + rule2.order).val('');
+            delete FormObject["remark-" + topicId + "_" + rule2.order];
+            $("#remark-" + topicId + "-" + rule2.order).removeClass('remarkRed');
+            $("#remark-" + topicId + "-" + rule2.order).attr('data-required', '0');
 
 
 
-            logic.length&&logic.map(item=>{
-                let el = $(`.form-item-${item}`).attr('data-count')*1 - 1;
-                el = el<0?0:el
-                if(el === 0 ){
-                    $(`.form-item-${item}`).addClass('form-item-hide')
-                    topicAllList.map(e=>{
-                        if(e.id===item){
+            // logic.length&&logic.map(item=>{
+            //     let el = $(`.form-item-${item}`).attr('data-count')*1 - 1;
+            //     el = el<0?0:el
+            //     if(el === 0 ){
+            //         $(`.form-item-${item}`).addClass('form-item-hide')
+            //         topicAllList.map(e=>{
+            //             if(e.id===item){
+            //                 e.isShow = false;
+            //             }
+            //         })
+            //     }
+            //     $(`.form-item-${item}`).attr('data-count',el)
+                
+            // })
+            logic.length && logic.map(function (item) {
+                var el = $(".form-item-" + item).attr('data-count') * 1 - 1;
+                el = el < 0 ? 0 : el;
+
+                if (el === 0) {
+                    $(".form-item-" + item).addClass('form-item-hide');
+                    topicAllList.map(function (e) {
+                        if (e.id === item) {
                             e.isShow = false;
                         }
-                    })
+                    });
                 }
-                $(`.form-item-${item}`).attr('data-count',el)
-                
-            })
+
+                $(".form-item-" + item).attr('data-count', el);
+            });
         }
 
-        $(`input[name='${name}']:checked`).each(function() { 
-            console.log($(this).next().text())
+        $("input[name='" + name + "']:checked").each(function() { 
             list.push($(this).next().text());
         });
 
         FormObject[name] = list.join(';')
         if(list.length){
             if(list.length<rule.min){
-                $(this).parent().parent().children(".field-rule").html(`最少选择${rule.min}项`)
+                $(this).parent().parent().children(".field-rule").html("最少选择"+rule.min+"项")
             }else if(list.length>rule.max){
-                $(this).parent().parent().children(".field-rule").html(`最多选择${rule.max}项`)
+                $(this).parent().parent().children(".field-rule").html("最多选择"+rule.max+"项")
             }else{
                 $(this).parent().parent().children(".field-rule").html('')
             }
-            $(`.orderNum-${topicId}`).removeClass('isRequired')
+            $(".orderNum-" + topicId).removeClass('isRequired')
            
         }else{
             if(rule.isRequiredQuestions){
-                $(`.orderNum-${topicId}`).addClass('isRequired')
+                $(".orderNum-" + topicId).addClass('isRequired')
                 $(this).parent().parent().children(".field-rule").html('必做题')
             }else{
                 $(this).parent().parent().children(".field-rule").html('')
@@ -1090,9 +1230,9 @@
 
     //数字
     $(document).on('input','.field-text-number',function(){
-        let that = $(this);
-        let value = that.val();
-        let rule = JSON.parse(that.attr("data-rule"));
+        var that = $(this);
+        var value = that.val();
+        var rule = JSON.parse(that.attr("data-rule"));
         console.log('数字',rule)
         if(value===""){
             if(rule.isRequiredQuestions){
@@ -1104,29 +1244,29 @@
         }else if(isNaN(value)){
             $(this).parent().parent().children(".field-rule").html('非数字值，请规范填写')
         }else{
-            let num = Number(value)
-            let numReg = /[0-9]{1,1000}.[0-9]{4,1000}$/;
+            var num = Number(value)
+            var numReg = /[0-9]{1,1000}.[0-9]{4,1000}$/;
             if(!isNaN(rule.min)){
                 if(num<rule.min){
-                    $(this).parent().parent().children(".field-rule").html(`数值范围为${rule.min}~${rule.max}`)
+                    $(this).parent().parent().children(".field-rule").html("数值范围为"+rule.min+"~"+rule.max)
                 }else if(num>rule.max){
-                    $(this).parent().parent().children(".field-rule").html(`数值范围为${rule.min}~${rule.max}`)
+                    $(this).parent().parent().children(".field-rule").html("数值范围为"+rule.min+"~"+rule.max)
                 }else if(rule.numbersetup.indexOf('2')<0&&String(value).indexOf('.')>-1){
-                    $(this).parent().parent().children(".field-rule").html(`限制小数输入`)
+                    $(this).parent().parent().children(".field-rule").html("限制小数输入")
                 }else if(rule.numbersetup.indexOf('3')<0&&num<0){
-                    $(this).parent().parent().children(".field-rule").html(`限制负数输入`)
+                    $(this).parent().parent().children(".field-rule").html("限制负数输入")
                 }else if(value.indexOf('.')>-1&&value.match(numReg)){
-                    $(this).parent().parent().children(".field-rule").html(`保留三位小数点`)
+                    $(this).parent().parent().children(".field-rule").html("保留三位小数点")
                 }else{
                     $(this).parent().parent().children(".field-rule").html('')
                 }
             }else{
                 if(rule.numbersetup.indexOf('2')<0&&String(value).indexOf('.')>-1){
-                    $(this).parent().parent().children(".field-rule").html(`限制小数输入`)
+                    $(this).parent().parent().children(".field-rule").html("限制小数输入")
                 }else if(rule.numbersetup.indexOf('3')<0&&num<0){
-                    $(this).parent().parent().children(".field-rule").html(`限制负数输入`)
+                    $(this).parent().parent().children(".field-rule").html("限制负数输入")
                 }else if(value.indexOf('.')>-1&&value.match(numReg)){
-                    $(this).parent().parent().children(".field-rule").html(`保留三位小数点`)
+                    $(this).parent().parent().children(".field-rule").html("保留三位小数点")
                 }else{
                     $(this).parent().parent().children(".field-rule").html('')
                 }
@@ -1136,12 +1276,12 @@
 
     //问答
     $(document).on('input','.field-txt',function(){
-        let that = $(this);
-        let value = that.val();
-        let rule = that.attr("data-rule");
+        var that = $(this);
+        var value = that.val();
+        var rule = that.attr("data-rule");
         rule = JSON.parse(rule)
         if(value.length>rule.max){
-            $(this).parent().parent().children(".field-rule").html(`字数限制${rule.max}字`)
+            $(this).parent().parent().children(".field-rule").html("字数限制"+rule.max+"字")
         }else{
             if(rule.isRequiredQuestions&&value===""){
                 $(this).parent().parent().children(".field-rule").html('必做题')
@@ -1153,19 +1293,19 @@
     
     //城市
     $(document).on('click','.field-text-address',function(){
-        let that = $(this)
-        let value = $(this).val()
-        let list = [];
-        let rule = that.attr("data-rule");
+        var that = $(this)
+        var value = $(this).val()
+        var list = [];
+        var rule = that.attr("data-rule");
         
         rule = JSON.parse(rule)
         console.log(rule)
-        let min = 3 - rule.min;
-        let provinceLimit = rule.provinceLimit;
+        var min = 3 - rule.min;
+        var provinceLimit = rule.provinceLimit;
         if(provinceLimit == '100000'){
             list = chinaCityList
         }else{
-            list = chinaCityList.filter(item=>{
+            list = chinaCityList.filter(function(item){
                 return item.value == provinceLimit
             })
         }
@@ -1186,17 +1326,17 @@
                         if(e.length===1){
                             that.val(e[0].label)
                         }else if(e.length===2){
-                            that.val(`${e[0].label}|${e[1].label}`)
+                            that.val(e[0].label + "|" + e[1].label);
                         }else if(e.length===3){
-                            that.val(`${e[0].label}|${e[1].label}`)
+                            that.val(e[0].label + "|" + e[1].label);
                         }
                     }else if(min===3){
                         if(e.length===1){
                             that.val(e[0].label)
                         }else if(e.length===2){
-                            that.val(`${e[0].label}|${e[1].label}`)
+                            that.val(e[0].label + "|" + e[1].label);
                         }else if(e.length===3){
-                            that.val(`${e[0].label}|${e[1].label}|${e[2].label}`)
+                            that.val(e[0].label + "|" + e[1].label + "|" + e[2].label);
                         }
                     }
   
@@ -1210,7 +1350,7 @@
 
     //海外国家
     $(document).on('click','.field-area',function(){
-        let that = $(this)
+        var that = $(this)
         // let value = $(this).val()
         weui.picker(country, 
             {
@@ -1228,13 +1368,12 @@
 
     //日期
     $(document).on('click','.field-text-date',function(){
-        let that = $(this);
-        let id = $(this).attr('id');
-        let rule = $(this).attr('data-rule');
-        rule = JSON.parse(rule);
-        console.log(rule)
-        let format = rule.format.toUpperCase();
-        console.log(format)
+        var that = $(this);
+        var id = $(this).attr('id');
+        var datarule = $(this).attr('data-rule')
+        console.log(datarule)
+        var rule = eval("("+datarule+")")
+        var format = rule.format.toUpperCase();
         if(format==='YYYY-MM-DD'||format==='YYYY-MM'||format==='YYYY'||format==='MM-DD'||format==='DD'){
             weui.datePicker({
                 start:2000,
@@ -1249,17 +1388,18 @@
                 onConfirm: function (e) {
                     console.log(e);
                     if(format==='YYYY-MM-DD'){
-                        that.val(`${e[0].value}-${e[1].value}-${e[2].value}`)
+                        that.val(e[0].value + "-" + e[1].value + "-" + e[2].value);
                         if(rule.min){
-                            let min = new Date(rule.min.replace(/-/g,'/')).getTime();
+                            var min = new Date(rule.min.replace(/-/g,'/')).getTime();
                             if(Number(rule.delay)>0){
-                                let newDate = moment(new Date()).format('YYYY/MM/DD')
+                                var newDate = moment(new Date()).format('YYYY/MM/DD')
                                 min = new Date(newDate).getTime() + rule.delay*3600*24*1000;
                             }
-                            let max = new Date(rule.max.replace(/-/g,'/')).getTime();
-                            let time = new Date(`${e[0].value}/${e[1].value*1<10?'0'+ e[1].value:e[1].value}/${e[2].value}`).getTime();
+                            var max = new Date(rule.max.replace(/-/g,'/')).getTime();
+                           
+                            var time = new Date(e[0].value + "/" + (e[1].value * 1 < 10 ? '0' + e[1].value : e[1].value) + "/" + e[2].value).getTime();
                             if(time<min||time>max){
-                                that.parent().parent().children(".field-rule").html(`时间限制范围${moment(min).format('YYYY-MM-DD')}~${rule.max}`)
+                                that.parent().parent().children(".field-rule").html("时间限制范围"+moment(min).format('YYYY-MM-DD')+"~"+rule.max)
                             }else{
                                 that.parent().parent().children(".field-rule").html('')
                             }
@@ -1268,15 +1408,13 @@
                             that.parent().parent().children(".field-rule").html('')
                         }
                     }else if(format==='YYYY-MM'){
-                        that.val(`${e[0].value}-${e[1].value}`)
+                        that.val(e[0].value+"-"+e[1].value)
                         if(rule.min){
-                            let min = new Date(moment(rule.min).format('YYYY/MM/01')).getTime();
-                            let max = new Date(rule.max.replace(/-/g,'/')).getTime();
-                            console.log(`${e[0].value}-${e[1].value}-01`)
-                            let nowTime = new Date(moment(`${e[0].value}-${e[1].value*1<10?'0'+ e[1].value:e[1].value}-01`).format('YYYY/MM/DD')).getTime();
-                            console.log(min,nowTime,max)
+                            var min = new Date(moment(rule.min).format('YYYY/MM/01')).getTime();
+                            var max = new Date(rule.max.replace(/-/g,'/')).getTime();
+                            var nowTime = new Date(moment(e[0].value + "-" + (e[1].value * 1 < 10 ? '0' + e[1].value : e[1].value) + "-01").format('YYYY/MM/DD')).getTime();
                             if(nowTime<min||nowTime>max){
-                                that.parent().parent().children(".field-rule").html(`时间限制范围${moment(rule.min).format('YYYY-MM')}~${moment(rule.max).format('YYYY-MM')}`)
+                                that.parent().parent().children(".field-rule").html("时间限制范围"+moment(rule.min).format('YYYY-MM')+"~"+moment(rule.max).format('YYYY-MM'))
                             }else{
                                 that.parent().parent().children(".field-rule").html('')
                             }
@@ -1284,33 +1422,16 @@
                             that.parent().parent().children(".field-rule").html('')
                         }
                     }else if(format==='MM-DD'){
-                        that.val(`${e[1].value}-${e[2].value}`)
+                        that.val(e[1].value + "-" + e[2].value);
                         that.parent().parent().children(".field-rule").html('')
-                        console.log('月日')
-                        // if(rule.min){
-                        //     let year = new Date().getFullYear();
-                        //     let month = new Date().getMonth()+1
-
-                        //     let min = new Date(moment(rule.min).format('YYYY/MM/DD')).getTime();
-                        //     let max = new Date(rule.max).getTime();
-                        //     let nowTime = new Date(moment(`${year}-${e[1].value}-${e[2].value}`).format('YYYY/MM/DD')).getTime();
-                        //     if(nowTime<min||nowTime>max){
-                        //         that.parent().parent().children(".field-rule").html(`时间限制范围${moment(rule.min).format('YYYY-MM-DD')}~${moment(rule.max).format('YYYY-MM-DD')}`)
-                        //     }else{
-                        //         that.parent().parent().children(".field-rule").html('')
-                        //     }
-                        // }else{
-                        //     that.parent().parent().children(".field-rule").html('')
-                        // }
-
                     }else if(format==='YYYY'){
-                        that.val(`${e[0].value}`)
+                        that.val(e[0].value)
                         if(rule.min){
-                            let min = Number(rule.min.substring(0,4));
-                            let max = Number(rule.max.substring(0,4));
-                            let nowTime = Number(`${e[0].value}`);
+                            var min = Number(rule.min.substring(0,4));
+                            var max = Number(rule.max.substring(0,4));
+                            var nowTime = Number(e[0].value);
                             if(nowTime<min||nowTime>max){
-                                that.parent().parent().children(".field-rule").html(`时间限制范围${min}~${max}`)
+                                that.parent().parent().children(".field-rule").html("时间限制范围"+min+"~"+max)
                             }else{
                                 that.parent().parent().children(".field-rule").html('')
                             }
@@ -1318,42 +1439,12 @@
                             that.parent().parent().children(".field-rule").html('')
                         }
                     }else if(format==='MM'){
-                        that.val(`${e[1].value}`)
+                        that.val(e[1].value)
                         that.parent().parent().children(".field-rule").html('')
-                        // if(rule.min){
-                        //     let min = new Date(moment(rule.min).format('YYYY/MM/01')).getTime();
-                        //     let max = new Date(rule.max.replace(/-/g,'/')).getTime();
-                        //     let nowTime = new Date(moment(`2020-${e[1].value}-01`).format('YYYY/MM/01')).getTime();
-                        //     console.log(min,nowTime,max)
-                        //     if(nowTime<min||nowTime>max){
-                        //         that.parent().parent().children(".field-rule").html(`时间限制范围${moment(rule.min).format('YYYY-MM')}~${moment(rule.max).format('YYYY-MM')}`)
-                        //     }else{
-                        //         that.parent().parent().children(".field-rule").html('')
-                        //     }
-                        // }else{
-                        //     that.parent().parent().children(".field-rule").html('')
-                        // }
                     }else if(format==='DD'){
-                        that.val(`${e[2].value}`)
+                        that.val(e[2].value)
                         that.parent().parent().children(".field-rule").html('')
                         console.log('日')
-
-                        // if(rule.min){
-                        //     let year = new Date().getFullYear();
-                        //     let month = new Date().getMonth()+1
-
-                        //     let min = new Date(moment(rule.min).format('YYYY/MM/DD')).getTime();
-                        //     let max = new Date(rule.max.replace(/-/g,'/')).getTime();
-                        //     let nowTime = new Date(`${year}/${month}/${e[2].value}`).getTime();
-                            
-                        //     if(nowTime<min||nowTime>max){
-                        //         that.parent().parent().children(".field-rule").html(`时间限制范围${moment(rule.min).format('YYYY-MM-DD')}~${moment(rule.max).format('YYYY-MM-DD')}`)
-                        //     }else{
-                        //         that.parent().parent().children(".field-rule").html('')
-                        //     }
-                        // }else{
-                        //     that.parent().parent().children(".field-rule").html('')
-                        // }
                     }
                 }
             });
@@ -1364,8 +1455,8 @@
                 $(".weui-picker__group").eq(1).hide()
             }
         }else if(format==='MM'){
-            let list = []
-            for(let i=1;i<13;i++){
+            var list = []
+            for(var i=1;i<13;i++){
                 list.push({label:i+'月',value:i})
             }
             weui.picker(list, 
@@ -1385,23 +1476,23 @@
 
     //附件
     $(document).on('change','.field-file',function(){
-        let that = this;
-        let fileObj = $(this)[0].files[0];
+        var that = this;
+        var fileObj = $(this)[0].files[0];
         console.log(fileObj,fileObj.type)
 
-        let rule = $(this).attr("data-rule");
+        var rule = $(this).attr("data-rule");
         rule = JSON.parse(rule)
 
-        let topicId = $(this).attr("data-id");
+        var topicId = $(this).attr("data-id");
 
         if(fileObj.size>=rule.max*1024*1024){
-            weui.topTips(`文件大小限制${rule.max}M`, 1500);
+            weui.topTips("文件大小限制"+rule.max+"M", 1500);
             return;
         }
 
-        let formData = new FormData();
+        var formData = new FormData();
         formData.append("file", fileObj);
-        let fileLoading = weui.loading('上传中...');
+        var fileLoading = weui.loading('上传中...');
         
         // fetch("http://10.110.200.62:443/services/web/file/upload/mallUpload/form",{
         //     method: 'POST',
@@ -1421,7 +1512,7 @@
         //     })
 
         $.ajax({ 
-            url:`${IP}/services/web/file/upload/mallUpload/form`, 
+            url:IP + "/services/web/file/upload/mallUpload/form", 
             type:"post", 
             // mode: 'no-cors',
             data:formData, 
@@ -1432,9 +1523,9 @@
                 fileLoading.hide();
                 if(res.status === 1){ 
                     $(that).css('backgroundImage','url(img/uploadOk.png)')
-                    $(`.deleteFile-${topicId}`).css('display','block')
-                    $(`.field-rule-${topicId}`).html('')
-                    FormObject[`file-${topicId}`] = res.root.object[0].filePath
+                    $(".deleteFile-" + topicId).css('display', 'block');
+                    $(".field-rule-" + topicId).html('');
+                    FormObject["file-" + topicId] = res.root.object[0].filePath;
                 }else{
                     weui.topTips(res.errorMsg, 1500);
                 }
@@ -1442,17 +1533,9 @@
                 
             }, 
             error:function(err){ 
-                console.log(err); 
-
-
-
-                console.log('0000000000000')
-                
-
-
                 fileLoading.hide();
-                let errorLoading = weui.loading('上传失败');
-                setTimeout(()=>{
+                var errorLoading = weui.loading('上传失败');
+                setTimeout(function(){
                     errorLoading.hide();
                 },1500)
                 
@@ -1464,42 +1547,40 @@
     //删除附件
     $(document).on('click','.deleteFile',function(){
 
-        let topicId = $(this).attr("data-id");
+        var topicId = $(this).attr("data-id");
 
-        let rule = $(this).attr("data-rule");
+        var rule = $(this).attr("data-rule");
         console.log(rule)
         if(rule==='true'){
-            $(`.field-rule-${topicId}`).html('必做题')
+            $(".field-rule-" + topicId).html('必做题');
         }
-        FormObject[`file-${topicId}`] = '';
-        $(`#file-${topicId}`).css('backgroundImage','url(img/upload.png)')
+        FormObject["file-" + topicId] = '';
+        $("#file-" + topicId).css('backgroundImage', 'url(img/upload.png)');
         $(this).css('display','none')
     })
 
     //备注-必填
     $(document).on('input','.field-remark',function(){
-        let that = $(this);
-        let value = that.val();
-        let id = that.attr("data-id");
+        var that = $(this);
+        var value = that.val();
+        var id = that.attr("data-id");
 
-        let isRequired = that.attr('data-required')
+        var isRequired = that.attr('data-required')
 
-        let order = that.attr('data-order')
+        var order = that.attr('data-order')
         
         
         if(order){
-            let remarkObj = {};
-            remarkObj = JSON.parse(FormObject[`remark-${id}_${order}`]);
+            var remarkObj = {};
+            remarkObj = JSON.parse(FormObject["remark-" + id + "_" + order]);
             remarkObj.desp = value;
-            FormObject[`remark-${id}_${order}`] = JSON.stringify(remarkObj);
+            FormObject["remark-" + id + "_" + order] = JSON.stringify(remarkObj);
         }else{
-            let remarkObj = {};
-            remarkObj = JSON.parse(FormObject[`remark-${id}_1`]);
+            var remarkObj = {};
+            remarkObj = JSON.parse(FormObject["remark-" + id + "_1"]);
             remarkObj.desp = value;
-            FormObject[`remark-${id}_1`] = JSON.stringify(remarkObj);
-            // FormObject[`remark-${id}_1`] = JSON.stringify({desp:value,required:isRequired==='1'});
+            FormObject["remark-" + id + "_1"] = JSON.stringify(remarkObj);
         }
-        console.log(isRequired,order,FormObject)
 
         if(value){
             that.removeClass('remarkRed')
@@ -1516,9 +1597,9 @@
 
     function submit(){
 
-        let ruleList = [];
+        var ruleList = [];
         $('.field-rule:visible').each(function() { 
-            let text = $(this).text()
+            var text = $(this).text()
             text&&ruleList.push(text)
         });
         console.log(ruleList)
@@ -1535,30 +1616,30 @@
         
 
         console.log($('#form').serialize());
-        let result = $('#form').serialize().split('&')
-        result.map(item=>{
+        var result = $('#form').serialize().split('&')
+        result.map(function(item){
             if(item.indexOf('checkbox')<0&&item.indexOf('select')<0&&item.indexOf('radio')<0){
-                let list = item.split('=')
-                FormObject[list[0]] = list[1]||''
+                var list2 = item.split('=')
+                FormObject[list2[0]] = list2[1]||''
             }
         })
 
         console.log(FormObject)
 
-        let list = [],remarkList = [],allFormData={};
-        for(let key in FormObject){
-            let regStr = /^remark-[0-9]{19}-[0-9]{1,2}$/;
+        var list = [],remarkList = [],allFormData={};
+        for(var key in FormObject){
+            var regStr = /^remark-[0-9]{19}-[0-9]{1,2}$/;
             if(regStr.test(key)){
                 // delete FormObject[key]
             }
-            let regStr2 = /^remark-[0-9]{19}_/;
+            var regStr2 = /^remark-[0-9]{19}_/;
             if(regStr2.test(key)){
                 console.log(key)
                 // remarkList.push({id:key.substring(7,26),remark:FormObject[key]})
                 // delete FormObject[key]
             }
             if(key.indexOf('remark')>-1&&key.indexOf('_')>-1&&FormObject[key]){
-                remarkList.push({id:key.substring(7,24),remark:FormObject[key]})
+                remarkList.push({id:key.substring(7,26),remark:FormObject[key]})
             }
             if(!regStr.test(key)&&!regStr2.test(key)){
                 allFormData[key] = FormObject[key]
@@ -1567,66 +1648,60 @@
 
         console.log(remarkList,FormObject,allFormData)
         
-        for(let name in allFormData){
-            let formName = name.split('-')[0];
-            let formId = name.split('-')[1];
-            let content = allFormData[name]
+        for(var name in allFormData){
+            var formName = name.split('-')[0];
+            var formid = name.split('-')[1];
+            var content = allFormData[name]
             if(formName==='checkbox'){
-                let arr2 = [];
-                remarkList.map(item=>{
-                    if(formId === item.id&&item.remark){
+                var arr2 = [];
+                remarkList.map(function(item){
+                    console.log(formid,item)
+                    if(formid === item.id&&item.remark){
+                        
                         arr2.push(JSON.parse(item.remark))
                     }
                 })
                 
                 list.push({
-                    "topicId": formId,
+                    "topicId": formid,
                     "content": content,
                     "remark": arr2.length?JSON.stringify(arr2):''
                 })
             }else if(formName==='radio'||formName==='select'){
-                let str = '';
-                remarkList.map(item=>{
-                    if(formId === item.id){
+                var str = '';
+                remarkList.map(function(item){
+                    if(formid === item.id){
                         str = item.remark
             
                     }
                 })
                 list.push({
-                    "topicId": formId,
+                    "topicId": formid,
                     "content": content,
                     "remark": str
                 })
             }else if(formName!=='checkbox'&&formName!=='radio'&&formName!=='select'&&formName!=='remark'){
-                console.log(formId)
                 list.push({
-                    "topicId": formId,
+                    "topicId": formid,
                     "content": decodeURI(String(content)),
                     "remark": ""
                 })
             }
             
         }
-        let body = [];
-        topicAllList.map(item=>{
-            list.map(e=>{
+        console.log(list)
+        var body = [];
+        topicAllList.map(function(item){
+            list.map(function(e){
                 if(e.topicId===item.id){
                     body.push(e)
-                    // if(item.isShow){
-                    //     body.push(e)
-                    // }else{
-                    //     e.content = '';
-                    //     e.remark = '';
-                    //     body.push(e)
-                    // }
                 }
                 
             })
         })
         console.log(body)
-        // return
-        let submitUrl = `${IP}/services/web/config/questionnaireFormAnswer/commitForm/${formId}/${userId}`;
-        let submitLoading = weui.loading('提交中...');
+        var submitUrl = IP + "/services/web/config/questionnaireFormAnswer/commitForm/" + formId + "/" + userId;
+        var submitLoading = weui.loading('提交中...');
         $.ajax({
             type:'post',
             url:submitUrl,
@@ -1637,10 +1712,10 @@
                 console.log(data)
                 submitLoading.hide();
                 if(data.status === 1){
-                    setTimeout(()=>{
+                    setTimeout(function(){
                         weui.toast('提交成功', 1200);
                         // window.location.href = 'finish.html?ToAPP=1'
-                        window.location.href = `${IP}/services/app/static/cicth5/form/finish.html?ToAPP=1`
+                        window.location.href = IP + "/services/app/static/cicth5/form/finish.html?ToAPP=1";
                     },200)
                 }else{
                     weui.topTips(data.errorMsg, 1500);

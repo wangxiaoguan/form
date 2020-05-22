@@ -170,8 +170,6 @@
 <script type="text/javascript" src="js/weui.js"></script>
 <script type="text/javascript" src='js/moment.js'></script>
 <script type="text/javascript" src='js/xlPaging.js'></script>
-<!-- <script type='text/javascript' src='http://www.jq22.com/demo/jqueryxlpaging201908112211/xlPaging.js'></script> -->
-<!-- <script type="text/javascript" src="http://www.jq22.com/demo/jqueryxlpaging201908112211/xlPaging.js"></script> -->
 <script>
 
     function toPage(nowPage,pageNum){
@@ -193,20 +191,17 @@
         var params = {};
 
 
-        var IP = 'http://10.128.151.108:443';
-        var search = '?formId=1262260388381634560&userId=10003'
-        search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+        // var IP = 'http://10.128.151.108:443';
+        // var search = '?formId=1262260388381634560&userId=10003'
+        // search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
 
 
-        // var IP = location.origin;
-        // location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+        var IP = location.origin;
+        location.search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
 
-        console.log(params)
-        function getFormData(pageNum=1,pageSize=10){
-
-            
-            
-            var url = "".concat(IP, "/services/web/config/questionnaireFormAnswer/getAnswersByUserAndFormId/").concat(params.formId, "/").concat(params.userId, "/").concat(pageNum, "/").concat(pageSize);
+        
+        function getFormData(pageNum){
+            var url = IP + '/services/web/config/questionnaireFormAnswer/getAnswersByUserAndFormId/' + params.formId + "/" + params.userId + "/" + pageNum + "/10";
             var totalNum = 0;
             var list = [];
             var DataLoading = weui.loading('数据请求中...');
@@ -216,15 +211,13 @@
                 contentType: 'application/json;charset=utf-8',
                 dataType: 'json',
                 success: function success(data) {
-                    console.log(data);
                     DataLoading.hide();
-
                     if (data.status === 1) {
-                    totalNum = Math.ceil(data.root.totalNum / 10);
-                    toPage(pageNum, totalNum);
-                    list = data.root.list || [];
-                    setFormData(list);
-                    $('footer').show();
+                        totalNum = Math.ceil(data.root.totalNum / 10);
+                        toPage(pageNum, totalNum);
+                        list = data.root.list || [];
+                        setFormData(list);
+                        $('footer').show();
                     }
                 },
                 error: function error(_error) {
@@ -237,16 +230,15 @@
         function setFormData(data){
             var liStr = '';
             data.map(function (item) {
-                liStr = liStr + "<li class=\"record\" data-time=\"".concat(item.createDate, "\">").concat(item.createDate, "<span class=\"detailLook\">\u67E5\u770B</span></li>");
+                liStr = liStr + "<li class=\"record\" data-time=\"" + item.createDate + "\">" + item.createDate + "<span class=\"detailLook\">查看</span></li>";
             });
             $('.list').html(liStr)
         }
-        getFormData()
+        getFormData(1)
 
         $(document).on('click','.record',function(){
-            let createDate = $(this).attr('data-time');
-            console.log(createDate)
-            window.location.href = "".concat(IP, "/services/app/static/cicth5/form/detail.html?formId=").concat(params.formId, "&userId=").concat(params.userId, "&createDate=").concat(createDate);
+            var createDate = $(this).attr('data-time');
+            window.location.href = IP + "/services/app/static/cicth5/form/detail.html?formId=" + params.formId + "&userId=" + params.userId + "&createDate=" + createDate;
         })
 </script>
 </html>

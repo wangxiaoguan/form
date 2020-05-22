@@ -59,73 +59,53 @@
 <script type="text/javascript" src="js/data.js"></script>
 <script type="text/javascript" src="js/weui.js"></script>
 <script type="text/javascript" src='js/moment.js'></script>
-<!-- <script type='text/javascript' src='http://www.jq22.com/demo/jqueryxlpaging201908112211/xlPaging.js'></script> -->
-<!-- <script type="text/javascript" src="http://www.jq22.com/demo/jqueryxlpaging201908112211/xlPaging.js"></script> -->
+
 <script>
+        function getFormData(){
+            var params = {};
 
-    // function toPage(nowPage,pageNum){
-    //     new Paging('page', {
-    //         nowPage: nowPage, // 当前页码
-    //         pageNum: pageNum, // 总页码
-    //         buttonNum: 4, //要展示的页码数量
-    //         canJump: 1,// 是否能跳转。0=不显示（默认），1=显示
-    //         showOne: 1,//只有一页时，是否显示。0=不显示,1=显示（默认）
-    //         callback: function (num) { //回调函数
-    //             console.log(num);
-    //             getFormData(num)
-    //         }
-    //     })
-    // }
-    // toPage(1,1)
-</script>
-<script>
-        
-        function getFormData(pageNum=1,pageSize=10){
-
-            let params = {};
+            // var IP = 'http://10.128.151.108:443';
+            // var search = '?formId=1262260388381634560&userId=10003&createDate=2020-05-21%2009:38:57'
+            // search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
 
 
-            // let IP = 'http://10.110.200.62:443';
-            // let search = '?formId=1250722340382633984&userId=10001'
-            // search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+            var IP = location.origin;
+            location.search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
 
-
-            let IP = location.origin;
-            location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
-
-            console.log(params)
             
-            let url = `${IP}/services/web/config/questionnaireFormAnswer/getAnswersByUserAndFormIdAndTime/${params.formId}/${params.userId}/${params.createDate}`;
-            let DataLoading = weui.loading('数据请求中...');
-            fetch(url).then(function(res){
-                res.json().then(data=>{
+            var url = IP + "/services/web/config/questionnaireFormAnswer/getAnswersByUserAndFormIdAndTime/" + params.formId + "/" + params.userId + "/" + params.createDate;
+            var DataLoading = weui.loading('数据请求中...');
+            $.ajax({
+                type: 'get',
+                url: url,
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                success: function success(data) {
+                    console.log(data)
                     if(data.status === 1){
-                        console.log(data)
                         DataLoading.hide();
-                        let detail = data.root.object.res;
+                        var detail = data.root.object.res;
                         setFormData(detail)
                         $('footer').show()
                     }else{
                         DataLoading.hide();
-                        let loading = weui.loading("未知异常");
-                        setTimeout(()=>{
+                        var loading = weui.loading("未知异常");
+                        setTimeout(function(){
                             loading.hide();
                         },3500)
                     }
-                })
-            }).catch(error=>{
-                DataLoading.hide();
-            })
+                },
+                error: function error(_error) {
+                    DataLoading.hide();
+                }
+            });
+
         }
 
         function setFormData(data){
-            let liStr = '';
-            console.log(data)
-            for(let key in data){
-                liStr = liStr + `<li class="form">
-                                    <div class="form-name">${key}</div>
-                                    <div class="form-content">${data[key]}</div>
-                                </li>`
+            var liStr = '';
+            for(var key in data){
+                liStr = liStr + ("<li class=\"form\"><div class=\"form-name\">" + key + "</div><div class=\"form-content\">" + data[key] + "</div></li>");
             }
             
             $('.list').html(liStr)

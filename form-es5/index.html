@@ -98,106 +98,73 @@
 <script type="text/javascript" src="js/weui.js"></script>
 <script type="text/javascript" src='js/moment.js'></script>
 <script>
-        var params = {};
+        // "use strict";
 
-        // let IP = 'http://10.128.151.108:443';
-        // let search = '?formId=1262260388381634560&userId=10001'
-        // search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+var params = {}; 
+// var IP = 'http://10.128.151.108:443';
+// var search = '?formId=1262201502618398720&userId=10001'
+// search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
+
+var IP = location.origin;
+location.search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
 
 
-        var IP = location.origin;
-        location.search.replace(/([^?&=]+)=([^&]+)/g, (_, k, v) => params[k] = v)
+var url = IP + "/services/web/config/questionnaireForm/getDetailByFormIdFromCache/" + params.formId + "/" + params.userId;
+var ossAddr = '';
+var formData = {}; //总表单数据
+
+var formDetail = {};
+
+function getFormData() {
+  var DataLoading = weui.loading('数据请求中...');
+  $.ajax({
+    type: 'get',
+    url: url,
+    contentType: 'application/json;charset=utf-8',
+    dataType: 'json',
+    success: function success(data) {
+      console.log(data);
+      if (data.status === 1) {
+        DataLoading.hide();
+        formData = data.root.object;
+        ossAddr = formData.ossAddr;
+        formDetail = formData.form;
+        setFormData(formDetail);
+        $('#app').show();
+        formData.hasJoinForm ? $('.look').show() : null;
+      } else {
         
-        console.log(params)
-
-        var url = `${IP}/services/web/config/questionnaireForm/getDetailByFormIdFromCache/${params.formId}/${params.userId}`;
-        var ossAddr = '';
-        var formData = {};//总表单数据
-        var formDetail = {};
-        function getFormData(){
-            let DataLoading = weui.loading('数据请求中...');
-            $.ajax({
-                type:'get',
-                url:url,
-                contentType:'application/json;charset=utf-8',
-                dataType:'json',
-                success:function(data){
-                    if(data.status === 1){
-                        DataLoading.hide();
-                        formData = data.root.object;
-                        ossAddr = formData.ossAddr;
-                        formDetail = formData.form;
-                        setFormData(formDetail)
-                        $('#app').show()
-                        formData.hasJoinForm?$('.look').show():null;
-                    }else{
-                        console.log(data)
-                        DataLoading.hide();
-                        // formData = data.root.object;
-                        // sessionStorage.setItem('errorMsg',formData.msg);
-                        // sessionStorage.setItem('hasJoinForm',formData.hasJoinForm?1:0);
-                        // window.location.href = 'finished.html?ToAPP=1';
-                        window.location.href = `${IP}/services/app/static/cicth5/form/finished.html?formId=${params.formId}&userId=${params.userId}&ToAPP=1`
-
-                        
-                    }
-                    
-                },
-                error:function(error){
-                    DataLoading.hide();
-                }
-            });
-            // fetch(url).then(function(res){
-            //     res.json().then(data=>{
-            //         if(data.status === 1){
-            //             DataLoading.hide();
-            //             formData = data.root.object;
-            //             ossAddr = formData.ossAddr;
-            //             formDetail = formData.form;
-            //             setFormData(formDetail)
-            //             $('#app').show()
-            //             formData.hasJoinForm?$('.look').show():null;
-            //         }else{
-            //             console.log(data)
-            //             DataLoading.hide();
-            //             // formData = data.root.object;
-            //             // sessionStorage.setItem('errorMsg',formData.msg);
-            //             // sessionStorage.setItem('hasJoinForm',formData.hasJoinForm?1:0);
-            //             // window.location.href = 'finished.html?ToAPP=1';
-            //             window.location.href = `${IP}/services/app/static/cicth5/form/finished.html?formId=${params.formId}&userId=${params.userId}&ToAPP=1`
-
-                        
-            //         }
-            //     })
-            // }).catch(error=>{
-            //     DataLoading.hide();
-                
-            // })
-        }
+        DataLoading.hide();
+        window.location.href = IP + "/services/app/static/cicth5/form/finished.html?formId=" + params.formId + "&userId=" + params.userId + "&ToAPP=1";
+      }
+    },
+    error: function error(_error) {
+      DataLoading.hide();
+    }
+  });
+}
 
         function setFormData(data){
             $('.title').html(data.name);
-            // $('.desp').html(data.content);
             document.getElementById('desp').innerHTML = data.content.replace(/<>/g,'')
             if(data.imgs!==''||data.imgs!=='[]'){
-                let imgs = []
-                // imgs = JSON.parse(data.imgs)
+                var imgs = []
                 imgs = eval("("+data.imgs+")")
-                let imgStr = '';
-                imgs.map(item=>{
-                    imgStr = imgStr + `<img class="content-img" src="${ossAddr+'/'+item}" alt=""/>`
+                var imgStr = '';
+                imgs.map(function(item){
+                    imgStr = imgStr + "<img class=\"content-img\" src=\"" + (ossAddr + '/' + item) + "\" alt=\"\"/>";
                 })
                 $('.content').html(imgStr)
             }
 
         }
         function submit(){
-            window.location.href = `${IP}/services/app/static/cicth5/form/form.html?formId=${params.formId}&userId=${params.userId}`
+            window.location.href = IP + "/services/app/static/cicth5/form/form.html?formId=" + params.formId + "&userId=" + params.userId;
         }
         getFormData()
 
         function lookList(){
-            window.location.href = `${IP}/services/app/static/cicth5/form/list.html?formId=${params.formId}&userId=${params.userId}`
+            window.location.href = IP + "/services/app/static/cicth5/form/list.html?formId=" + params.formId + "&userId=" + params.userId;
         }
 </script>
 </html>
