@@ -38,7 +38,7 @@ function getService(path,callback){
 
 function postService(path,body,callback){
     $.ajax({
-        type:'get',
+        type:'post',
         url:path,
         contentType:'application/json;charset=utf-8',
         dataType:'json',

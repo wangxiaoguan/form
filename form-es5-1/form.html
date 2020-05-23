@@ -1313,55 +1313,17 @@
         var formData = new FormData();
         formData.append("file", fileObj);
         var fileLoading = weui.loading('上传中...');
-        
-        // fetch("http://10.110.200.62:443/services/web/file/upload/mallUpload/form",{
-        //     method: 'POST',
-        //     mode: 'no-cors',
-        //     headers: {'Content-Type': 'application/json'},
-        //     credentials: 'include',
-        //     cache: 'default',
-        //     // body: JSON.stringify(formData),
-        //     body: formData,
-        // }).then(function(res){
-        //         res.json().then(data=>{
-        //             console.log(res)
-        //         })
-        //     }).catch(error=>{
-        //         console.log(error)
-                
-        //     })
-
-        $.ajax({ 
-            url:IP + "/services/web/file/upload/mallUpload/form", 
-            type:"post", 
-            // mode: 'no-cors',
-            data:formData, 
-            contentType:'application/x-www-form-urlencoded;charset=utf-8',
-            processData: false ,    // 不处理数据
-            contentType: false,    // 不设置内容类型
-            success:function(res){ 
-                fileLoading.hide();
-                if(res.status === 1){ 
-                    $(that).css('backgroundImage','url(img/uploadOk.png)')
-                    $(".deleteFile-" + topicId).css('display', 'block');
-                    $(".field-rule-" + topicId).html('');
-                    FormObject["file-" + topicId] = res.root.object[0].filePath;
-                }else{
-                    weui.topTips(res.errorMsg, 1500);
-                }
-                console.log(res); 
-                
-            }, 
-            error:function(err){ 
-                fileLoading.hide();
-                var errorLoading = weui.loading('上传失败');
-                setTimeout(function(){
-                    errorLoading.hide();
-                },1500)
-                
-            } 
-        
-        }) 
+        var fileUploadUrl = IP + "/services/web/file/upload/mallUpload/form";
+        uploadService(fileUploadUrl,formData,function(data){
+            if(data.status === 1){ 
+                $(that).css('backgroundImage','url(img/uploadOk.png)')
+                $(".deleteFile-" + topicId).css('display', 'block');
+                $(".field-rule-" + topicId).html('');
+                FormObject["file-" + topicId] = data.root.object[0].filePath;
+            }else{
+                weui.topTips(data.errorMsg, 1500);
+            }
+        })
     })
 
     //删除附件
@@ -1522,34 +1484,20 @@
         console.log(body)
         var submitUrl = IP + "/services/web/config/questionnaireFormAnswer/commitForm/" + params.formId + "/" + params.userId;
         var submitLoading = weui.loading('提交中...');
-        $.ajax({
-            type:'post',
-            url:submitUrl,
-            contentType:'application/json;charset=utf-8',
-            dataType:'json',
-            data:JSON.stringify(body),      
-            success:function(data){
-                console.log(data)
-                submitLoading.hide();
-                if(data.status === 1){
-                    setTimeout(function(){
-                        weui.toast('提交成功', 1200);
-                        // window.location.href = 'finish.html?ToAPP=1'
-                        window.location.href = IP + "/services/app/static/cicth5/form/finish.html?ToAPP=1";
-                    },200)
-                }else{
-                    weui.topTips(data.errorMsg, 1500);
-                }
-            },
-            error:function(error){
 
+
+        postService(submitUrl,body,function(data){
+            submitLoading.hide();
+            if(data.status === 1){
+                setTimeout(function(){
+                    weui.toast('提交成功', 1200);
+                    // window.location.href = 'finish.html?ToAPP=1'
+                    window.location.href = IP + "/services/app/static/cicth5/form/finish.html?ToAPP=1";
+                },200)
+            }else{
+                weui.topTips(data.errorMsg, 1500);
             }
-        });   
-
-        
-        
-
-        
+        }) 
     }
 </script>
 </html>
