@@ -77,43 +77,27 @@
     </div>
 </body>
 <script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src='js/myFetch.js'></script>
 <script>
 
-        var params = {};
-
-        // var IP = 'http://10.128.151.108:443';
-        // var search = '?formId=1262260388381634560&userId=10001'
-        // search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
-
-        var IP = location.origin;
-        location.search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
-
-        
+    function getFormData(){
         var url = IP + "/services/web/config/questionnaireForm/getDetailByFormIdFromCache/" + params.formId + "/" + params.userId;
-        function getFormData(){
-            $.ajax({
-                type: 'get',
-                url: url,
-                contentType: 'application/json;charset=utf-8',
-                dataType: 'json',
-                success: function success(data) {
-                    if (data.status === 0) {
-                        var formData = data.root.object;
-                        var errorMsg = formData.msg;
-                        var hasJoinForm = formData.hasJoinForm;
-                        console.log(errorMsg,hasJoinForm)
-                        $('.status').html(errorMsg)
-                        hasJoinForm&&$('.look').show()
-                    }
-                },
-                error: function error(_error) {
-                }
-            });
-        }
-        getFormData()
-        function lookList(){
-            window.location.href = IP + "/services/app/static/cicth5/form/list.html?formId=" + params.formId + "&userId=" + params.userId;
-        }
+        getService(url,function(data){
+            if (data.status === 0) {
+                var formData = data.root.object;
+                var errorMsg = formData.msg;
+                var hasJoinForm = formData.hasJoinForm;
+                console.log(errorMsg,hasJoinForm)
+                $('.status').html(errorMsg)
+                hasJoinForm&&$('.look').show()
+            }
+        })
+    }
+    getFormData()
+
+    function lookList(){
+        window.location.href = IP + "/services/app/static/cicth5/form/list.html?formId=" + params.formId + "&userId=" + params.userId;
+    }
 
 </script>
 </html>

@@ -9,72 +9,8 @@
     <title>填报</title>
     <link rel="stylesheet" type="text/css" href="css/weui.css" />
     <link rel="stylesheet" type="text/css" href="css/validate.css">
-    <style>
-        html,body{
-            width: 100%;
-            height: 100%;
-            padding: 0;
-            margin:0;
-        }
-        #app{
-            width: 100%;
-            height: 100%;
-            display: none;
-        }
-        .title{
-            border: 0px solid transparent;
-            font-size: 1.4rem;
-            text-align: center;
-            line-height: 2rem;
-            padding-top: 1rem;
-        }
-        .desp{
-            border: 0px solid transparent;
-            margin-top:0.5rem;
-            padding: 0.8rem;
-            font-size: 1rem;
-            word-wrap: break-word;
-            word-break: normal;
-        }
-        .content-img{
-            width: 100%;
-        }
-        .middle{
-            border: 0px solid transparent;
-            text-align: center;
-            margin-top: 2rem;
-        } 
-        .status{
-            line-height: 2rem;
-            font-size: 0.85rem;
-            margin-top: 1rem;
-            font-family:'PingFang SC';
-            font-weight:400;
-            color:#B5B5B5
-        }
-        .look{
-            font-size: 0.8rem;
-            color:#00A0E9;
-            text-decoration: none;
-            display: none;
-        }
-        .foot{
-            width: 100%;
-            padding: 2rem 0;
-            margin-top: 4rem;
-        }
-        .submitBtn{
-            width:90%;
-            margin:0 5%;
-            height: 2.4rem;
-            border-radius: 0.4rem;
-            background: #007AFF;
-            text-align: center;
-            line-height: 2.4rem;
-            color: #fff;
-        }
-        
-    </style>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+
 </head>
 <body>
     <div id="app">
@@ -97,74 +33,52 @@
 <script type="text/javascript" src="js/data.js"></script>
 <script type="text/javascript" src="js/weui.js"></script>
 <script type="text/javascript" src='js/moment.js'></script>
+<script type="text/javascript" src='js/myFetch.js'></script>
 <script>
-        // "use strict";
 
-var params = {}; 
-// var IP = 'http://10.128.151.108:443';
-// var search = '?formId=1262201502618398720&userId=10001'
-// search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
-
-var IP = location.origin;
-location.search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
-
-
-var url = IP + "/services/web/config/questionnaireForm/getDetailByFormIdFromCache/" + params.formId + "/" + params.userId;
-var ossAddr = '';
-var formData = {}; //总表单数据
-
-var formDetail = {};
-
-function getFormData() {
-  var DataLoading = weui.loading('数据请求中...');
-  $.ajax({
-    type: 'get',
-    url: url,
-    contentType: 'application/json;charset=utf-8',
-    dataType: 'json',
-    success: function success(data) {
-      console.log(data);
-      if (data.status === 1) {
-        DataLoading.hide();
-        formData = data.root.object;
-        ossAddr = formData.ossAddr;
-        formDetail = formData.form;
-        setFormData(formDetail);
-        $('#app').show();
-        formData.hasJoinForm ? $('.look').show() : null;
-      } else {
-        
-        DataLoading.hide();
-        window.location.href = IP + "/services/app/static/cicth5/form/finished.html?formId=" + params.formId + "&userId=" + params.userId + "&ToAPP=1";
-      }
-    },
-    error: function error(_error) {
-      DataLoading.hide();
-    }
-  });
-}
-
-        function setFormData(data){
-            $('.title').html(data.name);
-            document.getElementById('desp').innerHTML = data.content.replace(/<>/g,'')
-            if(data.imgs!==''||data.imgs!=='[]'){
-                var imgs = []
-                imgs = eval("("+data.imgs+")")
-                var imgStr = '';
-                imgs.map(function(item){
-                    imgStr = imgStr + "<img class=\"content-img\" src=\"" + (ossAddr + '/' + item) + "\" alt=\"\"/>";
-                })
-                $('.content').html(imgStr)
+    var url = IP + "/services/web/config/questionnaireForm/getDetailByFormIdFromCache/" + params.formId + "/" + params.userId;
+    var ossAddr = '';
+    var formData = {}; //总表单数据
+    var formDetail = {};
+    function getFormData() {
+        var dataLoading = weui.loading('数据请求中...');
+        getService(url,function(data){
+            dataLoading.hide();
+            if (data.status === 1) {
+                formData = data.root.object;
+                ossAddr = formData.ossAddr;
+                formDetail = formData.form;
+                setFormData(formDetail);
+                $('#app').show();
+                formData.hasJoinForm ? $('.look').show() : null;
+            } else {
+                window.location.href = IP + "/services/app/static/cicth5/form/finished.html?formId=" + params.formId + "&userId=" + params.userId + "&ToAPP=1";
             }
+        })
 
-        }
-        function submit(){
-            window.location.href = IP + "/services/app/static/cicth5/form/form.html?formId=" + params.formId + "&userId=" + params.userId;
-        }
-        getFormData()
+    }
 
-        function lookList(){
-            window.location.href = IP + "/services/app/static/cicth5/form/list.html?formId=" + params.formId + "&userId=" + params.userId;
+    function setFormData(data){
+        $('.title').html(data.name);
+        document.getElementById('desp').innerHTML = data.content.replace(/<>/g,'')
+        if(data.imgs!==''||data.imgs!=='[]'){
+            var imgs = []
+            imgs = eval("("+data.imgs+")")
+            var imgStr = '';
+            imgs.map(function(item){
+                imgStr = imgStr + "<img class=\"content-img\" src=\"" + (ossAddr + '/' + item) + "\" alt=\"\"/>";
+            })
+            $('.content').html(imgStr)
         }
+
+    }
+    function submit(){
+        window.location.href = IP + "/services/app/static/cicth5/form/form.html?formId=" + params.formId + "&userId=" + params.userId;
+    }
+    getFormData()
+
+    function lookList(){
+        window.location.href = IP + "/services/app/static/cicth5/form/list.html?formId=" + params.formId + "&userId=" + params.userId;
+    }
 </script>
 </html>

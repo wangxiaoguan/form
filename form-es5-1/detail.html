@@ -8,42 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>记录</title>
     <link rel="stylesheet" type="text/css" href="css/weui.css" />
-    <!-- <link rel="stylesheet" type="text/css" href="css/validate.css"> -->
-    <style>
-        html,body{
-            width: 100%;
-            height: 100%;
-            padding: 0;
-            margin:0;
-        }
-        #app{
-            width: 100%;
-            height: 100%;
-        }
-        .list{
-            padding:0 3%;
-        }
-        .form{
-            border: 1px solid #c0c0c0;
-            margin: 1rem 0;
-            border-radius: 4px;
-        }
-        .form-name{
-            border-bottom: 1px solid #e0e0e0 ;
-            padding: 0.6rem;
-            font-size: 0.9rem;
-            line-height: 1.2rem;
-            color: #888;
-        }
-        .form-content{
-            padding: 0.6rem;
-            font-size: 0.8rem;
-            line-height: 1.2rem;
-            min-height: 1rem;
-            font-weight: 500;
-            word-wrap:break-word;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="css/detail.css" />
 </head>
 <body>
     <div id="app">
@@ -62,19 +27,8 @@
 <script type="text/javascript" src='js/myFetch.js'></script>
 
 <script>
-        function getFormData(){
-            // var params = {};
-
-            // var IP = 'http://10.128.151.108:443';
-            // var search = '?formId=1262260388381634560&userId=10003&createDate=2020-05-21%2009:38:57'
-            // search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
-
-
-            // var IP = location.origin;
-            // location.search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
-
-            
-            var url = IP + "/services/web/config/questionnaireFormAnswer/getAnswersByUserAndFormIdAndTime1/" + params.formId + "/" + params.userId + "/" + params.createDate;
+        function getFormData(){ 
+            var url = IP + "/services/web/config/questionnaireFormAnswer/getAnswersByUserAndFormIdAndTime/" + params.formId + "/" + params.userId + "/" + params.createDate;
             var dataLoading = weui.loading('数据请求中...');
             getService(url,function(data){
                 dataLoading.hide();
@@ -89,30 +43,7 @@
                     },2000)
                 }
             })
-            // $.ajax({
-            //     type: 'get',
-            //     url: url,
-            //     contentType: 'application/json;charset=utf-8',
-            //     dataType: 'json',
-            //     success: function success(data) {
-            //         console.log(data)
-            //         if(data.status === 1){
-            //             DataLoading.hide();
-            //             var detail = data.root.object.res;
-            //             setFormData(detail)
-            //             $('footer').show()
-            //         }else{
-            //             DataLoading.hide();
-            //             var loading = weui.loading("未知异常");
-            //             setTimeout(function(){
-            //                 loading.hide();
-            //             },3500)
-            //         }
-            //     },
-            //     error: function error(_error) {
-            //         DataLoading.hide();
-            //     }
-            // });
+
 
         }
 
