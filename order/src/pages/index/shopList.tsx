@@ -5,7 +5,7 @@ import { setIp, setToken } from "../redux/action";
 import Store from "../redux/store";
 import "../order/shopList.scss";
 import { baseUrl, imgUrl } from "../../../config/config";
-
+import {getService,postService} from '../common/myFetch'
 export default class ShopList extends Component<any, any> {
   constructor(props) {
     super(props);
@@ -29,10 +29,10 @@ export default class ShopList extends Component<any, any> {
     navigationBarTitleText: "商品列表"
   };
   componentWillMount() {
-    // let userId = "1193815038429872128";
-    // let IP = "http://10.110.200.62:443";
-    // let activityId = "1207168203686588416";
-    // let YQToken = "NrDlumVeUrgwDvBJoRqvAObb5gUtW4KKgqL3S8U1Z6x%2FrY3UAAUuAABjPdEH5ngD";
+    // let userId = "63699";
+    // let IP = "http://10.128.151.13:443";
+    // let activityId = "1263738193493573632";
+    // let YQToken = "HVQyMKUCNKkwYG1cIY9ve3OS9KfU5WKCZRdNnv7YEj0%3D";
 
     let list = window.location.search.substring(1).split('&');
     let params = {};
@@ -64,32 +64,39 @@ export default class ShopList extends Component<any, any> {
     // const YQToken = "oQ%2FXHE7oHO08hgdXx3qZLc36Hqw1Gz8C34bycgfVyRc%3D";
     // const activityId = "1204936785973858304";
     let { YQToken, activityId, IP } = this.state;
-    fetch(`${IP}/services/app/buyerUser/getProductList/${activityId}`, {
-      method: "GET",
-      mode: "cors",
-      cache: "default",
-      headers: { "Content-Type": "application/json", "YQ-Token": YQToken }
+    getService(`${IP}/services/app/buyerUser/getProductList/${activityId}`,YQToken,data=>{
+      if ( data.status === 1) {
+        this.setState({shopList: data.root.activityProductRels});
+      } else {
+        Taro.atMessage({message: data.errorMsg,type: "error"});
+      }
     })
-      .then(resp => {
-        resp.json().then(data => {
-          if (Number(data.status) === 1) {
-            this.setState({
-              shopList: data.root.activityProductRels
-            });
-          } else {
-            Taro.atMessage({
-              message: data.errorMsg,
-              type: "error"
-            });
-          }
-        });
-      })
-      .catch(e => {
-        Taro.atMessage({
-          message: "获取商品列表失败，请稍后重试！",
-          type: "error"
-        });
-      });
+    // fetch(`${IP}/services/app/buyerUser/getProductList/${activityId}`, {
+    //   method: "GET",
+    //   mode: "cors",
+    //   cache: "default",
+    //   headers: { "Content-Type": "application/json", "YQ-Token": YQToken }
+    // })
+    //   .then(resp => {
+    //     resp.json().then(data => {
+    //       if (Number(data.status) === 1) {
+    //         this.setState({
+    //           shopList: data.root.activityProductRels
+    //         });
+    //       } else {
+    //         Taro.atMessage({
+    //           message: data.errorMsg,
+    //           type: "error"
+    //         });
+    //       }
+    //     });
+    //   })
+    //   .catch(e => {
+    //     Taro.atMessage({
+    //       message: "获取商品列表失败，请稍后重试！",
+    //       type: "error"
+    //     });
+    //   });
   };
 
   backUp = () => {

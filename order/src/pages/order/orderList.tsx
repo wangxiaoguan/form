@@ -4,7 +4,7 @@ import { AtIcon,AtMessage  } from 'taro-ui'
 import Store from '../redux/store'
 import {imgUrl } from "../../../config/config";
 import './index.scss'
-
+import {getService,postService} from '../common/myFetch'
 export default class Submit extends Component<any,any> {
   constructor (props) {
     super (props)
@@ -25,9 +25,9 @@ export default class Submit extends Component<any,any> {
   }
 
   componentWillMount () {
-    // let IP = "http://10.110.200.62:443";
-    // let activityId = "1210164334725152768";
-    // let YQToken = "K%2FF8tyEqMCG14uuYxspHvCAQnKsOMLWnoeK8p4sntaVnado4rHGgBrLLKoyowbu%2B";
+    // let IP = "http://10.128.151.13:443";
+    // let activityId = "1263738193493573632";
+    // let YQToken = "BCNQt%2FSTBKJ%2B3qK%2BRE%2FkmAgNTRmx7fQ3p62jMXV7fWI%3D";
     let list = window.location.search.substring(1).split('&');
     let params = {};
     list.map(item=>{
@@ -42,38 +42,49 @@ export default class Submit extends Component<any,any> {
 
   componentDidMount () { 
     const {IP,YQToken,activityId} = this.state
-    fetch(`${IP}/services/app/buyerUser/getOrderListOfActivity/${activityId}`,
-    {
-        method: 'GET',
-        mode: 'cors',
-        cache: 'default',
-        headers: {'Content-Type': 'application/json','YQ-Token':YQToken},
-    }).then(response=>{
-       response.json().then(data=>{
-          console.log(data)
-          if(data.status === 1){
-            if(data.root.list.length){
-              this.setState({data:data.root.list})
-            }else{
-              Taro.atMessage({
-                'message': '你的订单为空，请添加订单',
-                'type': 'success',
-              })
-            }
+    getService(`${IP}/services/app/buyerUser/getOrderListOfActivity/${activityId}`,YQToken,data=>{
+      if(data.status === 1){
+        if(data.root.list.length){
+          this.setState({data:data.root.list})
+        }else{
+          Taro.atMessage({'message': '你的订单为空，请添加订单','type': 'success',})
+        }
+      }else{
+        Taro.atMessage({'message': data.errorMsg,'type': 'error',})
+      }
+    })
+    // fetch(`${IP}/services/app/buyerUser/getOrderListOfActivity/${activityId}`,
+    // {
+    //     method: 'GET',
+    //     mode: 'cors',
+    //     cache: 'default',
+    //     headers: {'Content-Type': 'application/json','YQ-Token':YQToken},
+    // }).then(response=>{
+    //    response.json().then(data=>{
+    //       console.log(data)
+    //       if(data.status === 1){
+    //         if(data.root.list.length){
+    //           this.setState({data:data.root.list})
+    //         }else{
+    //           Taro.atMessage({
+    //             'message': '你的订单为空，请添加订单',
+    //             'type': 'success',
+    //           })
+    //         }
             
-          }else{
-            Taro.atMessage({
-              'message': data.errorMsg,
-              'type': 'error',
-            })
-          }
-       })
-      }).catch(e => {
-        Taro.atMessage({
-          message: "获取订单列表失败",
-          type: "error"
-        });
-      })
+    //       }else{
+    //         Taro.atMessage({
+    //           'message': data.errorMsg,
+    //           'type': 'error',
+    //         })
+    //       }
+    //    })
+    //   }).catch(e => {
+    //     Taro.atMessage({
+    //       message: "获取订单列表失败",
+    //       type: "error"
+    //     });
+    //   })
 
   }
 

@@ -4,7 +4,7 @@ import { AtIcon,AtButton,AtMessage,AtModal,AtModalContent,AtModalHeader,AtCheckb
 import moment from 'moment';
 import Store from '../redux/store'
 import './index.scss'
-
+import {getService,postService} from '../common/myFetch'
 export default class Submit extends Component<any,any> {
   constructor () {
     super(...arguments)
@@ -32,7 +32,7 @@ export default class Submit extends Component<any,any> {
 
   componentDidMount () {
     let store = Store.getState()
-    console.log(store)
+    
     let order = store.order;
     let detail = store.detail;
 
@@ -41,6 +41,7 @@ export default class Submit extends Component<any,any> {
       address.push({ label: item.addressName, value: item.id })
     })
     let arr = []
+    console.log('----------------------->',order)
     order.map(item=>{
       let total = 0;
       let list = item.orderDetailList.filter(e=>{
@@ -69,32 +70,40 @@ export default class Submit extends Component<any,any> {
   submitOrder = () => {
     const {IP,YQToken,data} = this.state
     this.setState({shopCarLoad:true})
-    fetch(`${IP}/services/app/buyerUser/submitOrder`,
-    {
-        method: 'POST',
-        mode: 'cors',
-        cache: 'default',
-        headers: {'Content-Type': 'application/json','YQ-Token':YQToken},
-        body: JSON.stringify(data),
-    }).then(response=>{
-       response.json().then(data=>{
-          console.log(data)
-          this.setState({shopCarLoad:false})
-          if(data.status === 1){
-            Taro.navigateTo({url:'/pages/order/orderList'})
-          }else{
-            Taro.atMessage({
-              'message': data.errorMsg,
-              'type': 'error',
-            })
-          }
-       })
-      }).catch(e => {
-        Taro.atMessage({
-          message: "提交订单失败",
-          type: "error"
-        });
-      })
+    postService(`${IP}/services/app/buyerUser/submitOrder`,YQToken,data,res=>{
+      this.setState({shopCarLoad:false})
+      if(res.status === 1){
+        Taro.navigateTo({url:'/pages/order/orderList'})
+      }else{
+        Taro.atMessage({'message': res.errorMsg,'type': 'error',})
+      }
+    })
+    // fetch(`${IP}/services/app/buyerUser/submitOrder`,
+    // {
+    //     method: 'POST',
+    //     mode: 'cors',
+    //     cache: 'default',
+    //     headers: {'Content-Type': 'application/json','YQ-Token':YQToken},
+    //     body: JSON.stringify(data),
+    // }).then(response=>{
+    //    response.json().then(data=>{
+    //       console.log(data)
+    //       this.setState({shopCarLoad:false})
+    //       if(data.status === 1){
+    //         Taro.navigateTo({url:'/pages/order/orderList'})
+    //       }else{
+    //         Taro.atMessage({
+    //           'message': data.errorMsg,
+    //           'type': 'error',
+    //         })
+    //       }
+    //    })
+    //   }).catch(e => {
+    //     Taro.atMessage({
+    //       message: "提交订单失败",
+    //       type: "error"
+    //     });
+    //   })
       
   }
   total = data => {

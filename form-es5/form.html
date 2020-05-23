@@ -409,13 +409,13 @@
 <script>
         var params = {};
 
-        // var IP = 'http://10.128.151.108:443';
-        // // var IP = 'https://test.cictsj.com:30000'
-        // var search = '?formId=1263664214585778176&userId=10008'
-        // search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
+        var IP = 'http://10.128.151.108:443';
+        // var IP = 'https://test.cictsj.com:30000'
+        var search = '?formId=1263664214585778176&userId=10008'
+        search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
 
-        var IP = location.origin;
-        location.search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
+        // var IP = location.origin;
+        // location.search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
 
         var formId = params.formId;
         var userId = params.userId;

@@ -6,7 +6,7 @@ import Store from '../redux/store'
 import QRCode from 'qrcode'
 import moment from 'moment';
 import './index.scss'
-
+import {getService,postService} from '../common/myFetch'
 export default class OrderDetail extends Component<any,any> {
   constructor (props) {
     super(props)
@@ -29,10 +29,10 @@ export default class OrderDetail extends Component<any,any> {
   }
 
   componentWillMount () {
-    // let userId = "12657";
-    // let IP = "http://10.110.200.62:443";
-    // let activityId = "1211826485099044864";
-    // let YQToken = "GLI%2BMHOFuq4PktU8GSWbiSbTPr8dMmA6gOtKnYpD2fQ%3D";
+    // let userId = "63699";
+    // let IP = "http://10.128.151.13:443";
+    // let activityId = "1263738193493573632";
+    // let YQToken = "BCNQt%2FSTBKJ%2B3qK%2BRE%2FkmAgNTRmx7fQ3p62jMXV7fWI%3D";
 
     let orderId = window.sessionStorage.getItem('orderId');
     let list = window.location.search.substring(1).split('&');
@@ -50,70 +50,91 @@ export default class OrderDetail extends Component<any,any> {
    }
    getFreeTimes = (YQToken, IP) => {
     // let { YQToken, IP } = this.state;
-    fetch(`${IP}/services/app/buyerUser/getFreeTimes`, {
-      method: "GET",
-      mode: "cors",
-      cache: "default",
-      headers: { "Content-Type": "application/json", "YQ-Token": YQToken }
-    }).then(resp => {
-      resp.json().then(data => {
-        if (data.status === 1) {
-          this.setState({freeTimes:data.root.object})
-        }
-      });
-    }).catch(e => {
-      Taro.atMessage({
-        message: "请求失败",
-        type: "error"
-      });
-    });
+    getService(`${IP}/services/app/buyerUser/getFreeTimes`,YQToken,data=>{
+      if (data.status === 1) {
+        this.setState({freeTimes:data.root.object})
+      }else{
+        Taro.atMessage({'message': data.errorMsg,'type': 'error',})
+      }
+    })
+    // fetch(`${IP}/services/app/buyerUser/getFreeTimes`, {
+    //   method: "GET",
+    //   mode: "cors",
+    //   cache: "default",
+    //   headers: { "Content-Type": "application/json", "YQ-Token": YQToken }
+    // }).then(resp => {
+    //   resp.json().then(data => {
+    //     if (data.status === 1) {
+    //       this.setState({freeTimes:data.root.object})
+    //     }
+    //   });
+    // }).catch(e => {
+    //   Taro.atMessage({
+    //     message: "请求失败",
+    //     type: "error"
+    //   });
+    // });
    }
    getDeatil = ( YQToken, activityId, IP ) => {
     // let { YQToken, activityId, IP } = this.state;
-    fetch(`${IP}/services/app/activity/getActivityById/${activityId}`, {
-      method: "GET",
-      mode: "cors",
-      cache: "default",
-      headers: { "Content-Type": "application/json", "YQ-Token": YQToken }
-    }).then(resp => {
-      resp.json().then(data => {
-        if (data.status === 1) {
-          this.setState({endTime:data.root.object.endTime})
-        }
-      });
-    }).catch(e => {
-      Taro.atMessage({
-        message: "请求失败",
-        type: "error"
-      });
-    });
+    getService(`${IP}/services/app/activity/getActivityById/${activityId}`,YQToken,data=>{
+      if (data.status === 1) {
+        this.setState({endTime:data.root.object.endTime})
+      }else{
+        Taro.atMessage({'message': data.errorMsg,'type': 'error',})
+      }
+    })
+    // fetch(`${IP}/services/app/activity/getActivityById/${activityId}`, {
+    //   method: "GET",
+    //   mode: "cors",
+    //   cache: "default",
+    //   headers: { "Content-Type": "application/json", "YQ-Token": YQToken }
+    // }).then(resp => {
+    //   resp.json().then(data => {
+    //     if (data.status === 1) {
+    //       this.setState({endTime:data.root.object.endTime})
+    //     }
+    //   });
+    // }).catch(e => {
+    //   Taro.atMessage({
+    //     message: "请求失败",
+    //     type: "error"
+    //   });
+    // });
   };
   componentDidMount () { 
     const {IP,YQToken,orderId} = this.state
-    fetch(`${IP}/app/order/detail/getById/${orderId}`,
-    {
-        method: 'GET',
-        mode: 'cors',
-        cache: 'default',
-        headers: {'Content-Type': 'application/json','YQ-Token':YQToken},
-    }).then(response=>{
-       response.json().then(data=>{
-          console.log(data)
-          if(data.status === 1){
-            this.setState({data:data.root.object})
-          }else{
-            Taro.atMessage({
-              'message': data.errorMsg,
-              'type': 'error',
-            })
-          }
-       })
-      }).catch(e => {
-        Taro.atMessage({
-          message: "获取详情失败",
-          type: "error"
-        });
-      });
+    getService(`${IP}/app/order/detail/getById/${orderId}`,YQToken,data=>{
+      if (data.status === 1) {
+        this.setState({data:data.root.object})
+      }else{
+        Taro.atMessage({'message': data.errorMsg,'type': 'error',})
+      }
+    })
+    // fetch(`${IP}/app/order/detail/getById/${orderId}`,
+    // {
+    //     method: 'GET',
+    //     mode: 'cors',
+    //     cache: 'default',
+    //     headers: {'Content-Type': 'application/json','YQ-Token':YQToken},
+    // }).then(response=>{
+    //    response.json().then(data=>{
+    //       console.log(data)
+    //       if(data.status === 1){
+    //         this.setState({data:data.root.object})
+    //       }else{
+    //         Taro.atMessage({
+    //           'message': data.errorMsg,
+    //           'type': 'error',
+    //         })
+    //       }
+    //    })
+    //   }).catch(e => {
+    //     Taro.atMessage({
+    //       message: "获取详情失败",
+    //       type: "error"
+    //     });
+    //   });
 
   }
 
@@ -151,38 +172,48 @@ export default class OrderDetail extends Component<any,any> {
     const {IP,YQToken,orderId} = this.state
     // let IP = 'http://10.110.200.62:443';
     // let YQToken = 'NrDlumVeUrgwDvBJoRqvAObb5gUtW4KKgqL3S8U1Z6x%2FrY3UAAUuAABjPdEH5ngD'
-    fetch(`${IP}/services/app/buyerUser/cancelOrder/${orderId}`,
-    {
-        method: 'POST',
-        mode: 'cors',
-        cache: 'default',
-        headers: {'Content-Type': 'application/json','YQ-Token':YQToken},
-        body: JSON.stringify({orderId:orderId}),
-    }).then(response=>{
-       response.json().then(data=>{
-          console.log(data)
-          if(data.status === 1){
-            // this.setState({data:data.root.object})
-            Taro.atMessage({
-              'message': '订单取消成功',
-              'type': 'success',
-            })
-            setTimeout(function(){
-              Taro.navigateTo({url: '/pages/order/orderList'})
-            },800)
-          }else{
-            Taro.atMessage({
-              'message': data.errorMsg,
-              'type': 'error',
-            })
-          }
-       })
-      }).catch(e => {
-        Taro.atMessage({
-          message: "订单取消失败",
-          type: "error"
-        });
-      });
+    postService(`${IP}/services/app/buyerUser/cancelOrder/${orderId}`,YQToken,{orderId:orderId},data=>{
+      if(data.status === 1){
+        Taro.atMessage({'message': '订单取消成功','type': 'success',})
+        setTimeout(function(){
+          Taro.navigateTo({url: '/pages/order/orderList'})
+        },800)
+      }else{
+        Taro.atMessage({'message': data.errorMsg,'type': 'error',})
+      }
+    })
+    // fetch(`${IP}/services/app/buyerUser/cancelOrder/${orderId}`,
+    // {
+    //     method: 'POST',
+    //     mode: 'cors',
+    //     cache: 'default',
+    //     headers: {'Content-Type': 'application/json','YQ-Token':YQToken},
+    //     body: JSON.stringify({orderId:orderId}),
+    // }).then(response=>{
+    //    response.json().then(data=>{
+    //       console.log(data)
+    //       if(data.status === 1){
+    //         // this.setState({data:data.root.object})
+    //         Taro.atMessage({
+    //           'message': '订单取消成功',
+    //           'type': 'success',
+    //         })
+    //         setTimeout(function(){
+    //           Taro.navigateTo({url: '/pages/order/orderList'})
+    //         },800)
+    //       }else{
+    //         Taro.atMessage({
+    //           'message': data.errorMsg,
+    //           'type': 'error',
+    //         })
+    //       }
+    //    })
+    //   }).catch(e => {
+    //     Taro.atMessage({
+    //       message: "订单取消失败",
+    //       type: "error"
+    //     });
+    //   });
   }
   goBack = () => {
     window.history.back(-1)

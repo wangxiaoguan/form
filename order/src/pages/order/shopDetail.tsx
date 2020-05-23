@@ -4,6 +4,7 @@ import { AtIcon, AtButton, AtBadge, AtMessage } from "taro-ui";
 import "./shopDetail.scss";
 import { baseUrl, imgUrl } from "../../../config/config";
 import Store from "../redux/store";
+import {getService,postService} from '../common/myFetch'
 let isClick = 0;
 export default class ShopList extends Component<any, any> {
   constructor(props) {
@@ -46,12 +47,9 @@ export default class ShopList extends Component<any, any> {
     let YQToken = params.YQToken;
 
 
-    // let IP = "http://10.110.200.62:443";
-    // let activityId = "1207932908185866240";
-    // let YQToken = "NrDlumVeUrgwDvBJoRqvAObb5gUtW4KKgqL3S8U1Z6x%2FrY3UAAUuAABjPdEH5ngD";
-    // let IP = "http://10.110.200.62:443";
-    // let activityId = "1211826485099044864";
-    // let YQToken = "GLI%2BMHOFuq4PktU8GSWbiSbTPr8dMmA6gOtKnYpD2fQ%3D";
+    // let IP = "http://10.128.151.13:443";
+    // let activityId = "1263738193493573632";
+    // let YQToken = "BCNQt%2FSTBKJ%2B3qK%2BRE%2FkmAgNTRmx7fQ3p62jMXV7fWI%3D";
     this.setState({ IP, YQToken, activityId });
   }
   componentDidShow() {
@@ -62,82 +60,115 @@ export default class ShopList extends Component<any, any> {
   }
   getShopList = () => {
     let { YQToken, activityId, IP,} = this.state;
-    fetch(`${IP}/services/app/buyerUser/getProductList/${activityId}`, {
-      method: "GET",
-      mode: "cors",
-      headers: { "Content-Type": "application/json", "YQ-Token": YQToken }
-    }).then(resp => {
-        resp.json().then(data => {
-          if (data.status === 1) {
-            let list = data.root.orderCarts;
-            let arr = []
-            list.map(item=>{
-              item.orderCartList.map(e=>{
-                arr.push(e)
-              })
-            })
-            this.setState({shopList: data.root.activityProductRels,carList:arr})
-            }
+    getService(`${IP}/services/app/buyerUser/getProductList/${activityId}`,YQToken,data=>{
+      if (data.status === 1) {
+        let list = data.root.orderCarts;
+        let arr = []
+        list.map(item=>{
+          item.orderCartList.map(e=>{
+            arr.push(e)
           })
         })
+        this.setState({shopList: data.root.activityProductRels,carList:arr})
+        }
+    })
+
+    // fetch(`${IP}/services/app/buyerUser/getProductList/${activityId}`, {
+    //   method: "GET",
+    //   mode: "cors",
+    //   headers: { "Content-Type": "application/json", "YQ-Token": YQToken }
+    // }).then(resp => {
+    //     resp.json().then(data => {
+    //       if (data.status === 1) {
+    //         let list = data.root.orderCarts;
+    //         let arr = []
+    //         list.map(item=>{
+    //           item.orderCartList.map(e=>{
+    //             arr.push(e)
+    //           })
+    //         })
+    //         this.setState({shopList: data.root.activityProductRels,carList:arr})
+    //         }
+    //       })
+    //     })
   }
   judgeType = () => {
     let { activityId, YQToken, IP } = this.state;
-    fetch(`${IP}/services/app/activity/getActivityById/${activityId}`, {
-      method: "GET",
-      mode: "cors",
-      cache: "default",
-      headers: { "Content-Type": "application/json", "YQ-Token": YQToken }
+    getService(`${IP}/services/app/activity/getActivityById/${activityId}`,YQToken,data=>{
+      if (data.status === 1) {
+        if (data.root.joinCount === 0) {
+          this.setState({
+            isJoin: true
+          });
+        }else{
+          this.setState({
+            isJoin: false
+          });
+        }
+      }
     })
-      .then(resp => {
-        resp.json().then(data => {
-          if (Number(data.status) === 1) {
-            if (data.root.joinCount === 0) {
-              this.setState({
-                isJoin: true
-              });
-            }else{
-              this.setState({
-                isJoin: false
-              });
-            }
-          }
-        });
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    // fetch(`${IP}/services/app/activity/getActivityById/${activityId}`, {
+    //   method: "GET",
+    //   mode: "cors",
+    //   cache: "default",
+    //   headers: { "Content-Type": "application/json", "YQ-Token": YQToken }
+    // })
+    //   .then(resp => {
+    //     resp.json().then(data => {
+    //       if (Number(data.status) === 1) {
+    //         if (data.root.joinCount === 0) {
+    //           this.setState({
+    //             isJoin: true
+    //           });
+    //         }else{
+    //           this.setState({
+    //             isJoin: false
+    //           });
+    //         }
+    //       }
+    //     });
+    //   })
+    //   .catch(e => {
+    //     console.log(e);
+    //   });
   };
 
   getDetalis = () => {
     let { productId, YQToken, IP } = this.state;
     if (productId !== "") {
-      fetch(`${IP}/services/app/buyerUser/getProductDetail/${productId}`, {
-        method: "GET",
-        mode: "cors",
-        cache: "default",
-        headers: { "Content-Type": "application/json", "YQ-Token": YQToken }
+      getService(`${IP}/services/app/buyerUser/getProductDetail/${productId}`,YQToken,data=>{
+        if (data.status === 1) {
+          this.setState({details: data.root.object});
+        } else {
+          Taro.atMessage({message: data.errorMsg,type: "error"});
+        }
       })
-        .then(resp => {
-          resp.json().then(data => {
-            if (Number(data.status) === 1) {
-              this.setState({
-                details: data.root.object
-              });
-            } else {
-              Taro.atMessage({
-                message: data.errorMsg,
-                type: "error"
-              });
-            }
-          });
-        })
-        .catch(e => {
-          Taro.atMessage({
-            message: "获取商品详情失败，请稍后重试！",
-            type: "error"
-          });
-        });
+      // fetch(`${IP}/services/app/buyerUser/getProductDetail/${productId}`, {
+      //   method: "GET",
+      //   mode: "cors",
+      //   cache: "default",
+      //   headers: { "Content-Type": "application/json", "YQ-Token": YQToken }
+      // })
+      //   .then(resp => {
+      //     resp.json().then(data => {
+      //       if (Number(data.status) === 1) {
+      //         this.setState({
+      //           details: data.root.object
+      //         });
+      //       } else {
+      //         Taro.atMessage({
+      //           message: data.errorMsg,
+      //           type: "error"
+      //         });
+      //       }
+      //     });
+      //   })
+      //   .catch(e => {
+      //     Taro.atMessage({
+      //       message: "获取商品详情失败，请稍后重试！",
+      //       type: "error"
+      //     });
+      //   });
     } else {
       Taro.atMessage({
         message: "请先选择商品！",
@@ -195,35 +226,43 @@ export default class ShopList extends Component<any, any> {
         };
         let { YQToken, IP } = this.state;
         if(isFlag){
-          fetch(`${IP}/services/app/buyerUser/addProductIntoCart`, {
-            method: "POST",
-            mode: "cors",
-            body: JSON.stringify(payload),
-            headers: { "Content-Type": "application/json", "YQ-Token": YQToken }
+          postService(`${IP}/services/app/buyerUser/addProductIntoCart`,YQToken,payload,data=>{
+            if (data.status === 1) {
+              Taro.atMessage({message: "加入购物车成功！",type: "success"});
+              this.getDetalis();
+            } else {
+              Taro.atMessage({message: data.errorMsg,type: "error"});
+            }
           })
-            .then(resp => {
-              resp.json().then(data => {
-                this.getShopList()
-                if (Number(data.status) === 1) {
-                  Taro.atMessage({
-                    message: "加入购物车成功！",
-                    type: "success"
-                  });
-                  this.getDetalis();
-                } else {
-                  Taro.atMessage({
-                    message: data.errorMsg,
-                    type: "error"
-                  });
-                }
-              });
-            })
-            .catch(e => {
-              Taro.atMessage({
-                message: "加入购物车失败，请稍后重试！",
-                type: "error"
-              });
-            });
+          // fetch(`${IP}/services/app/buyerUser/addProductIntoCart`, {
+          //   method: "POST",
+          //   mode: "cors",
+          //   body: JSON.stringify(payload),
+          //   headers: { "Content-Type": "application/json", "YQ-Token": YQToken }
+          // })
+          //   .then(resp => {
+          //     resp.json().then(data => {
+          //       this.getShopList()
+          //       if (Number(data.status) === 1) {
+          //         Taro.atMessage({
+          //           message: "加入购物车成功！",
+          //           type: "success"
+          //         });
+          //         this.getDetalis();
+          //       } else {
+          //         Taro.atMessage({
+          //           message: data.errorMsg,
+          //           type: "error"
+          //         });
+          //       }
+          //     });
+          //   })
+          //   .catch(e => {
+          //     Taro.atMessage({
+          //       message: "加入购物车失败，请稍后重试！",
+          //       type: "error"
+          //     });
+          //   });
         }else{
           Taro.atMessage({
             message: "该商品购物车数量不得超过存库",
