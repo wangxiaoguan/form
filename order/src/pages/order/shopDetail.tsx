@@ -48,8 +48,8 @@ export default class ShopList extends Component<any, any> {
 
 
     // let IP = "http://10.128.151.13:443";
-    // let activityId = "1263738193493573632";
-    // let YQToken = "BCNQt%2FSTBKJ%2B3qK%2BRE%2FkmAgNTRmx7fQ3p62jMXV7fWI%3D";
+    // let activityId = "1264793804386562048";
+    // let YQToken = "%2BxMgoH9Ptfn1gKtcVvYJPL40S2iwpHWO3a87msf%2BW5Q%3D";
     this.setState({ IP, YQToken, activityId });
   }
   componentDidShow() {
@@ -326,7 +326,7 @@ export default class ShopList extends Component<any, any> {
           <View className="at-row shop_add">
             <View className="at-col at-col-6 shop_price">
               {details && details.productPrice
-                ? `￥${details.productPrice}`
+                ? `￥${Number(details.productPrice).toFixed(2)}`
                 : "暂无"}
             </View>
             {details &&

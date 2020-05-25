@@ -63,7 +63,7 @@ export default class SellerOrdersList extends Component {
           </View>
           <View className='order_total_price'>
             <Text className='text_999_12' style={{fontSize: '14px',marginRight: '10px'}}>总价:</Text>
-            <Text style={{ color: '#d70000',fontSize:'20px'}}>{'¥ ' + item.totalAmount}</Text>
+            <Text style={{ color: '#d70000',fontSize:'20px'}}>{'¥ ' + Number(item.totalAmount).toFixed(2)}</Text>
           </View>
           <View style={{ height: '10px',background:'#f5f5f5'}} />
         </View>)
@@ -78,7 +78,7 @@ export default class SellerOrdersList extends Component {
           <Text className='text_999_12'>{item.remark}</Text>
         </View>
         <View style={{flex: 1, textAlign: 'center',color: '#999',fontSize: '14px'}}>{'x ' + item.productAmount}</View>
-        <View style={{color: '#d70000',fontSize: '16px', flex: 2, textAlign: 'end'}}>{'¥' + item.discountPrice}</View>
+        <View style={{color: '#d70000',fontSize: '16px', flex: 2, textAlign: 'end'}}>{'¥' + Number(item.discountPrice).toFixed(2)}</View>
       </View>
     })
   }

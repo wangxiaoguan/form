@@ -47,8 +47,8 @@ export default class ShopCar extends Component<any, any> {
   componentWillMount() {
     // let userId = "63699";
     // let IP = "http://10.128.151.13:443";
-    // let activityId = "1263738193493573632";
-    // let YQToken = "BCNQt%2FSTBKJ%2B3qK%2BRE%2FkmAgNTRmx7fQ3p62jMXV7fWI%3D";
+    // let activityId = "1264793804386562048";
+    // let YQToken = "%2BxMgoH9Ptfn1gKtcVvYJPL40S2iwpHWO3a87msf%2BW5Q%3D";
   
     let list = window.location.search.substring(1).split("&");
     let params = {};
@@ -479,7 +479,7 @@ export default class ShopCar extends Component<any, any> {
       }
     }
     const obj = {
-      price: price === 0 ? "" : `￥${price.toFixed(2)}`,
+      price: price === 0 ? "" : `${price.toFixed(2)}`,
       num
     };
     return obj;
@@ -897,7 +897,7 @@ export default class ShopCar extends Component<any, any> {
                             销量:<span>{v.sales}</span>库存:<span>{v.productStock}</span>
                           </View>
                           <View className="busin_price at-article__h3">
-                            {`￥${v.productPrice}`}
+                            {`￥${Number(v.productPrice).toFixed(2)}`}
                           </View>
                         </View>
                         {
@@ -933,7 +933,7 @@ export default class ShopCar extends Component<any, any> {
                     </span>
                   </AtBadge>
                   <span className="shopCar_price">
-                    {price}
+                    ￥{Number(price).toFixed(2)}
                   </span>
                 </View>
               : <View className="at-col at-col-8">
@@ -990,7 +990,7 @@ export default class ShopCar extends Component<any, any> {
                                   销量:<span>{v1.sales}</span>库存:<span>{v1.productStock}</span>
                                 </View> */}
                                 <View className="busin_price at-article__h3">
-                                  {`￥${v1.productPrice}`}
+                                  {`￥${Number(v1.productPrice).toFixed(2)}`}
                                 </View>
                               </View>
                               <View className="right_set">

@@ -26,7 +26,7 @@ export default class Index extends Component<any,any> {
 
   componentWillMount () {
     // let IP = "http://10.128.151.13:443";
-    // let YQToken = "HVQyMKUCNKkwYG1cIY9ve3OS9KfU5WKCZRdNnv7YEj0%3D";
+    // let YQToken = "%2BxMgoH9Ptfn1gKtcVvYJPL40S2iwpHWO3a87msf%2BW5Q%3D";
 
     let list = window.location.search.substring(1).split('&');
     let params = {};
@@ -149,14 +149,14 @@ export default class Index extends Component<any,any> {
                         return <div className='content commonPad' onClick={()=>this.goDetail(e.orderId)}>
                         <span className='left'><img src={`${imgUrl}${e.productImages}`}/></span>
                         <span className='middle'>{e.productName}<br/>X{e.productAmount}</span>
-                        <span className='right'>￥{e.discountPrice}</span>
+                        <span className='right'>￥{Number(e.discountPrice).toFixed(2)}</span>
                       </div>
                     })
                     
                   }
                   <div className='total commonPad'>
                     {/* <span className='right'>总价：{this.total(item.orderDetailList)}</span> */}
-                    <span className='right'>总价：{item.totalAmount}</span>
+                    <span className='right'>总价：{Number(item.totalAmount).toFixed(2)}</span>
                   </div>
                 </li>
             })

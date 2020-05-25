@@ -31,8 +31,8 @@ export default class ShopList extends Component<any, any> {
   componentWillMount() {
     // let userId = "63699";
     // let IP = "http://10.128.151.13:443";
-    // let activityId = "1263738193493573632";
-    // let YQToken = "HVQyMKUCNKkwYG1cIY9ve3OS9KfU5WKCZRdNnv7YEj0%3D";
+    // let activityId = "1264793804386562048";
+    // let YQToken = "%2BxMgoH9Ptfn1gKtcVvYJPL40S2iwpHWO3a87msf%2BW5Q%3D";
 
     let list = window.location.search.substring(1).split('&');
     let params = {};
@@ -153,7 +153,7 @@ export default class ShopList extends Component<any, any> {
                             销量:<span>{v.sales}</span>库存:<span>{v.productStock}</span>
                           </View>
                           <View className="busin_price at-article__h3">
-                            {`￥${v.productPrice}`}
+                            {`￥${Number(v.productPrice).toFixed(2)}`}
                           </View>
                         </View>
                       </View>

@@ -31,8 +31,8 @@ export default class OrderDetail extends Component<any,any> {
   componentWillMount () {
     // let userId = "63699";
     // let IP = "http://10.128.151.13:443";
-    // let activityId = "1263738193493573632";
-    // let YQToken = "BCNQt%2FSTBKJ%2B3qK%2BRE%2FkmAgNTRmx7fQ3p62jMXV7fWI%3D";
+    // let activityId = "1264793804386562048";
+    // let YQToken = "%2BxMgoH9Ptfn1gKtcVvYJPL40S2iwpHWO3a87msf%2BW5Q%3D";
 
     let orderId = window.sessionStorage.getItem('orderId');
     let list = window.location.search.substring(1).split('&');
@@ -320,7 +320,7 @@ export default class OrderDetail extends Component<any,any> {
                             return <tr className='list-tr'>
                             <td className='shopName'>{item.productName}<br/><span className='shopTime'>{moment(data.sendDate).format("HH:mm")}取餐</span></td>
                             <td className='shopNum'>X{item.productAmount}</td>
-                            <td className='shopPrice'>￥{item.discountPrice}</td>
+                            <td className='shopPrice'>￥{Number(item.discountPrice).toFixed(2)}</td>
                           </tr>
                         })
                       }
@@ -336,7 +336,7 @@ export default class OrderDetail extends Component<any,any> {
                       </tr> */}
                       <tr>
                         {/* <td colSpan={2} className='shopTotal'>合计：<span>￥{String(this.total(data.orderDetailList))}</span></td> */}
-                        <td colSpan={2} className='shopTotal'>合计：<span>￥{data.totalAmount}</span></td>
+                        <td colSpan={2} className='shopTotal'>合计：<span>￥{Number(data.totalAmount).toFixed(2)}</span></td>
                       </tr>
                     </table>
                   </div>

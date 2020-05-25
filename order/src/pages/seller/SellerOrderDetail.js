@@ -47,7 +47,7 @@ export default class SellerOrderDetail extends Component {
 
         <View className='order_total_price'>
           <Text className='text_999_12' style={{fontSize: '14px', marginRight: '10px'}}>总价:</Text>
-          <Text style={{color: '#d70000', fontSize: '20px'}}>{'¥ ' + detail.totalAmount}</Text>
+          <Text style={{color: '#d70000', fontSize: '20px'}}>{'¥ ' + Number(detail.totalAmount).toFixed(2)}</Text>
         </View>
 
         <View style={{ height: '10px',background: '#f5f5f5'}} />
@@ -87,7 +87,7 @@ export default class SellerOrderDetail extends Component {
           {'x ' + item.productAmount}
         </View>
         <View className='order_goods_price'>
-          {'¥ ' + item.discountPrice}
+          {'¥ ' + Number(item.discountPrice).toFixed(2)}
         </View>
       </View>
     })

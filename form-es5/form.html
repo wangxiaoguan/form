@@ -411,7 +411,7 @@
 
         var IP = 'http://10.128.151.108:443';
         // var IP = 'https://test.cictsj.com:30000'
-        var search = '?formId=1263664214585778176&userId=10008'
+        var search = '?formId=1263361215480807424&userId=10008'
         search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
 
         // var IP = location.origin;
@@ -563,7 +563,7 @@
             var rule = JSON.parse(item.typeDetailLimit)
             rule.isRequiredQuestions = item.isRequiredQuestions;
             var ruleStr = JSON.stringify(rule)
-            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div><br/><div class=\"field-div\"><input type=\"text\" name='number-" + item.id + "' id=\'number-" + item.id + "\' data-rule=\'" + ruleStr + "\' class=\"field-text field-text-number\" placeholder=\"\u8BF7\u8F93\u5165\u6570\u5B57\uFF08\u53EA\u4FDD\u7559\u5C0F\u6570\u70B9\u540E\u4E09\u4F4D\uFF09\"/></div></div>";
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div><br/><div class=\"field-div\"><input type=\"text\" name='number-" + item.id + "' id=\'number-" + item.id + "\' data-rule=\'" + ruleStr + "\' class=\"field-text field-text-number\" placeholder=\"请输入数字\"/></div></div>";
             
         }
 
@@ -1255,21 +1255,24 @@
                     $(this).parent().parent().children(".field-rule").html("限制小数输入")
                 }else if(rule.numbersetup.indexOf('3')<0&&num<0){
                     $(this).parent().parent().children(".field-rule").html("限制负数输入")
-                }else if(value.indexOf('.')>-1&&value.match(numReg)){
-                    $(this).parent().parent().children(".field-rule").html("保留三位小数点")
                 }else{
                     $(this).parent().parent().children(".field-rule").html('')
                 }
+                // else if(value.indexOf('.')>-1&&value.match(numReg)){
+                //     $(this).parent().parent().children(".field-rule").html("保留三位小数点")
+                // }
             }else{
                 if(rule.numbersetup.indexOf('2')<0&&String(value).indexOf('.')>-1){
                     $(this).parent().parent().children(".field-rule").html("限制小数输入")
                 }else if(rule.numbersetup.indexOf('3')<0&&num<0){
                     $(this).parent().parent().children(".field-rule").html("限制负数输入")
-                }else if(value.indexOf('.')>-1&&value.match(numReg)){
-                    $(this).parent().parent().children(".field-rule").html("保留三位小数点")
                 }else{
                     $(this).parent().parent().children(".field-rule").html('')
                 }
+                
+                // else if(value.indexOf('.')>-1&&value.match(numReg)){
+                //     $(this).parent().parent().children(".field-rule").html("保留三位小数点")
+                // }
             }
         }
     })

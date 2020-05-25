@@ -170,7 +170,7 @@ export default class Submit extends Component<any,any> {
                     item.orderDetailList.map(e=>{
                       return <tr className='content-order-list'>
                       <td>{e.productName}<br/><span>x{e.productAmount}</span></td>
-                      <td>￥{e.discountPrice}</td>
+                      <td>￥{Number(e.discountPrice).toFixed(2)}</td>
                     </tr>
                     })
                   }
@@ -212,7 +212,7 @@ export default class Submit extends Component<any,any> {
       <div className='footer'>
           <div className='descripe'><AtIcon value='alert-circle' size='14' color='#D70000'></AtIcon>凭姓名+二维码到指定窗口取货哦~</div>
           <div className='footer-btn'>
-        <div className='total'>合计：<span>￥{String(Math.round(totalAmount*100)/100)}</span></div>
+        <div className='total'>合计：<span>￥{String((Math.round(totalAmount*100)/100).toFixed(2))}</span></div>
             <div className='submitBtn' onClick={this.submitOrder}>提交订单</div>
           </div>
       </div>

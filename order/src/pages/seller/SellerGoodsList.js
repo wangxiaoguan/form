@@ -56,7 +56,7 @@ export default class SellerGoodsList extends Component {
                   <Text className='text_666_12' style={{ marginLeft: '10px'}}>{'库存 '+item.productStock || 0 + '份'}</Text>
                 </View>
                 <View style={{ flex: 1}} />
-                <Text style={{color: '#D70000', fontSize: '20px'}}>{'¥ '+item.productPrice}</Text>
+                <Text style={{color: '#D70000', fontSize: '20px'}}>{'¥ '+Number(item.productPrice).toFixed(2)}</Text>
               </View>
             </View>
             <AtDivider height='1px' lineColor='#e6e6e6' />

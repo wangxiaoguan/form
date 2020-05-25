@@ -26,8 +26,8 @@ export default class Submit extends Component<any,any> {
 
   componentWillMount () {
     // let IP = "http://10.128.151.13:443";
-    // let activityId = "1263738193493573632";
-    // let YQToken = "BCNQt%2FSTBKJ%2B3qK%2BRE%2FkmAgNTRmx7fQ3p62jMXV7fWI%3D";
+    // let activityId = "1264793804386562048";
+    // let YQToken = "%2BxMgoH9Ptfn1gKtcVvYJPL40S2iwpHWO3a87msf%2BW5Q%3D";
     let list = window.location.search.substring(1).split('&');
     let params = {};
     list.map(item=>{
@@ -149,7 +149,7 @@ export default class Submit extends Component<any,any> {
                         return <div className='content commonPad' onClick={()=>this.goDetail(e.orderId)}>
                         <span className='left'><img src={`${imgUrl}${e.productImages}`}/></span>
                         <span className='middle'>{e.productName}<br/>X{e.productAmount}</span>
-                        <span className='right'>￥{e.discountPrice}</span>
+                        <span className='right'>￥{Number(e.discountPrice).toFixed(2)}</span>
                       </div>
                     })
                     
@@ -161,7 +161,7 @@ export default class Submit extends Component<any,any> {
                   </div> */}
                   <div className='total commonPad'>
                     {/* <span className='right'>总价：{String(this.total(item.orderDetailList))}</span> */}
-                    <span className='right'>总价：{item.totalAmount}</span>
+                    <span className='right'>总价：{Number(item.totalAmount).toFixed(2)}</span>
                   </div>
                 </li>
             })

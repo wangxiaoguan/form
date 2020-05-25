@@ -34,7 +34,7 @@ export default class SellerGoodDetail extends Component{
         <Text style={{ fontSize: '12px',color: '#999', marginLeft: '10px'}}>{`库存: ${detail.productStock}份`}</Text>
       </View>
 
-      <Text style={{ color: '#D70000', fontSize: '20px', marginLeft: '12px',marginRight:'12px' }}>{`¥${detail.productPrice}`}</Text>
+      <Text style={{ color: '#D70000', fontSize: '20px', marginLeft: '12px',marginRight:'12px' }}>{`¥${Number(detail.productPrice).toFixed(2)}`}</Text>
 
       <AtDivider height='1px' lineColor='#eee' customStyle={{ marginTop: '10px',marginBottom: '10px'}} />
 

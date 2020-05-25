@@ -152,7 +152,7 @@ export default class ShopList extends Component<any, any> {
                             销量:<span>{v.sales}</span>库存:<span>{v.productStock}</span>
                           </View>
                           <View className="busin_price at-article__h3">
-                            {`￥${v.productPrice}`}
+                            {`￥${Number(v.productPrice).toFixed(2)}`}
                           </View>
                         </View>
                       </View>

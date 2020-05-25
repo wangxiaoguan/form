@@ -3,6 +3,6 @@
 // 测试环境
 const baseUrl = 'http://10.128.151.139:30930/services/app'
 
-const imgUrl = 'http://ctyoss.chutianyun.gov.cn:8060/yq_fiberhome_test/'
+const imgUrl = 'http://ctyoss.chutianyun.gov.cn:8060/yq_fiberhome_prod/'
 
 export { baseUrl, imgUrl }
