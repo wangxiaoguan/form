@@ -26,7 +26,7 @@ export default class Index extends Component<any,any> {
 
   componentWillMount () {
     // let IP = "http://10.128.151.13:443";
-    // let YQToken = "%2BxMgoH9Ptfn1gKtcVvYJPL40S2iwpHWO3a87msf%2BW5Q%3D";
+    // let YQToken = "FVVYTvFPUprPT6MMASohFEM%2FW%2F%2BdUPjIzBLVUPiSIps%3D";
 
     let list = window.location.search.substring(1).split('&');
     let params = {};
@@ -120,8 +120,9 @@ export default class Index extends Component<any,any> {
     })
     return String(Math.round(num*100)/100)
   }
-  goDetail = (id) => {
+  goDetail = (id,activityId) => {
     window.sessionStorage.setItem('orderId',id)
+    window.sessionStorage.setItem('activityId',activityId)
     Taro.navigateTo({url: `/pages/order/orderDetail`})
   }
   render () {
@@ -146,7 +147,7 @@ export default class Index extends Component<any,any> {
                   </div>
                   {
                     item.orderDetailList.map(e=>{
-                        return <div className='content commonPad' onClick={()=>this.goDetail(e.orderId)}>
+                        return <div className='content commonPad' onClick={()=>this.goDetail(e.orderId,item.activityId)}>
                         <span className='left'><img src={`${imgUrl}${e.productImages}`}/></span>
                         <span className='middle'>{e.productName}<br/>X{e.productAmount}</span>
                         <span className='right'>￥{Number(e.discountPrice).toFixed(2)}</span>

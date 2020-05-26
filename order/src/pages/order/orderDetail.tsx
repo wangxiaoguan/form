@@ -31,8 +31,8 @@ export default class OrderDetail extends Component<any,any> {
   componentWillMount () {
     // let userId = "63699";
     // let IP = "http://10.128.151.13:443";
-    // let activityId = "1264793804386562048";
-    // let YQToken = "%2BxMgoH9Ptfn1gKtcVvYJPL40S2iwpHWO3a87msf%2BW5Q%3D";
+    // let activityId = "1265197328541978624";
+    // let YQToken = "FVVYTvFPUprPT6MMASohFEM%2FW%2F%2BdUPjIzBLVUPiSIps%3D";
 
     let orderId = window.sessionStorage.getItem('orderId');
     let list = window.location.search.substring(1).split('&');
@@ -44,6 +44,10 @@ export default class OrderDetail extends Component<any,any> {
     let IP = location.origin;
     let activityId = params.activityId;
     let YQToken = params.YQToken;
+  
+    if(!activityId){
+      activityId = window.sessionStorage.getItem('activityId');
+    }
     this.setState({ IP, YQToken, activityId,orderId });
     this.getDeatil( YQToken, activityId, IP )
     this.getFreeTimes(YQToken, IP)
