@@ -12,13 +12,49 @@
             word-wrap: break-word;
             word-break: normal;
         }
+        img{
+            width: 300px;
+        }
+        iframe{
+            width: 300px;
+            height: 360px;
+        }
     </style>
 </head>
 <body>
+    <iframe src="http://www.baidu.com"></iframe>
+    <img src="http://ctyoss.chutianyun.gov.cn:8060/yq_fiberhome_prod/goods/6/5/7/9/20200522030752907161.jpg" οnerrοr="javascript:this.src='http://ctyoss.chutianyun.gov.cn:8060/yq_fiberhome_test/goods/6/5/7/9/20200522030752907161.jpg'"/>
     <div class="box"></div>
     <input id="file" type="file" style="color:#fff"/>
 </body>
 <script>
-    document.getElementById('file').innerHTML = ''
+    var object = {
+        name:'wang',
+        age:1234
+    }
+    var fn = function(){
+        console.log('1111')
+    }
+    function deepClone(obj) {
+        let result = typeof  obj.splice === "function" ? [] : {};
+        if (obj && typeof obj === 'object') {
+            for (let key in obj) {
+                if (obj[key] && typeof obj[key] === 'object') {
+                    result[key] = deepClone(obj[key]);//如果对象的属性值为object的时候，递归调用deepClone,即在吧某个值对象复制一份到新的对象的对应值中。
+                } else {
+                    result[key] = obj[key];//如果对象的属性值不为object的时候，直接复制参数对象的每一个键值到新的对象对应的键值对中。
+                }
+
+            }
+            return result;
+        }
+        return obj;
+    }
+    var deep = deepClone(object);
+    console.log(deep)
+
+    var num =2;
+    num = num.toFixed(2);  // 输出结果为 2.45
+    console.log(num)
 </script>
 </html>
