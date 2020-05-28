@@ -41,15 +41,16 @@
             display: none;
         }
         .field-rule{
+            clear: both;
             width: calc(100% - 1rem);
             /* position: absolute; */
-            position: relative;
-            left: 0;
-            bottom: 6px;
-            height: 1.6rem;
-            margin: 0 0.5rem;
+            /* position: relative; */
+            /* left: 0; */
+            /* bottom: 6px; */
+            height: 1rem;
+            /* margin: 0 0.5rem; */
             font-size: 0.75rem;
-            line-height: 1.6rem;
+            /* line-height: 1.6rem; */
             color: #ff0000;
             text-indent: 1rem;
         }
@@ -366,7 +367,7 @@
             border-radius: 50%;
             background: #fff;
             position: absolute;
-            top: 50px;
+            top: 3px;
             left: 64px;
             background-image: url('img/deleteFile.png');
             background-size:24px 24px;
@@ -387,6 +388,9 @@
         }
         .isRequired{
             color: #ff0000;
+        }
+        .field-div-file{
+            position: relative;
         }
     </style>
 </head>
@@ -409,13 +413,13 @@
 <script>
         var params = {};
 
-        var IP = 'http://10.128.151.108:443';
+        // var IP = 'http://10.128.151.108:443';
         // var IP = 'https://test.cictsj.com:30000'
-        var search = '?formId=1263361215480807424&userId=10008'
-        search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
+        // var search = '?formId=1262200253672108032&userId=10008'
+        // search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
 
-        // var IP = location.origin;
-        // location.search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
+        var IP = location.origin;
+        location.search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
 
         var formId = params.formId;
         var userId = params.userId;
@@ -490,7 +494,7 @@
         // return data.map(function(item){
         //     return `<div class="form-item form-item-${item.isShow?'show':'hide'} form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
         //                 <div class="field-name">${setNum(item.orderNum)}.${item.name}</div>
-        //                 <div class="field-rule field-rule-select">${item.isRequiredQuestions?'必做题':''}</div><br/>
+        //                 <div class="field-rule field-rule-select">${item.isRequiredQuestions?'必做题':''}</div>
         //                 <div class="field-div field-div-select">
         //                     <input name='select-${item.id}' id="select-${item.id}" data-id="${item.id}" readonly="readonly" unselectable="on" class="field-text field-text-select" placeholder="请选择"/>
         //                 </div>
@@ -499,7 +503,7 @@
         //                     <span class="beizhu">备注：</span><input name='remark-${item.id}-1' id="remark-${item.id}" data-id="${item.id}" class="field-remark field-text-remark"/>
         //                 </div>
         //             </div>`
-            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + " form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><div class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</div><div class=\"field-rule field-rule-select\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div><br/><div class=\"field-div field-div-select\"><input type=\"text\" name=\'select-" + item.id + "\' id=\"select-" + item.id + "\" data-id=\"" + item.id + "\" readonly=\"readonly\" unselectable=\"on\" class=\"field-text field-text-select\" placeholder=\"\u8BF7\u9009\u62E9\"/></div><div class=\"field-div field-div-remark field-remark-" + item.id + "\"><span class=\"beizhu\">\u5907\u6CE8\uFF1A</span><input name=\"remark-" + item.id + "-1\" id=\"remark-" + item.id + "\" data-id=\"" + item.id + "\" class=\"field-remark field-text-remark\"/></div></div>";
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + " form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><div class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</div><div class=\"field-rule field-rule-select\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div><div class=\"field-div field-div-select\"><input type=\"text\" name=\'select-" + item.id + "\' id=\"select-" + item.id + "\" data-id=\"" + item.id + "\" readonly=\"readonly\" unselectable=\"on\" class=\"field-text field-text-select\" placeholder=\"\u8BF7\u9009\u62E9\"/></div><div class=\"field-div field-div-remark field-remark-" + item.id + "\"><span class=\"beizhu\">\u5907\u6CE8\uFF1A</span><input name=\"remark-" + item.id + "-1\" id=\"remark-" + item.id + "\" data-id=\"" + item.id + "\" class=\"field-remark field-text-remark\"/></div></div>";
         // })
     }
 
@@ -508,13 +512,13 @@
         return data.map(function(item){
             var optionList = item.content;
             var option = optionItem2(item,optionList).join('')
-            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><div class=\"field-name field-div-radio\">" + setNum(item.orderNum) + "." + item.name + "</div><div class=\"field-rule field-rule-radio\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div><br/>" + option + "<div class=\"field-div field-div-remark field-remark-" + item.id + "\"><span class=\"beizhu\">\u5907\u6CE8\uFF1A</span><input name='remark-" + item.id + "-1' id=\"remark-" + item.id + "\" data-id=\"" + item.id + "\" class=\"field-remark field-text-remark\"/></div></div>";
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><div class=\"field-name field-div-radio\">" + setNum(item.orderNum) + "." + item.name + "</div><div class=\"field-rule field-rule-radio\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div>" + option + "<div class=\"field-div field-div-remark field-remark-" + item.id + "\"><span class=\"beizhu\">\u5907\u6CE8\uFF1A</span><input name='remark-" + item.id + "-1' id=\"remark-" + item.id + "\" data-id=\"" + item.id + "\" class=\"field-remark field-text-remark\"/></div></div>";
         })
         
     }
     function optionItem2(item,data){
         return data.map(function(e){
-                return "<div class=\"field-div field-div-option\"><input type=\"radio\" data-logic='" + JSON.stringify(e.logic) + "' data-rule='" + JSON.stringify(e) + "' data-text='" + e.content + "' data-id='" + item.id + "' id=\"radio-" + item.id + "-" + e.order + "\" name=\"radio-" + item.id + "\" class=\"field-radio\" value=\"" + e.order + "\"/><label for=\"radio-" + item.id + "-" + e.order + "\">" + e.content + "</label><br/></div>";
+                return "<div class=\"field-div field-div-option\"><input type=\"radio\" data-logic='" + JSON.stringify(e.logic) + "' data-rule='" + JSON.stringify(e) + "' data-text='" + e.content + "' data-id='" + item.id + "' id=\"radio-" + item.id + "-" + e.order + "\" name=\"radio-" + item.id + "\" class=\"field-radio\" value=\"" + e.order + "\"/><label for=\"radio-" + item.id + "-" + e.order + "\">" + e.content + "</label></div>";
                 })
     }
 
@@ -525,10 +529,10 @@
             var option = optionItem3(item,optionList).join('')
             // return `<div class="form-item form-item-${item.isShow?'show':'hide'}  form-item-${item.id}" data-type="${item.type}" data-count="${item.isShow?'1':'0'}">
             //             <div class="field-name field-div-checkbox">${setNum(item.orderNum)}.${item.name}</div>
-            //             <div class="field-rule field-rule-checkbox">${item.isRequiredQuestions?'必做题':''}</div><br/>
+            //             <div class="field-rule field-rule-checkbox">${item.isRequiredQuestions?'必做题':''}</div>
             //             ${option}
             //         </div>`
-            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><div class=\"field-name field-div-checkbox\">" + setNum(item.orderNum) + "." + item.name + "</div><div class=\"field-rule field-rule-checkbox\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div><br/>" + option + "</div>";
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><div class=\"field-name field-div-checkbox\">" + setNum(item.orderNum) + "." + item.name + "</div><div class=\"field-rule field-rule-checkbox\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div>" + option + "</div>";
         })
         
     }
@@ -537,7 +541,7 @@
         rule.isRequiredQuestions = item.isRequiredQuestions;
         var ruleStr = JSON.stringify(rule)
         return data.map(function(e){
-                return "<div class=\"field-div field-div-option\"><input type=\"checkbox\" data-rule='" + ruleStr + "' data-rule2='" + JSON.stringify(e) + "' data-content='" + e.content + "' data-id=\"" + item.id + "\" data-logic='" + JSON.stringify(e.logic) + "'' id=\"checkbox-" + item.id + "-" + e.order + "\" name=\"checkbox-" + item.id + "\" class=\"field-checkbox\" value=\"" + e.order + "\"><label for=\"checkbox-" + item.id + "-" + e.order + "\" class=\"checkbox-" + item.id + "-" + e.order + "\">" + e.content + "</label><br/><div class=\"field-div field-div-remark field-remark-" + item.id + "-" + e.order + "\"><span class=\"beizhu\">\u5907\u6CE8\uFF1A</span><input name='remark-" + item.id + "-" + e.order + "' data-order='" + e.order + "' data-rule='" + JSON.stringify(e) + "' id=\"remark-" + item.id + "-" + e.order + "\" data-id=\"" + item.id + "\"  class=\"field-remark field-text-remark\"/></div></div>";
+                return "<div class=\"field-div field-div-option\"><input type=\"checkbox\" data-rule='" + ruleStr + "' data-rule2='" + JSON.stringify(e) + "' data-content='" + e.content + "' data-id=\"" + item.id + "\" data-logic='" + JSON.stringify(e.logic) + "'' id=\"checkbox-" + item.id + "-" + e.order + "\" name=\"checkbox-" + item.id + "\" class=\"field-checkbox\" value=\"" + e.order + "\"><label for=\"checkbox-" + item.id + "-" + e.order + "\" class=\"checkbox-" + item.id + "-" + e.order + "\">" + e.content + "</label><div class=\"field-div field-div-remark field-remark-" + item.id + "-" + e.order + "\"><span class=\"beizhu\">\u5907\u6CE8\uFF1A</span><input name='remark-" + item.id + "-" + e.order + "' data-order='" + e.order + "' data-rule='" + JSON.stringify(e) + "' id=\"remark-" + item.id + "-" + e.order + "\" data-id=\"" + item.id + "\"  class=\"field-remark field-text-remark\"/></div></div>";
                 })
     }
 
@@ -545,7 +549,7 @@
         function fieldItem3(item){
                 var optionList = item.content;
                 var option = optionItem3(item,optionList)
-                return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><div class=\"field-name field-div-checkbox\">" + setNum(item.orderNum) + "." + item.name + "</div><div class=\"field-rule field-rule-checkbox\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div><br/>" + option + "</div>";
+                return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><div class=\"field-name field-div-checkbox\">" + setNum(item.orderNum) + "." + item.name + "</div><div class=\"field-rule field-rule-checkbox\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div>" + option + "</div>";
         }
         function optionItem3(item,data){
             var rule = eval("("+item.typeDetailLimit+")")
@@ -554,7 +558,7 @@
             var ruleStr = JSON.stringify(rule)
             var optionStr = "";
             data.map(function(e){
-                    optionStr = optionStr +  "<div class=\"field-div field-div-option\"><input type=\"checkbox\" data-rule=\'" + ruleStr + "\' data-rule2=\'" + JSON.stringify(e) + "\' data-content=\'" + e.content + "\' data-id=\"" + item.id + "\" data-logic=\'" + JSON.stringify(e.logic) + "\' id=\"checkbox-" + item.id + "-" + e.order + "\" name=\"checkbox-" + item.id + "\" class=\"field-checkbox\" value=\"" + e.order + "\"><label for=\"checkbox-" + item.id + "-" + e.order + "\" class=\"checkbox-" + item.id + "-" + e.order + "\">" + e.content + "</label><br/><div class=\"field-div field-div-remark field-remark-" + item.id + "-" + e.order + "\"><span class=\"beizhu\">\u5907\u6CE8\uFF1A</span><input name=\'remark-" + item.id + "-" + e.order + "\' data-order=\'" + e.order + "\' data-rule=\'" + JSON.stringify(e) + "\' id=\"remark-" + item.id + "-" + e.order + "\" data-id=\"" + item.id + "\"  class=\"field-remark field-text-remark\"/></div></div>";
+                    optionStr = optionStr +  "<div class=\"field-div field-div-option\"><input type=\"checkbox\" data-rule=\'" + ruleStr + "\' data-rule2=\'" + JSON.stringify(e) + "\' data-content=\'" + e.content + "\' data-id=\"" + item.id + "\" data-logic=\'" + JSON.stringify(e.logic) + "\' id=\"checkbox-" + item.id + "-" + e.order + "\" name=\"checkbox-" + item.id + "\" class=\"field-checkbox\" value=\"" + e.order + "\"><label for=\"checkbox-" + item.id + "-" + e.order + "\" class=\"checkbox-" + item.id + "-" + e.order + "\">" + e.content + "</label><div class=\"field-div field-div-remark field-remark-" + item.id + "-" + e.order + "\"><span class=\"beizhu\">\u5907\u6CE8\uFF1A</span><input name=\'remark-" + item.id + "-" + e.order + "\' data-order=\'" + e.order + "\' data-rule=\'" + JSON.stringify(e) + "\' id=\"remark-" + item.id + "-" + e.order + "\" data-id=\"" + item.id + "\"  class=\"field-remark field-text-remark\"/></div></div>";
                     })
             return optionStr
         }
@@ -563,7 +567,7 @@
             var rule = JSON.parse(item.typeDetailLimit)
             rule.isRequiredQuestions = item.isRequiredQuestions;
             var ruleStr = JSON.stringify(rule)
-            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div><br/><div class=\"field-div\"><input type=\"text\" name='number-" + item.id + "' id=\'number-" + item.id + "\' data-rule=\'" + ruleStr + "\' class=\"field-text field-text-number\" placeholder=\"请输入数字\"/></div></div>";
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div><div class=\"field-div\"><input type=\"text\" name='number-" + item.id + "' id=\'number-" + item.id + "\' data-rule=\'" + ruleStr + "\' class=\"field-text field-text-number\" placeholder=\"请输入数字\"/></div></div>";
             
         }
 
@@ -573,7 +577,7 @@
             rule.isRequiredQuestions = item.isRequiredQuestions;
             var ruleStr = JSON.stringify(rule)
 
-            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.content ? '' : item.isRequiredQuestions ? '必做题' : '') + "</div><br/><div class=\"field-div\"><textarea name=\'textarea-" + item.id + "\' id=\'textarea-" + item.id + "\' class=\"field-txt\" rows=\"6\" data-rule=\'" + ruleStr + "\' placeholder=\"\u8BF7\u586B\u5199\">" + (item.content || '') + "</textarea></div></div>";
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.content ? '' : item.isRequiredQuestions ? '必做题' : '') + "</div><div class=\"field-div\"><textarea name=\'textarea-" + item.id + "\' id=\'textarea-" + item.id + "\' class=\"field-txt\" rows=\"6\" data-rule=\'" + ruleStr + "\' placeholder=\"\u8BF7\u586B\u5199\">" + (item.content || '') + "</textarea></div></div>";
             
         }
         //城市
@@ -582,12 +586,12 @@
             var includeAll = rule.includeAll?"<div class=\"field-area\">\u6D77\u5916\u5730\u533A\u586B\u5199></div>":''
             var height = Math.ceil(rule.max/18)
             var ruleStr = JSON.stringify(rule)
-            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.content ? '' : item.isRequiredQuestions ? '必做题' : '') + "</div><br/><div class=\"field-div\"><input type=\"text\" name=\'address-" + item.id + "\' id=\"address-" + item.id + "\" data-rule=\'" + ruleStr + "\' readonly=\"readonly\" unselectable=\"on\" class=\"field-text field-text-address\" placeholder=\"\u7701/\u5E02/\u533A/\u8BE6\u7EC6\u5730\u5740\"/>" + includeAll + "</div></div>";
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.content ? '' : item.isRequiredQuestions ? '必做题' : '') + "</div><div class=\"field-div\"><input type=\"text\" name=\'address-" + item.id + "\' id=\"address-" + item.id + "\" data-rule=\'" + ruleStr + "\' readonly=\"readonly\" unselectable=\"on\" class=\"field-text field-text-address\" placeholder=\"\u7701/\u5E02/\u533A/\u8BE6\u7EC6\u5730\u5740\"/>" + includeAll + "</div></div>";
         }
 
     //日期
     function fieldItem7(item){
-        return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.content ? "" : item.isRequiredQuestions ? '必做题' : '') + "</div><br/><div class=\"field-div\"><input type=\"text\" name=\"date-" + item.id + "\" data-rule=\'" + item.typeDetailLimit + "\' id=\"date-" + item.id + "\"  placeholder=\"\u8BF7\u9009\u62E9\u65E5\u671F\" readonly=\"readonly\" unselectable=\"on\" class=\"field-text field-text-date\"/></div></div>";
+        return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.content ? "" : item.isRequiredQuestions ? '必做题' : '') + "</div><div class=\"field-div\"><input type=\"text\" name=\"date-" + item.id + "\" data-rule=\'" + item.typeDetailLimit + "\' id=\"date-" + item.id + "\"  placeholder=\"\u8BF7\u9009\u62E9\u65E5\u671F\" readonly=\"readonly\" unselectable=\"on\" class=\"field-text field-text-date\"/></div></div>";
         
     }
 
@@ -608,7 +612,7 @@
             if(rule.indexOf('zip,rar,7z')>-1){
                 acceptType = acceptType + 'application/x-zip-compressed'
             }
-            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule field-rule-" + item.id + "\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div><br/><div class=\"field-div\"><input type=\"file\" title=\"\" id=\"file-" + item.id + "\" accept=\"" + acceptType + "\" data-id=\"" + item.id + "\"  name=\"file-" + item.id + "\" data-rule=\'" + item.typeDetailLimit + "\' class=\"field-text field-file\" /><div class=\'deleteFile deleteFile-" + item.id + "\' data-rule=\"" + item.isRequiredQuestions + "\" data-id=\"" + item.id + "\"></div></div></div>";
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule field-rule-" + item.id + "\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div><div class=\"field-div field-div-file\"><input type=\"file\" title=\"\" id=\"file-" + item.id + "\" accept=\"" + acceptType + "\" data-id=\"" + item.id + "\"  name=\"file-" + item.id + "\" data-rule=\'" + item.typeDetailLimit + "\' class=\"field-text field-file\" /><div class=\'deleteFile deleteFile-" + item.id + "\' data-rule=\"" + item.isRequiredQuestions + "\" data-id=\"" + item.id + "\"></div></div></div>";
         })
         
     }
