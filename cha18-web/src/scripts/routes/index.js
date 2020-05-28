@@ -1,7 +1,7 @@
 import React,{Component} from "react";
 import {Route,Switch,Router,Redirect} from "react-router-dom";
 
-import BaseLayout from '../content/BaseLayout'
+import Base from '../content/Base'
 import ConnectPage from '../content/ConnectPage/index';
 
 import InformationSubmit from '../content/InformationSubmit/index';//信息报送
@@ -38,7 +38,7 @@ export default class Routes extends Component{
 
     render(){
         return(
-            <BaseLayout>
+            <Base>
                 <Route exact path="/" component={ConnectPage}/>
                 <Route exact path="/InformationSubmit" component={InformationSubmit}/>
                 <Route exact path="/InformationSubmit/Add" component={AddInformationSubmit}/>
@@ -63,7 +63,7 @@ export default class Routes extends Component{
                 <Route exact path="/404" component={notFindePage}/>
 
 
-            </BaseLayout> 
+            </Base> 
         )
     }
 }

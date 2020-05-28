@@ -7,12 +7,13 @@ const FormItem = Form.Item;
 import './index.less';
 import {getService,postService} from '../../common/fetch'
 import {limitStr} from '../../common/checkForm'
+import {setUser} from '../../redux/action'
 @connect(
     state => ({
         state: state,
     }),
     dispatch => ({
-        
+        setUser:n=>dispatch(setUser(n))
     })
 )
 export default class List extends Component{
@@ -34,7 +35,10 @@ export default class List extends Component{
             searchData:[]
         }
     }
-
+    componentWillMount(){
+        console.log(this.props)
+        this.props.setUser('111111111111111')
+    }
     componentDidMount(){
         document.addEventListener('keydown',this.onkeydown);
         this.getList(1,10)

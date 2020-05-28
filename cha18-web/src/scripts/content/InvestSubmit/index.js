@@ -48,6 +48,7 @@ export default class List extends Component{
         document.addEventListener('keydown',this.onkeydown);
         this.getList(1,10)
         this.getTree()
+        console.log(this.props)
         
     }
     getList = (page, pageSize,params='') => {

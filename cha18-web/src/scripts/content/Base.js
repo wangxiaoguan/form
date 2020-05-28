@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { getToken } from '../utils/ProjectUtils';
-import {Spin} from 'antd'
-import "./index.less";
-export default class Title extends Component {
+import "./Base.less";
+export default class Base extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -44,16 +43,16 @@ export default class Title extends Component {
         <div className="top">　</div>
         <div className="top-content">
           <div>
-				{
-					titleList.map((item) => {
-						const isSelect = location.hash.indexOf(item.Path) > 0;
-						return (
-							<div className={`top-content-tab ${isSelect ? "top-content-tab-active" : "" }`} key={item.key} onClick={() => this.TabPane(item)}>
-								<span className='top-content-tab-title'>{item.value}</span>
-							</div>
-						)
-					})
-				}
+            {
+              titleList.map((item) => {
+                const isSelect = location.hash.indexOf(item.Path) > 0;
+                return (
+                  <div className={`top-content-tab ${isSelect ? "top-content-tab-active" : "" }`} key={item.key} onClick={() => this.TabPane(item)}>
+                    <span className='top-content-tab-title'>{item.value}</span>
+                  </div>
+                )
+              })
+            }
           </div>
           <div className="mainContent">{this.props.children}</div>
         </div>
