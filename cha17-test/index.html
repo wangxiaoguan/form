@@ -6,10 +6,21 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <div id='div1'></div>
+    <button>点击</button>
 </body>
+<script src="http://wanghg.top/js/jquery.js"></script>
 <script>
-    sessionStorage.setItem('isTimeFlag',true)
-    console.log(typeof sessionStorage.getItem('isTimeFlag'))
+    // sessionStorage.setItem('isTimeFlag',true)
+    // console.log(typeof sessionStorage.getItem('isTimeFlag'))
+
+    // let error = new Error('111111')
+    // console.log(error)
+    // const err = new Error('错误信息');
+    // console.error(err.message);
+    console.log(Date.now())
+    $("button").click(function(){
+		$("#div1").load("test.txt");
+	});
 </script>
 </html>
