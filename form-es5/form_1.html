@@ -42,18 +42,11 @@
             display: none;
         }
         .field-rule{
-            clear: both;
-            width: calc(100% - 1rem);
-            /* position: absolute; */
-            /* position: relative; */
-            /* left: 0; */
-            /* bottom: 6px; */
-            height: 1rem;
-            /* margin: 0 0.5rem; */
-            font-size: 0.75rem;
-            /* line-height: 1.6rem; */
-            color: #ff0000;
-            text-indent: 1rem;
+          display: inline-block;
+          font-size: 0.75rem;
+           color: #ff0000;
+          margin-top: 12px;
+          margin-left: 6px;
         }
         .field-rule-select{
             bottom: 6px;
@@ -86,15 +79,14 @@
             border-left: 0.2rem solid #635CEA;
         }
         .field-name{
-            width: calc(100% - 1rem);
-            display: block;
-            float: left;
-            margin: 0.6rem 0;
-            line-height: 1.2rem;
-            font-size: 16px;
-            font-family:'PingFang SC';
-            font-weight:500;
-            color:rgba(51,51,51,1)
+           /*float: left;*/
+    margin: 0.6rem 0;
+    line-height: 1.2rem;
+    font-size: 16px;
+    font-family: 'PingFang SC';
+    font-weight: 500;
+    color: rgba(51,51,51,1);
+    display: inline;
         }
         .field-area{
             text-align: right;
@@ -410,7 +402,31 @@
             font-size: 12px;
             color: #999;
         }
+    
+#loading {
+position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    opacity: 1;
+    background-color: rgba(0,0,0,0.5);
+    display: none;
+}
+
+#loading img {
+width: 30px;
+    position: absolute;
+    z-index: 2001;
+    height: 30px;
+    left: 50%;
+    top: 50%;
+    color: #fff;
+}
+    
     </style>
+    
 </head>
 <body>
     <div id="app">
@@ -421,6 +437,7 @@
         <footer>
             <div class="submitBtn" onclick="submit()">完成并提交</div>
         </footer>
+         <div id="loading"><img src="img/loading.gif"/></div>
     </div>
 </body>
 <script type="text/javascript" src="js/rolldate.js"></script>
@@ -432,18 +449,14 @@
 <script>
         var params = {};
 
-        // var IP = 'http://10.128.151.13:443';
-        // // var IP = 'https://test.cictsj.com:30000'
-        // var search = '?formId=1266632834734043136&userId=10008'
-        // search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
-
-        var IP = location.origin;
-        location.search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
-
+        var IP = 'http://10.128.151.13:443';
+     //       var IP = 'https://test.cictsj.com:30000'
+      var search = '?formId=1270307647226978304&userId=10008'
+     search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
+     //   var IP = location.origin;
+    //    location.search.replace(/([^?&=]+)=([^&]+)/g, function(_, k, v){params[k] = v})
         var formId = params.formId;
-        var userId = params.userId;
-        
-        
+        var userId = params.userId;     
         var url = IP + "/services/web/config/questionnaireForm/getDetailByFormIdFromCache/" + formId + "/" + userId;
         var formData = {};//总表单数据
         var topicAllList = [];//总题目列表
@@ -522,7 +535,7 @@
         //                     <span class="beizhu">备注：</span><input name='remark-${item.id}-1' id="remark-${item.id}" data-id="${item.id}" class="field-remark field-text-remark"/>
         //                 </div>
         //             </div>`
-            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + " form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><div class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</div><div class=\"field-rule field-rule-select\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div><div class=\"field-div field-div-select\"><input type=\"text\" name=\'select-" + item.id + "\' id=\"select-" + item.id + "\" data-id=\"" + item.id + "\" readonly=\"readonly\" unselectable=\"on\" class=\"field-text field-text-select\" placeholder=\"\u8BF7\u9009\u62E9\"/></div><div class=\"field-div field-div-remark field-remark-" + item.id + "\"><span class=\"beizhu\">\u5907\u6CE8\uFF1A</span><input name=\"remark-" + item.id + "-1\" id=\"remark-" + item.id + "\" data-id=\"" + item.id + "\" class=\"field-remark field-text-remark\"/></div></div>";
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + " form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><div class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</div><div class=\"field-rule field-rule-select\">" + (item.isRequiredQuestions ? '*' : '') + "</div><div class=\"field-div field-div-select\"><input type=\"text\" name=\'select-" + item.id + "\' id=\"select-" + item.id + "\" data-id=\"" + item.id + "\" readonly=\"readonly\" unselectable=\"on\" class=\"field-text field-text-select\" placeholder=\"\u8BF7\u9009\u62E9\"/></div><div class=\"field-div field-div-remark field-remark-" + item.id + "\"><span class=\"beizhu\">\u5907\u6CE8\uFF1A</span><input name=\"remark-" + item.id + "-1\" id=\"remark-" + item.id + "\" data-id=\"" + item.id + "\" class=\"field-remark field-text-remark\"/></div></div>";
         // })
     }
 
@@ -531,7 +544,7 @@
         return data.map(function(item){
             var optionList = item.content;
             var option = optionItem2(item,optionList).join('')
-            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><div class=\"field-name field-div-radio\">" + setNum(item.orderNum) + "." + item.name + "</div><div class=\"field-rule field-rule-radio\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div>" + option + "<div class=\"field-div field-div-remark field-remark-" + item.id + "\"><span class=\"beizhu\">\u5907\u6CE8\uFF1A</span><input name='remark-" + item.id + "-1' id=\"remark-" + item.id + "\" data-id=\"" + item.id + "\" class=\"field-remark field-text-remark\"/></div></div>";
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><div class=\"field-name field-div-radio\">" + setNum(item.orderNum) + "." + item.name + "</div><div class=\"field-rule field-rule-radio\">" + (item.isRequiredQuestions ? '*' : '') + "</div>" + option + "<div class=\"field-div field-div-remark field-remark-" + item.id + "\"><span class=\"beizhu\">\u5907\u6CE8\uFF1A</span><input name='remark-" + item.id + "-1' id=\"remark-" + item.id + "\" data-id=\"" + item.id + "\" class=\"field-remark field-text-remark\"/></div></div>";
         })
         
     }
@@ -551,7 +564,7 @@
             //             <div class="field-rule field-rule-checkbox">${item.isRequiredQuestions?'必做题':''}</div>
             //             ${option}
             //         </div>`
-            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><div class=\"field-name field-div-checkbox\">" + setNum(item.orderNum) + "." + item.name + "</div><div class=\"field-rule field-rule-checkbox\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div>" + option + "</div>";
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><div class=\"field-name field-div-checkbox\">" + setNum(item.orderNum) + "." + item.name + "</div><div class=\"field-rule field-rule-checkbox\">" + (item.isRequiredQuestions ? '*' : '') + "</div>" + option + "</div>";
         })
         
     }
@@ -568,7 +581,7 @@
         function fieldItem3(item){
                 var optionList = item.content;
                 var option = optionItem3(item,optionList)
-                return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><div class=\"field-name field-div-checkbox\">" + setNum(item.orderNum) + "." + item.name + "</div><div class=\"field-rule field-rule-checkbox\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div>" + option + "</div>";
+                return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><div class=\"field-name field-div-checkbox\">" + setNum(item.orderNum) + "." + item.name + "</div><div class=\"field-rule field-rule-checkbox\">" + (item.isRequiredQuestions ? '*' : '') + "</div>" + option + "</div>";
         }
         function optionItem3(item,data){
             var rule = eval("("+item.typeDetailLimit+")")
@@ -586,7 +599,7 @@
             var rule = JSON.parse(item.typeDetailLimit)
             rule.isRequiredQuestions = item.isRequiredQuestions;
             var ruleStr = JSON.stringify(rule)
-            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div><div class=\"field-div\"><input type=\"text\" name='number-" + item.id + "' id=\'number-" + item.id + "\' data-rule=\'" + ruleStr + "\' class=\"field-text field-text-number\" placeholder=\"请输入数字\"/></div></div>";
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.isRequiredQuestions ? '*' : '') + "</div><div class=\"field-div\"><input type=\"text\" name='number-" + item.id + "' id=\'number-" + item.id + "\' data-rule=\'" + ruleStr + "\' class=\"field-text field-text-number\" placeholder=\"请输入数字\"/></div></div>";
             
         }
 
@@ -596,7 +609,7 @@
             rule.isRequiredQuestions = item.isRequiredQuestions;
             var ruleStr = JSON.stringify(rule)
 
-            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.content ? '' : item.isRequiredQuestions ? '必做题' : '') + "</div><div class=\"field-div\"><textarea name=\'textarea-" + item.id + "\' id=\'textarea-" + item.id + "\' class=\"field-txt\" rows=\"6\" data-rule=\'" + ruleStr + "\' placeholder=\"\u8BF7\u586B\u5199\">" + (item.content || '') + "</textarea></div></div>";
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.content ? '' : item.isRequiredQuestions ? '*' : '') + "</div><div class=\"field-div\"><textarea name=\'textarea-" + item.id + "\' id=\'textarea-" + item.id + "\' class=\"field-txt\" rows=\"6\" data-rule=\'" + ruleStr + "\' placeholder=\"\u8BF7\u586B\u5199\">" + (item.content || '') + "</textarea></div></div>";
             
         }
         //城市
@@ -605,12 +618,12 @@
             var includeAll = rule.includeAll?"<div class=\"field-area\">\u6D77\u5916\u5730\u533A\u586B\u5199></div>":''
             var height = Math.ceil(rule.max/18)
             var ruleStr = JSON.stringify(rule)
-            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.content ? '' : item.isRequiredQuestions ? '必做题' : '') + "</div><div class=\"field-div\"><input type=\"text\" name=\'address-" + item.id + "\' id=\"address-" + item.id + "\" data-rule=\'" + ruleStr + "\' readonly=\"readonly\" unselectable=\"on\" class=\"field-text field-text-address\" placeholder=\"\u7701/\u5E02/\u533A/\u8BE6\u7EC6\u5730\u5740\"/>" + includeAll + "</div></div>";
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.content ? '' : item.isRequiredQuestions ? '*' : '') + "</div><div class=\"field-div\"><input type=\"text\" name=\'address-" + item.id + "\' id=\"address-" + item.id + "\" data-rule=\'" + ruleStr + "\' readonly=\"readonly\" unselectable=\"on\" class=\"field-text field-text-address\" placeholder=\"\u7701/\u5E02/\u533A/\u8BE6\u7EC6\u5730\u5740\"/>" + includeAll + "</div></div>";
         }
 
     //日期
     function fieldItem7(item){
-        return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.content ? "" : item.isRequiredQuestions ? '必做题' : '') + "</div><div class=\"field-div\"><input type=\"text\" name=\"date-" + item.id + "\" data-rule=\'" + item.typeDetailLimit + "\' id=\"date-" + item.id + "\"  placeholder=\"\u8BF7\u9009\u62E9\u65E5\u671F\" readonly=\"readonly\" unselectable=\"on\" class=\"field-text field-text-date\"/></div></div>";
+        return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule\">" + (item.content ? "" : item.isRequiredQuestions ? '*' : '') + "</div><div class=\"field-div\"><input type=\"text\" name=\"date-" + item.id + "\" data-rule=\'" + item.typeDetailLimit + "\' id=\"date-" + item.id + "\"  placeholder=\"\u8BF7\u9009\u62E9\u65E5\u671F\" readonly=\"readonly\" unselectable=\"on\" class=\"field-text field-text-date\"/></div></div>";
         
     }
 
@@ -631,7 +644,7 @@
             if(rule.indexOf('zip,rar,7z')>-1){
                 acceptType = acceptType + 'application/x-zip-compressed'
             }
-            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule field-rule-" + item.id + "\">" + (item.isRequiredQuestions ? '必做题' : '') + "</div><div class=\"field-div field-div-file\"><input type=\"file\" title=\"\" id=\"file-" + item.id + "\" accept=\"" + acceptType + "\" data-id=\"" + item.id + "\"  name=\"file-" + item.id + "\" data-rule=\'" + item.typeDetailLimit + "\' class=\"field-text field-file\" /><div class=\"field-file-word\">点击上传附件</div><div class=\'deleteFile deleteFile-" + item.id + "\' data-rule=\"" + item.isRequiredQuestions + "\" data-id=\"" + item.id + "\"></div></div></div>";
+            return "<div class=\"form-item form-item-" + (item.isShow ? 'show' : 'hide') + "  form-item-" + item.id + "\" data-type=\"" + item.type + "\" data-count=\"" + (item.isShow ? '1' : '0') + "\"><span class=\"field-name\">" + setNum(item.orderNum) + "." + item.name + "</span><div class=\"field-rule field-rule-" + item.id + "\">" + (item.isRequiredQuestions ? '*' : '') + "</div><div class=\"field-div field-div-file\"><input type=\"file\" title=\"\" id=\"file-" + item.id + "\" accept=\"" + acceptType + "\" data-id=\"" + item.id + "\"  name=\"file-" + item.id + "\" data-rule=\'" + item.typeDetailLimit + "\' class=\"field-text field-file\" /><div class=\"field-file-word\">点击上传附件</div><div class=\'deleteFile deleteFile-" + item.id + "\' data-rule=\"" + item.isRequiredQuestions + "\" data-id=\"" + item.id + "\"></div></div></div>";
         })
         
     }
@@ -675,8 +688,6 @@
             })
             
         }
-
-   
 
 </script>
 <script>
@@ -1236,16 +1247,16 @@
             }else if(list.length>rule.max){
                 $(this).parent().parent().children(".field-rule").html("最多选择"+rule.max+"项")
             }else{
-                $(this).parent().parent().children(".field-rule").html('')
+//              $(this).parent().parent().children(".field-rule").html('')
             }
             $(".orderNum-" + topicId).removeClass('isRequired')
            
         }else{
             if(rule.isRequiredQuestions){
                 $(".orderNum-" + topicId).addClass('isRequired')
-                $(this).parent().parent().children(".field-rule").html('必做题')
+                $(this).parent().parent().children(".field-rule").html('*')
             }else{
-                $(this).parent().parent().children(".field-rule").html('')
+//              $(this).parent().parent().children(".field-rule").html('')
             }
             
         }
@@ -1261,9 +1272,9 @@
         console.log('数字',rule)
         if(value===""){
             if(rule.isRequiredQuestions){
-                $(this).parent().parent().children(".field-rule").html('必做题');
+                $(this).parent().parent().children(".field-rule").html('*');
             }else{
-                $(this).parent().parent().children(".field-rule").html('');
+//              $(this).parent().parent().children(".field-rule").html('');
             }
             
         }else if(isNaN(value)){
@@ -1312,9 +1323,9 @@
             $(this).parent().parent().children(".field-rule").html("字数限制"+rule.max+"字")
         }else{
             if(rule.isRequiredQuestions&&value===""){
-                $(this).parent().parent().children(".field-rule").html('必做题')
+                $(this).parent().parent().children(".field-rule").html('*')
             }else{
-                $(this).parent().parent().children(".field-rule").html('')
+//              $(this).parent().parent().children(".field-rule").html('')
             }
         }
     })
@@ -1396,12 +1407,18 @@
 
     //日期
     $(document).on('click','.field-text-date',function(){
+    	$("#loading").animate({
+		"opacity": "1"
+		}, 200).show(0);
+		$("#loading").css('display','block')
+    	
         var that = $(this);
         var id = $(this).attr('id');
         var datarule = $(this).attr('data-rule')
         console.log(datarule)
         var rule = eval("("+datarule+")")
         var format = rule.format.toUpperCase();
+		 setTimeout(function(){		
         if(format==='YYYY-MM-DD'||format==='YYYY-MM'||format==='YYYY'||format==='MM-DD'||format==='DD'){
             weui.datePicker({
                 start:2000,
@@ -1411,7 +1428,10 @@
                 depth:format==='YYYY-MM-DD'?3:format==='YYYY-MM'?2:format==='YYYY'?1:3,
                 onChange: function (e) {
                     console.log(e);
-                    
+                   $("#loading").animate({
+						"opacity": "0"
+					}, 200).hide(0) 
+					$("#loading").css('display','none')
                 },
                 onConfirm: function (e) {
                     console.log(e);
@@ -1490,7 +1510,10 @@
             weui.picker(list, 
                 {
                     onChange: function (e) {
-                        console.log(e);
+                        $("#loading").animate({
+						"opacity": "0"
+					}, 200).hide(0) 
+					$("#loading").css('display','none')
                     },
                     onConfirm: function (e) {
                         console.log(e);
@@ -1500,23 +1523,58 @@
                     }
             });
         }
-    })
+    },300) 
+ })
 
     //附件
     $(document).on('change','.field-file',function(){
+	// debugger;
+	//    $(this).replaceWith('<input type="file" id="' + $(this).attr('id') + '" />');
+	    
         var that = this;
         var fileObj = $(this)[0].files[0];
-        console.log(fileObj,fileObj.type)
-
         var rule = $(this).attr("data-rule");
         rule = JSON.parse(rule)
 
         var topicId = $(this).attr("data-id");
-
         if(fileObj.size>=rule.max*1024*1024){
             weui.topTips("文件大小限制"+rule.max+"M", 1500);
             return;
         }
+		
+		if(rule.type[0]=="jpg,jpeg,png,gif"){
+		 rule.type[0]="jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF" 
+		}
+	
+		if(rule.type[0]=="word,excel,powerpoint,pdf"){
+		 rule.type[0]="word,excel,powerpoint,pdf,docx,doc,xlsx,xls,ppt,PPT,XLS,XLSX,DOCX,DOC,PDF" 
+		}
+		
+		if(rule.type[0]=="mp3,mp4"){
+		 rule.type[0]="mp3,mp4,MP3,MP4" 
+		}
+		
+		if(rule.type[0]=="zip,rar,7z"){
+		 rule.type[0]="zip,rar,7z,ZIP,RAR,7Z" 
+		}
+	    var type;
+		if(fileObj.name.split('.').length>1){
+		 type= fileObj.name.split('.')[fileObj.name.split('.').length-1];
+		}else{
+            console.log('------------')
+            var input = document.getElementById('file'+topicId);
+            input.value = ''; 
+		  weui.topTips("上传的附件格式不正确", 1500);
+		  return;
+		}
+		
+		if(rule.type[0].indexOf(type)===-1){
+            console.log('==================')
+            var input2 = document.getElementById('file-'+topicId);
+            input2.value = ''; 
+		   weui.topTips("上传的附件格式不正确", 1500);
+		     return;
+		}
 
         var formData = new FormData();
         formData.append("file", fileObj);
@@ -1555,6 +1613,7 @@
                     $(".field-rule-" + topicId).html('');
                     FormObject["file-" + topicId] = res.root.object[0].filePath;
                 }else{
+                    $(that).replaceWith(input)
                     weui.topTips(res.errorMsg, 1500);
                 }
                 console.log(res); 
@@ -1580,7 +1639,7 @@
         var rule = $(this).attr("data-rule");
         console.log(rule)
         if(rule==='true'){
-            $(".field-rule-" + topicId).html('必做题');
+            $(".field-rule-" + topicId).html('*');
         }
         FormObject["file-" + topicId] = '';
         $("#file-" + topicId).css('backgroundImage', 'url(img/upload.png)');
@@ -1630,7 +1689,6 @@
             var text = $(this).text()
             text&&ruleList.push(text)
         });
-        console.log(ruleList)
         if(ruleList.length){
             weui.topTips('表单填写不规范或必做题没填', 1500);
             return;
@@ -1641,9 +1699,7 @@
             return;
         }
         
-        
-
-        console.log($('#form').serialize());
+       console.log($('#form').serialize());
         var result = $('#form').serialize().split('&')
         result.map(function(item){
             if(item.indexOf('checkbox')<0&&item.indexOf('select')<0&&item.indexOf('radio')<0){
@@ -1672,7 +1728,7 @@
                 }else{
                     remarkList.push({id:key.substring(7,26),remark:FormObject[key]})
                 }
-                
+                // remarkList.push({id:key.substring(7,26),remark:FormObject[key]})
             }
             if(!regStr.test(key)&&!regStr2.test(key)){
                 allFormData[key] = FormObject[key]
@@ -1757,12 +1813,19 @@
             error:function(error){
 
             }
-        });   
-
-        
-        
-
-        
+        });            
     }
 </script>
+
+<style>
+.field-div label{
+	width: 100%;
+	display: block;
+}
+
+
+</style>
+
+
+
 </html>
