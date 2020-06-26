@@ -52,6 +52,8 @@ export default {
                 return state.number + 5
             },
         }),
+        h5:()=>3,
+        number:()=>store.state.number,
         ...mapState([
             'number',
             'city',
@@ -59,6 +61,10 @@ export default {
             'obj',
             "data"
         ])
+    },
+    mounted(){
+        console.log(this)
+        console.log()
     },
     created() {
         console.log(this.$store);

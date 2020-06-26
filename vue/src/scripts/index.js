@@ -37,5 +37,8 @@ const vm = new Vue({
     },
     computed:{
 
+    },
+    mounted(){
+        console.log(this)
     }
 }).$mount("#app")

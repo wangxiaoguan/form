@@ -19,6 +19,7 @@ export default {
         }
     },
     mounted(){
+        console.log(this)
         this.$http.get("http://47.94.208.182:3000/detail",{
             params:{
                 id:this.$route.params.id

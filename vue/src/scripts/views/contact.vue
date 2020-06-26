@@ -1,12 +1,12 @@
 <template>
     <div class="box">
         <Head title="退出" ></Head>
-        <mt-swipe :auto="2000"  >
+        <!-- <mt-swipe :auto="2000"  >
             <mt-swipe-item v-for="(m,id) in mvs" :key="id" >
                 <img :src="m.images.large" alt="" class="my">
             </mt-swipe-item>
 
-        </mt-swipe>
+        </mt-swipe> -->
     </div>
 </template>
 <script>
@@ -19,10 +19,10 @@ export default {
         }
     },
     mounted(){
-        Indicator.open({
-            text: '加载中...',
-            spinnerType: 'triple-bounce'
-        });
+        // Indicator.open({
+        //     text: '加载中...',
+        //     spinnerType: 'triple-bounce'
+        // });
 
         // this.$http.get("http://47.94.208.182:3000/movie",{
         //     params:{
@@ -36,19 +36,19 @@ export default {
         //     },1200)
         // })
 
-        this.getmv({url:"/movie",limit:18,callback:function(){
-             setTimeout(()=>{
-                 Indicator.close();
-             },1200)
-        }});
+        // this.getmv({url:"/movie",limit:18,callback:function(){
+        //      setTimeout(()=>{
+        //          Indicator.close();
+        //      },1200)
+        // }});
     },
-    computed:{
-        ...mapState(['mv']),
-        ...mapGetters(['mvs'])
-    },
-    methods:{
-        ...mapActions(['getmv'])
-    }
+    // computed:{
+    //     ...mapState(['mv']),
+    //     ...mapGetters(['mvs'])
+    // },
+    // methods:{
+    //     ...mapActions(['getmv'])
+    // }
 }
 </script>
 

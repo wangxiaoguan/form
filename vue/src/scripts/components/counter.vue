@@ -27,6 +27,9 @@ export default {
 
         }
     },
+    mounted(){
+        console.log(store)
+    },
     methods:{
         countadd:function(){
             bus.$emit("count-add",10);
@@ -47,10 +50,10 @@ export default {
         change(e){
             console.log(e.target.value);
         },
-        ...mapActions({
-            add:"increment",
+        // ...mapActions({
+        //     add:"increment",
 
-        }),
+        // }),
         ...mapActions([
             'increment',
             'countadd',  // this.store.dispatch('increment')

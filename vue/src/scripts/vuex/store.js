@@ -14,18 +14,129 @@
 
 import Vue from "vue";
 import Vuex from "vuex";
+import axios from "axios";
+axios.defaults.baseURL = "http://47.94.208.182:3000/"
 
+const baseURL = "http://47.94.208.182:3000";
+// import Vue from "vue";
 Vue.use(Vuex);
 
-import state from "./state"
-import actions from "./actions";
-import mutations from "./mutations"
-import getters from "./getters";
+// import state from "./state"
+// import actions from "./actions";
+// import mutations from "./mutations"
+// import getters from "./getters";
+const state = {
+    number:1000,
+    city:"武汉wh",
+    mv:[],
+    msg:"hello vuex",
+    obj:{
+        username:"zkl"
+    },
+    data:"1803-----daydayup",
+    username:"zkl1",
+    phone:"10086"
+}
 
+const actions = {
+    increment(context){
+        // context == store   =  {commit:func}  = {commit:commit} = {commit}
+        // context.commit("mutations")  {commit:func}
+        console.log('------------->',context)
+        context.commit("increment")   // mutations 
+    }, 
+    decrement({commit}){  // action 参数解构 
+        commit("decrement")  // mutationType  decrement
+    },
+    countadd({commit},preload){
+        console.log(preload);
+        console.log('------------->',commit)
+        // commit("countadd",preload);
+        dispatch('countadd',preload)
+    },
+    changeCity({commit},city){
+        commit("changeCity",city);
+    },
+    changeMsg({commit},{msg}){
+        commit("changeMsg",{msg});
+    },
+    changeUsername({commit},{username}){
+        commit("changeUsername",{username});
+    },
+    changeData({commit},{url,id}){
+        // ajax 异步
+        // this.$http
+        console.log(url);
+        Vue.http.get(baseURL+url).then(res=>{
+            console.log(res);
+            commit("changeData",res.body);
+        })
+    },
+    getmv({commit},{url,limit,callback}){
+        axios.get(url,{
+            params:{
+                limit
+            }
+        }).then(res=>{
+            console.log(res.data);
+            commit("getmv",res.data);
+            console.log(callback);
+            callback();
+        })
+    } 
+}
+
+const mutations = {
+    add(){
+
+    },
+    increment(state){
+        state.number++;
+    },
+    decrement(state){
+        state.number--;
+    },
+    countadd(state,preload){
+        state.number+=preload;
+    },
+    changeCity(state,city){
+        state.city = city;
+    },
+    changeMsg(state,{msg}){
+     
+        state.msg = msg;  
+        // staet.msg = {...state.msg,msg:msg}
+    },
+    changeUsername(state,{username}){
+        state.obj = {...state.obj,username:username};// 对象  
+    },
+    changeData(state,data){
+        state.data = data;
+    },
+    getmv(state,mv){
+        state.mv = mv;
+    },
+    getUsername(state,username){
+      
+        state.username = username;
+        console.log("xxxusernamee")
+        console.log(state);
+    },
+    updatePhone(state,phone){
+        state.phone = phone;
+        console.log(state);
+    }
+}
+
+const getters = {
+    mvs(state){
+        return state.mv.filter((m,index)=>index%2==0);
+    }
+}
 const store = new Vuex.Store({
     state:state,
     actions:actions,
-    getters,
+    getters:getters,
     mutations:mutations
 })
 

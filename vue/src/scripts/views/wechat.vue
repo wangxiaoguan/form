@@ -1,7 +1,7 @@
 <template>
     <div class="box" v-if="show">
         <Head title="首页" ></Head>
-        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
+        <!-- <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
             <ul class="list clearfix"
                 v-infinite-scroll="loadMore"
                 infinite-scroll-disabled="loading"
@@ -14,7 +14,7 @@
                     </router-link>
                 </li>
             </ul>
-        </mt-loadmore>
+        </mt-loadmore> -->
 
     </div>
 </template>
@@ -31,58 +31,58 @@ export default {
         }
     },
     methods:{
-        loadTop(){
-            console.log("loadTop");
-            this.$http.get("http://47.94.208.182:3000/movie",{
+        // loadTop(){
+        //     console.log("loadTop");
+        //     this.$http.get("http://47.94.208.182:3000/movie",{
 
-            }).then(res=>{
-                setTimeout(()=>{
-                    this.mv = res.body.reverse();
-                    Toast('下拉刷新数据成功!');
-                    this.$refs.loadmore.onTopLoaded();
-                },1500)
-            })
-        },
-        loadBottom(){
-            console.log("loadBottom")
-        },
-        loadMore(){
-            console.log("上拉loadmore");
-            this.loading = true;
-             this.$http.get("http://47.94.208.182:3000/movie",{
-                 params:{
-                     limit:4
-                 }
-            }).then(res=>{
-                setTimeout(()=>{
-                    this.mv = this.mv.concat(res.body);
-                    this.loading = false;
-                    Toast('上拉加载更多数据成功!');
-                },1500)
-            })
-        }
+        //     }).then(res=>{
+        //         setTimeout(()=>{
+        //             this.mv = res.body.reverse();
+        //             Toast('下拉刷新数据成功!');
+        //             this.$refs.loadmore.onTopLoaded();
+        //         },1500)
+        //     })
+        // },
+        // loadBottom(){
+        //     console.log("loadBottom")
+        // },
+        // loadMore(){
+        //     console.log("上拉loadmore");
+        //     this.loading = true;
+        //      this.$http.get("http://47.94.208.182:3000/movie",{
+        //          params:{
+        //              limit:4
+        //          }
+        //     }).then(res=>{
+        //         setTimeout(()=>{
+        //             this.mv = this.mv.concat(res.body);
+        //             this.loading = false;
+        //             Toast('上拉加载更多数据成功!');
+        //         },1500)
+        //     })
+        // }
     },
     mounted(){
-        Indicator.open({
-            text: '努力加载中...',
-            spinnerType: 'triple-bounce'
-        });
-        this.$http.get("http://47.94.208.182:3000/movie",{
-            params:{
-                limit:20
-            }
-        }).then(res=>{
-            setTimeout(()=>{
-                this.mv = res.body;
-                this.show = true;
-                Indicator.close();
-                Toast({
-                    message: '请求成功',
-                    iconClass: 'icon iconfont icon-fanhuidingbu',
-                    duration:400
-                });
-            },100)
-        })
+        // Indicator.open({
+        //     text: '努力加载中...',
+        //     spinnerType: 'triple-bounce'
+        // });
+        // this.$http.get("http://47.94.208.182:3000/movie",{
+        //     params:{
+        //         limit:20
+        //     }
+        // }).then(res=>{
+        //     setTimeout(()=>{
+        //         this.mv = res.body;
+        //         this.show = true;
+        //         Indicator.close();
+        //         Toast({
+        //             message: '请求成功',
+        //             iconClass: 'icon iconfont icon-fanhuidingbu',
+        //             duration:400
+        //         });
+        //     },100)
+        // })
     }
 }
 </script>
