@@ -5,17 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-<script src="https://common.cnblogs.com/scripts/jquery-2.2.0.min.js"></script>
+<script src="js/jquery.js"></script>
+<script src="js/mouse.js"></script>
 <body>
-  
-    <div id="page_end_html">
-        <script src="js/mouse.js"></script>
+<div class="app">
+    <input type="number" onchange="number(this.value)" min="1" max="12" step="1"/>
+    <input type="color" onchange="color(this.value)"/>
+</div>
+<div id="page_end_html">
+</div>
 <script type="text/javascript">
+// $.shuicheMouse({
+//         type:12,
+//         color:'#aaa'
+//     })
+var num = 1,col="#0f0"
+function number(e){
+    console.log(e)
+    num = e
     $.shuicheMouse({
-        type:16,
-        color:"rgba(187,67,128,1)"
+        type:e,
+        color:col
     })
+}
+function color(e){
+    console.log(e)
+    col = e
+    $.shuicheMouse({
+        type:num,
+        color:e
+    })
+}  
 </script>
-    </div>
 </body>
 </html>
