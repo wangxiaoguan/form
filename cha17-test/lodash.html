@@ -64,33 +64,6 @@ console.log(t,x)
 // const y = BigInt(123)
 // console.log(r,y,typeof r) //300n 123n "bigint"
 
-
-
-// let a= new Promise((resolve,reject)=>{
-//   //异步操作...
-//   resolve({ code: 200,msg:"请求成功"})
-// })
-// let b= new Promise((resolve,reject)=>{
-//   //异步操作...
-//   resolve({ code: 200,msg:"请求成功"})
-// })
-// let c= new Promise((resolve,reject)=>{
-//   //异步操作...
-//   reject({ code: 500,msg:"服务器出现异常"})
-// })
-// // 使用进行并发请求
-// // 1.Promise.all
-// Promise.all([a,b,c]).then((res) => {
-// // 只有 上面所有的请求都是 resolve (成功) 的时候才会进入此回调中
-// console.log(res,"res")
-// }).catch((error) => {
-// // 上面的请求中，只要有一个是reject (失败) 就会进入此回调
-// console.log(error,"error")
-// })
-// // 2.Promise.allSettled
-// Promise.allSettled([a,b,c]).then((data=>{
-//   console.log(data,"data")
-// }))
 </script>
 
 </html>
