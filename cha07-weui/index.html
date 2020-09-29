@@ -68,7 +68,7 @@
 <script src="js/jquery.js"></script>
 <script src="js/zepto.js"></script>
 <script src="js/data.js"></script>
-<script src="js/weui.js"></script>
+<script src="js/weui.mini.js"></script>
 <script>
 $(document).ready(function(){
 
@@ -82,11 +82,11 @@ $(document).ready(function(){
     $(".content1").click(()=>{
         weui.datePicker({
             start: 1990,
-            // end: new Date(),
-            // format: 'YYYY-MM',
-            end: new Date().getFullYear(),
-	defaultValue: [new Date().getFullYear(), new Date().getMonth()+1, new Date().getDate()],
-	depth:1,
+            end: 2099,
+            // format: 'YYYY-MM-DD',
+            // end: new Date().getFullYear(),
+            defaultValue: [new Date().getFullYear(), new Date().getMonth()+1, new Date().getDate()],
+            depth:3,
             onChange: function (e) {
                 console.log(e);
                 
