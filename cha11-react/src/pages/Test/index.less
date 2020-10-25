@@ -1,0 +1,73 @@
+@import '../../../global.less';
+:global {
+  .ant-table-wrapper {
+    width: 100%;
+  }
+  .ant-steps-item-title {
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .ant-descriptions-bordered .ant-descriptions-item-label {
+    background-color: #f5f7fa !important;
+  }
+  .ant-descriptions-item-label {
+    // min-width: 200px;
+  }
+}
+.black-btn {
+  background: rgba(48, 49, 51, 1) !important;
+  border-color: rgba(48, 49, 51, 1) !important;
+  &:hover {
+    background: rgba(48, 49, 51, 1) !important;
+    border-color: rgba(48, 49, 51, 1) !important;
+  }
+  &:focus {
+    background: rgba(48, 49, 51, 1) !important;
+    border-color: rgba(48, 49, 51, 1) !important;
+  }
+}
+.changeForm {
+  // width: 100%;
+  // height: 242px;
+  // overflow: auto;
+}
+.changeEditableTable {
+  width: 100%;
+  min-height: 300px;
+  overflow: auto;
+}
+.tableBar {
+  display: inline;
+  padding-left: 10px;
+}
+.tableCellBgcColor {
+  background-color: #f5f7fa !important;
+  font-weight: 700;
+}
+.descriptionsBox {
+  :global(.ant-descriptions-item-label) {
+    width: 50%;
+  }
+  :global(.ant-descriptions-view) {
+    height: 100%;
+    table {
+      height: 100%;
+    }
+  }
+}
+.medicalChargeInfo {
+  text-align: center;
+  border: 1px solid #f0f0f0;
+  padding: 2px 2px;
+}
+.infoStyle {
+  :global {
+    .ant-descriptions-item-label {
+      width: 200px;
+    }
+    .ant-descriptions-item-content {
+      max-width: 200px;
+      min-width: 100px;
+    }
+  }
+}

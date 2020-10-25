@@ -440,7 +440,6 @@
     function fieldItem8(data){
         return data.map(item=>{
             let rule = JSON.parse(item.typeDetailLimit).type;
-            console.log(rule)
             let acceptType = '';
             if(rule.indexOf('jpg,jpeg,png,gif')>-1){
                 acceptType = acceptType + 'image/jpeg,jpeg,image/png,image/gif'
@@ -916,11 +915,8 @@
     $(document).on('click','.field-text-select',function(){
         let that = $(this)
         let topicId = that.attr("data-id")
-        console.log(topicId)
         let name = $(this).attr('name')
-        console.log(name)
         let list = topicList1.filter(item=>{return item.id===topicId})[0].content;
-        console.log(list)
         list.map(item=>{
             item.label = item.content;
             item.value = item.order;
@@ -929,18 +925,14 @@
         weui.picker(list, 
             {
                 onChange: function (e) {
-                    console.log(e);
                 },
                 onConfirm: function (e) {
-                    console.log(e);
                     that.val(e[0].label)
                     that.parent().parent().children(".field-rule").html('')
                     let logic = e[0].logic;
                     let order = e[0].order;
-                    console.log(logic)
 
                     FormObject[name] = e[0].label;
-                    console.log(FormObject)
 
                     list.map(item=>{
                         if(item.order!==order){
@@ -977,21 +969,16 @@
         $(this).attr('data-check','1')
 
         let value = $(this).val()
-        console.log(value)
 
         let topicId = $(this).attr('data-id');
-        console.log(topicId)
 
         let name = $(this).attr('name');
-        console.log(name)
 
         let radioList = $(`input:radio[name="${name}"]`).not(this)
-        console.log(radioList)
         radioList.each(function() { 
             if($(this).attr('data-check')==='1'){
                 let otherlogic = $(this).attr('data-logic');
                 otherlogic = JSON.parse(otherlogic);
-                console.log(otherlogic)
                 otherlogic.length&&otherlogic.map(item=>{
                     let el = $(`.form-item-${item}`).attr('data-count') - 1;
                     el===0&&$(`.form-item-${item}`).addClass('form-item-hide').attr('data-count','0')
@@ -1009,7 +996,6 @@
 
         let logic = $(this).attr('data-logic');
         logic = JSON.parse(logic)
-        console.log(logic)
         logic.length&&logic.map(item=>{
             let el = $(`.form-item-${item}`).attr('data-count')*1 + 1;
             $(`.form-item-${item}`).attr('data-count',el).removeClass('form-item-hide')
@@ -1028,21 +1014,16 @@
         let that = $(this)
 
         let value = $(this).val()
-        console.log(value)
 
         let name = $(this).attr('name')
-        console.log(name)
 
         let rule = JSON.parse(that.attr("data-rule"));
-        console.log('多选框',rule)
 
         let logic = $(this).attr('data-logic');
         logic = JSON.parse(logic)
-        console.log(logic)
 
         let list=[];
         let isCheck = $(this).prop('checked');
-        console.log('是否选中',isCheck)
         if(isCheck){
             logic.length&&logic.map(item=>{
                 let el = $(`.form-item-${item}`).attr('data-count')*1 + 1;
@@ -1070,7 +1051,6 @@
         }
 
         $(`input[name='${name}']:checked`).each(function() { 
-            console.log($(this).next().text())
             list.push($(this).next().text());
         });
 
@@ -1101,7 +1081,6 @@
         let that = $(this);
         let value = that.val();
         let rule = JSON.parse(that.attr("data-rule"));
-        console.log('数字',rule)
         if(value===""){
             if(rule.isRequiredQuestions){
                 $(this).parent().parent().children(".field-rule").html('必填项');
@@ -1162,7 +1141,6 @@
         let rule = that.attr("data-rule");
         
         rule = JSON.parse(rule)
-        console.log(rule)
         let min = 3 - rule.min;
         let provinceLimit = rule.provinceLimit;
         if(provinceLimit == '100000'){
@@ -1173,16 +1151,13 @@
             })
         }
         
-        console.log(list)
         weui.picker(list, 
             {
                 // defaultValue: ['110000','110100','110101'],
                 depth:min,
                 onChange: function (e) {
-                    console.log(e);
                 },
                 onConfirm: function (e) {
-                    console.log(e);  
                     if(min===1){
                         that.val(e[0].label)
                         
@@ -1220,7 +1195,6 @@
             {
                 defaultValue: ['1'],
                 onChange: function (e) {
-                    console.log(e);
                 },
                 onConfirm: function (e) {
                     that.prev().val(e[0].label)
@@ -1238,9 +1212,7 @@
         let id = $(this).attr('id');
         let rule = $(this).attr('data-rule');
         rule = JSON.parse(rule);
-        console.log(rule)
         let format = rule.format.toUpperCase();
-        console.log(format)
         if(format==='YYYY-MM-DD'||format==='YYYY-MM'||format==='YYYY'||format==='MM-DD'||format==='DD'){
             weui.datePicker({
                 start:2000,
@@ -1249,11 +1221,9 @@
                 defaultValue: [new Date().getFullYear(), new Date().getMonth()+1, new Date().getDate()],
                 depth:format==='YYYY-MM-DD'?3:format==='YYYY-MM'?2:format==='YYYY'?1:3,
                 onChange: function (e) {
-                    console.log(e);
                     
                 },
                 onConfirm: function (e) {
-                    console.log(e);
                     if(format==='YYYY-MM-DD'){
                         that.val(`${e[0].value}-${e[1].value}-${e[2].value}`)
                         if(rule.min){
@@ -1273,9 +1243,7 @@
                         if(rule.min){
                             let min = new Date(moment(rule.min).format('YYYY-MM-01')).getTime();
                             let max = new Date(rule.max).getTime();
-                            console.log(`${e[0].value}-${e[1].value}-01`)
                             let nowTime = new Date(moment(`${e[0].value}-${e[1].value}-01`).format('YYYY-MM-01')).getTime();
-                            console.log(min,nowTime,max)
                             if(nowTime<min||nowTime>max){
                                 that.parent().parent().children(".field-rule").html(`时间限制范围${moment(rule.min).format('YYYY-MM')}~${moment(rule.max).format('YYYY-MM')}`)
                             }else{
@@ -1294,7 +1262,6 @@
                             let min = new Date(moment(rule.min).format('YYYY-MM-DD')).getTime();
                             let max = new Date(rule.max).getTime();
                             let nowTime = new Date(moment(`${year}-${e[1].value}-${e[2].value}`).format('YYYY-MM-DD')).getTime();
-                            console.log(year,month,min,nowTime,max)
                             if(nowTime<min||nowTime>max){
                                 that.parent().parent().children(".field-rule").html(`时间限制范围${moment(rule.min).format('YYYY-MM-DD')}~${moment(rule.max).format('YYYY-MM-DD')}`)
                             }else{
@@ -1320,7 +1287,6 @@
                             let min = new Date(moment(rule.min).format('YYYY-MM-01')).getTime();
                             let max = new Date(rule.max).getTime();
                             let nowTime = new Date(moment(`2020-${e[1].value}-01`).format('YYYY-MM-01')).getTime();
-                            console.log(min,nowTime,max)
                             if(nowTime<min||nowTime>max){
                                 that.parent().parent().children(".field-rule").html(`时间限制范围${moment(rule.min).format('YYYY-MM')}~${moment(rule.max).format('YYYY-MM')}`)
                             }else{
@@ -1364,10 +1330,8 @@
             weui.picker(list, 
                 {
                     onChange: function (e) {
-                        console.log(e);
                     },
                     onConfirm: function (e) {
-                        console.log(e);
                         that.val(e[0].value)
                         that.parent().parent().children(".field-rule").html('')
                     }
@@ -1382,8 +1346,6 @@
     $(document).on('change','.field-file',function(){
         let that = this;
         let fileObj = $(this)[0].files[0];
-        console.log(fileObj,fileObj.type)
-        alert('1111111111111111111')
         let rule = $(this).attr("data-rule");
         rule = JSON.parse(rule)
 
@@ -1408,10 +1370,8 @@
         //     body: formData,
         // }).then(function(res){
         //         res.json().then(data=>{
-        //             console.log(res)
         //         })
         //     }).catch(error=>{
-        //         console.log(error)
                 
         //     })
 
@@ -1431,18 +1391,9 @@
                     $(`.field-rule-${topicId}`).html('')
                     FormObject[`file-${topicId}`] = res.root.object[0].filePath
                 } 
-                console.log(res); 
                 
             }, 
             error:function(err){ 
-                console.log(err); 
-
-
-
-                console.log('0000000000000')
-                
-
-
                 fileLoading.hide();
                 let errorLoading = weui.loading('上传失败');
                 setTimeout(()=>{
@@ -1460,7 +1411,6 @@
         let topicId = $(this).attr("data-id");
 
         let rule = $(this).attr("data-rule");
-        console.log(rule)
         if(rule==='true'){
             $(`.field-rule-${topicId}`).html('必填项')
         }
@@ -1477,7 +1427,6 @@
             let text = $(this).text()
             text&&ruleList.push(text)
         });
-        console.log(ruleList)
         if(ruleList.length){
             weui.topTips('表单填写不规范或必填项没填', 1500);
             return;
@@ -1485,7 +1434,6 @@
         
         
 
-        console.log($('#form').serialize());
         let result = $('#form').serialize().split('&')
         result.map(item=>{
             if(item.indexOf('checkbox')<0&&item.indexOf('select')<0){
@@ -1496,7 +1444,6 @@
             }
             
         })
-        console.log(FormObject)
 
 
         let list = [];
@@ -1534,7 +1481,6 @@
                 
             })
         })
-        console.log(body)
 
         let submitUrl = `${IP}/services/web/config/questionnaireFormAnswer/commitForm/${formId}/${userId}`;
         let submitLoading = weui.loading('提交中...');
@@ -1545,7 +1491,6 @@
             dataType:'json',
             data:JSON.stringify(body),      
             success:function(data){
-                console.log(data)
                 submitLoading.hide();
                 if(data.status === 1){
                     setTimeout(()=>{
@@ -1558,12 +1503,7 @@
             error:function(error){
 
             }
-        });   
-
-        
-        
-
-        
+        });    
     }
 </script>
 </html>

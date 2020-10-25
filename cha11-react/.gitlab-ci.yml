@@ -1,0 +1,182 @@
+image: docker:latest
+
+stages:
+- build
+- package
+- deploy
+
+cache:
+  paths:
+  - node_modules/
+
+build:
+  image: reg.aodous.org/odev-ci/gitlab-ci-node:latest
+  tags: 
+  - node
+  stage: build
+  script:
+  - cnpm i
+  - npm run build
+  artifacts:
+    paths:
+    - build/
+
+package local:
+  stage: package
+  tags:
+  - node
+  image: docker:latest
+  script:
+  - package local
+  only:
+  - develop
+  - release
+  - master
+  - tags
+
+package online:
+  stage: package
+  tags:
+  - node
+  image: docker:latest
+  script:
+  - package online
+  only:
+  - release
+  - master
+  - tags
+
+deploy development:
+  tags:
+  - node
+  stage: deploy
+  environment:
+    name: development
+    url: https://development.yanss.cn/front/
+  script:
+  - echo test
+  only:
+  - develop
+
+deploy staging:
+  tags:
+  - node
+  stage: deploy
+  image: reg.aodous.org/kitchen/deploy/kitchen-deploy:staging
+  environment:
+    name: staging
+    url: https://staging.yanss.cn/front/
+  script:
+  - deploy
+  only:
+  - release
+
+deploy production:
+  tags:
+  - node
+  stage: deploy
+  image: reg.aodous.org/kitchen/deploy/kitchen-deploy:production
+  environment:
+    name: production
+    url: https://m.yanss.cn/front/
+  script:
+  - deploy
+  only:
+  - master
+  - tags
+  when: manual
+
+.scripts: &scripts |
+  [[ "$TRACE" ]] && set -x
+
+  function package() {
+    location="${1:-local}"
+
+    case "${location}" in
+      local)
+        echo "Logging to Local GitLab Container Registry with CI credentials..."
+        docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+        echo ""
+
+        echo "Building Dockerfile-based application..."
+        docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME" .
+        echo ""
+
+        echo "Pushing to Local GitLab Container Registry..."
+        docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME"
+        echo ""
+
+        ;;
+      online)
+        echo "Logging to Online Container Registry with CI credentials..."
+        docker login -u "$ONLINE_CI_REGISTRY_USER" -p "$ONLINE_CI_REGISTRY_PASSWORD" "$ONLINE_CI_REGISTRY"
+        echo ""
+
+        echo "Building Dockerfile-based application..."
+        docker build --pull -t "$ONLINE_CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME" .
+        echo ""
+
+        echo "Pushing to Online GitLab Container Registry..."
+        docker push "$ONLINE_CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME"
+        echo ""
+
+        ;;
+      *)
+        echo "Error!"
+        ;;
+    esac
+  }
+
+  function deploy() {
+    case "${CI_ENVIRONMENT_SLUG}" in
+      development)
+        echo "Deploying Development Environment..."
+
+        echo "Packaging and Push Docker Image..."
+        package local
+        echo ""
+
+        ;;
+
+      staging)
+        echo "Deploying Staging Environment..."
+
+        echo "Packaging and Push Docker Image..."
+        image_sha=$(package online | awk '/digest/{print $3}')
+        echo ""
+
+        image_with_sha="${ENV_STAG_IMAGE}@${image_sha}"
+        deployment=${ENV_STAG_DEPLOYMENT}
+        container=${ENV_STAG_CONTAINER}
+        namespase=${ENV_STAG_NAMESPACE}
+
+        echo "Updating Deployment Image..."
+        kubectl set image deploy ${deployment} ${container}=${image_with_sha} -n ${namespase}
+        echo ""
+        ;;
+
+      production)
+        echo "Deploying Production Environment..."
+
+        echo "Packaging and Push Docker Image..."
+        image_sha=$(package online | awk '/digest/{print $3}')
+        echo ""
+
+        image_with_sha="${ENV_PROD_IMAGE}@${image_sha}"
+        deployment=${ENV_PROD_DEPLOYMENT}
+        container=${ENV_PROD_CONTAINER}
+        namespase=${ENV_PROD_NAMESPACE}
+
+        echo "Updating Deployment Image..."
+        kubectl set image deploy ${deployment} ${container}=${image_with_sha} -n ${namespase}
+        echo ""
+        
+        ;;
+      *)
+        echo "Error!"
+        ;;
+    esac
+  }
+
+before_script:
+- *scripts

@@ -1,0 +1,16 @@
+
+.right{
+    position: fixed;
+    right: 20px;
+    top: 100px;
+    border: 1px solid #ddd;
+    text-align: left;
+    line-height: 25px;
+    padding: 10px;
+    border-radius: 4px;
+}
+.right ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
