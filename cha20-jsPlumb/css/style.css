@@ -1,0 +1,129 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box
+}
+
+h1,h2,h3,h4,h5,h6,a,p,label,ul,li,label,span {
+	margin: 0;
+	padding: 0;
+	font-family: 寰蒋闆呴粦
+}
+
+a,a:active,a:focus,a:hover {
+	text-decoration: none
+}
+
+.clear {
+	clear: both
+}
+
+body {
+	background: #ededed
+}
+
+html,body {
+	height: 100%
+}
+
+.device .deviceLeft {
+	width: 220px;
+	height: 100%;
+	border-right: 1px solid #ccc;
+	float: left;
+	overflow: auto
+}
+
+.device .deviceLeft h3 {
+	padding-left: 10px;
+	font-size: 14px;
+	background: #ddd;
+	line-height: 36px;
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc
+}
+
+.device .deviceLeft .deviceLeft_box {
+	overflow: hidden;
+	padding: 10px 0
+}
+
+.device .deviceLeft .deviceLeft_box .node {
+	user-select: none;
+	width: 98px;
+	height: 40px;
+	line-height: 20px;
+	float: left;
+	margin: 5px
+}
+
+.device .node {
+	width: 120px;
+	height: 50px;
+	line-height: 30px;
+	box-shadow: 2px 2px 10px #aaa;
+	border-radius: 3px;
+	text-align: center;
+	z-index: 20;
+	background-color: #f1f1f2;
+	color: #000;
+	padding: 10px;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.device .node:hover {
+	box-shadow: 2px 2px 19px #444;
+	opacity: .8;
+	filter: alpha(opacity=80)
+}
+
+.device .node1css {
+    border: #87cefa 1px solid;
+    background-color: #87cefa;
+}
+
+.device .node2css {
+    border: #ffa500 1px solid;
+    background-color: #ffa500;
+}
+
+.device .node3css {
+    border: #cd5c5c 1px solid;
+    background-color: #cd5c5c;
+}
+
+.device .node4css {
+    border: #adff2f 1px solid;
+    background-color: #adff2f;
+}
+
+.device .node5css {
+    border: #005caf 1px solid;
+    background-color: #005caf;
+}
+.device .node6css {
+    border: #1b813e 1px solid;
+    background-color: #1b813e;
+}
+
+.device #deviceRight {
+	position: absolute;
+	right: 0;
+	width: calc(100% - 220px);
+	height: 100%;
+	box-sizing: border-box;
+	background: url(../images/bg.png)
+}
+
+.device #myDropDown {
+	width: 80px;
+	margin-left: -14px;
+	border: 1px solid #ccc;
+	text-align: center
+}
+
+.device #main {
+	width: 100%;
+	height: 100%
+}

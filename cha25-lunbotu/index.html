@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>jquery轻量级无缝轮播图</title>
+	<script src="https://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+	<script src="js/LoopSlider.js"></script>
+	<link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+	<div class="content">
+		<img src="https://www.jq22.com/img/cs/500x300-1.png">
+		<img src="https://www.jq22.com/img/cs/500x300-2.png">
+		<img src="https://www.jq22.com/img/cs/500x300-3.png">
+		<img src="https://www.jq22.com/img/cs/500x300-4.png">
+	</div>
+	<script>
+		LoopSlider.init({
+			el: ".content", //选择器
+			navigator: {
+				//前进后退按钮
+				prevEl: ".prev",
+				nextEl: ".next"
+			},
+			easing: "ease", //动画效果cubic-bezier(0.985, -0.060, 0.000, 1.320)
+			duration: 300, //过渡时间，默认为3000ms,
+			autoplay: 300, //boolean 和 number 设置为true 默认延时为3s,如果设置为1000，延时为1s
+		})
+	</script>
+</body>
+
+</html>

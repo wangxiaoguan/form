@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>jsPlumb流程图</title>
+<link rel="stylesheet" type="text/css" href="./css/jquery-ui.min.css">
+<link rel="stylesheet" type="text/css" href="./css/style.css">
+</head>
+<body>
+<div class="container device">
+
+<div class="deviceLeft">
+<h3>配置</h3>
+<div class="deviceLeft_box">
+<div class="node node1css" data-type='1' contenteditable="true">1</div>
+<div class="node node2css" data-type='2' contenteditable="true">2</div>
+<div class="node node3css" data-type='3' contenteditable="true">3</div>
+<div class="node node4css" data-type='4' contenteditable="true">4</div>
+<div class="node node5css" data-type='5' contenteditable="true">5</div>
+<div class="node node6css" data-type='6' contenteditable="true">6</div>
+</div>
+<!-- <button class="btn1"> console.log(JSON) </button> -->
+</div>
+<div id="deviceRight">
+<div id="main"></div>
+</div>
+</div>
+<script src="js/jquery.js"></script>
+<script src="js/jquery-ui.js"></script>
+<script type="text/javascript" src="js/jquery.jsplumb.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript">
+var jsonStr = {}
+
+    var connectorPaintStyle = {
+        lineWidth: 1,
+        strokeStyle: "#61b8d0",
+    };
+    var connectorHoverStyle = {
+        lineWidth: 1,
+        strokeStyle: "green",
+    };
+    var paintStyle = {
+        fillStyle: "#ccc",
+        radius: 10,
+        lineWidth: 1,
+    }
+    var hoverPaintStyle = {
+        fillStyle: "#aaa",
+    }
+    var hollowCircle = {
+        endpoint: ["Dot", {
+            radius: 5
+        }],
+        connectorStyle: connectorPaintStyle,
+        connectorHoverStyle: connectorHoverStyle,
+        paintStyle: paintStyle,
+        hoverPaintStyle: hoverPaintStyle,
+        isSource: true,
+        connector: ["Bezier", {
+            stub: [40, 60],
+            gap: 10,
+            cornerRadius: 1,
+            alwaysRespectStubs: true
+        }],
+        isTarget: true,
+        maxConnections: -1,
+        connectorOverlays: [
+            ["Arrow", {
+            width: 10,
+            length: 20,
+            location: 1,
+            id: "arrow"
+        }],
+         ["Custom", {
+            create: function(component) {
+                return $('<span style="background:#fff;position:relative;z-index:999;cursor:pointer;">单击输入</span>');
+            },
+            location: 0.5,
+            id: "customOverlay",
+        }], ],
+    };
+    const node = jsonStr.node
+    const line = jsonStr.line
+    jsPlumb.ready(function (){
+        jsPlumb.importDefaults({
+    ConnectionsDetachable: false
+  })
+  jsPlumb.bind('click', function (conn, originalEvent) {
+  if (window.prompt('确定删除所点击的链接吗？ 输入1确定') === '1') {
+    jsPlumb.detach(conn)
+  }
+})
+        if(node){
+            for(let i = 0;i<node.length;i++){
+                var id = node[i].divId;
+                var className = node[i].class;
+                var name = node[i].name;
+                var type = node[i].type;
+                var left = node[i].positionX;
+                var top = node[i].positionY;
+                $('#main').append(`<div class="node node${type}css" style="position: absolute" id="${id}" data-type="${type}" data-class="${className}" >${name}</div>`);
+
+                $("#" + id).css("left", left).css("top", top);
+                jsPlumb.addEndpoint(id, {
+                    anchors: 'Top'
+                },
+                hollowCircle);
+                jsPlumb.addEndpoint(id, {
+                    anchors: "Right"
+                },
+                hollowCircle);
+                jsPlumb.addEndpoint(id, {
+                    anchors: "Bottom"
+                },
+                hollowCircle);
+                jsPlumb.addEndpoint(id, {
+                    anchors: "Left"
+                },
+                hollowCircle);
+                jsPlumb.draggable(id);
+                jsPlumb.makeTarget(id, {
+                    anchor: "Continuous"
+                }) 
+                $("#" + id).draggable({
+                    containment: "parent",
+                    grid: [10, 10]
+                });
+                doubleclick("#" + id);
+            }
+            for(let j = 0;j<line.length;j++){
+                jsPlumb.connect(
+                    {
+                        source:line[j].pageSourceId, 
+                        target:line[j].pageTargetId,
+                        paintStyle:connectorPaintStyle,
+                        overlays: [ ['Arrow', { width: 12, length: 12, location: 1 }] ], 
+                    }, 
+                );
+            }
+            const lines = jsPlumb.getAllConnections();
+            console.log(lines)
+
+        }
+
+    })
+
+    function doubleclick(id) {
+        $(id).dblclick(function() {
+            var text = $(this).text();
+            $(this).html("");
+            $(this).append('<input style="width:100%" type="text" class="note" value="' + text + '" />');
+            $(this).mouseleave(function() {
+                $(this).html($(".note").val());
+            });
+        });
+    }
+    
+
+                    
+</script>
+</body>
+</html>

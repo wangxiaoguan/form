@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Flux Slider Demo &#0187; Hardware accelerated image transitions using CSS3</title>
+<style>
+	body{
+		background: #000033;
+	}
+	#slidercontainer{
+		margin: 20px;
+	}
+	#slider,#transitions{
+		float: left;
+	}
+	li{
+		width: 120px;
+		border: 1px solid #aaa;
+		margin-bottom: 4px;
+		border-radius: 4px;
+		text-indent: 10px;
+	}
+	
+	a{
+		color: #fff;
+		font-size: 16px;
+		text-decoration: none;
+	}
+</style>
+<script src="http://wanghg.top/js/jquery.js"></script>
+<script src="js/flux.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+$(function(){
+	if(!flux.browser.supportsTransitions) return;
+	window.f = new flux.slider('#slider', {
+		autoplay: false,
+		pagination: false
+	});
+	$('div#transitions').bind('click', function(event){
+		event.preventDefault();
+		if($(event.target).closest('ul').is('ul#trans3d') && !flux.browser.supports3d){
+			return;
+		}
+		window.f.next(event.target.href.split('#')[1]);
+	});
+});
+</script>
+</head>
+<body id="transitiongallery">
+<section class="container">
+
+<div id="slidercontainer">
+	<div id="slider">
+		<img src="http://wanghg.top/img/img1.jpg" alt="" />
+		<img src="http://wanghg.top/img/img2.jpg" alt="" />
+		<img src="http://wanghg.top/img/img3.jpg" alt="" />
+		<img src="http://wanghg.top/img/img4.jpg" alt="" />
+	</div>
+	<div id="transitions">
+		<ul id="trans2D">
+			<li><a href="#bars">Bars</a></li>
+			<li><a href="#zip">Zip</a></li>
+			<li><a href="#blinds">Blinds</a></li>
+			<li><a href="#blocks">Blocks</a></li>
+			<li><a href="#concentric">Concentric</a></li>
+			<li><a href="#warp">Warp</a></li>
+			<li><a href="#slide">Slide</a></li>
+		</ul>
+		<ul id="trans3d">
+			<li><a href="#bars3d">Bars3D</a></li>
+			<li><a href="#cube">Cube</a></li>
+			<li><a href="#tiles3d" class="new">Tiles3D</a></li>
+			<li><a href="#blinds3d" class="new">Blinds3D</a></li>
+			<li><a href="#turn" class="new">Turn</a></li>
+		</ul>
+	</div>
+</div>
+
+</section>
+</body>
+</html>

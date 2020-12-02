@@ -1,0 +1,310 @@
+﻿<!doctype html>
+<html lang="zh">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="img/favicon.ico" />
+	<title>田园乡村</title>
+	<style>
+		body {
+			background: #021649;
+			font-family: Montserrat;
+			overflow: hidden;
+			-webkit-touch-callout: none;
+			-webkit-user-select: none;
+			-khtml-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+
+		.metro {
+			width: calc(100% - 160px);
+			margin: 10px;
+			/* height: calc(100vh - 20px); */
+
+		}
+
+
+		.metro li {
+			-webkit-transform: perspective(600px);
+			-webkit-transform-style: preserve-3d;
+			-webkit-transform-origin-x: 50%;
+			-webkit-transform-origin-y: 50%;
+			-ms-transform: perspective(600px);
+			-ms-transform-style: preserve-3d;
+			-ms-transform-origin-x: 50%;
+			-ms-transform-origin-y: 50%;
+			transform: perspective(600px);
+			transform-style: preserve-3d;
+			transform-origin-x: 50%;
+			transform-origin-y: 50%;
+			cursor: default;
+			position: relative;
+			text-align: center;
+			margin: 0 10px 10px 0;
+			width: 150px;
+			height: 150px;
+			color: #ffffff;
+			float: left;
+			-webkit-transition: .2s -webkit-transform, 1s opacity;
+			-ms-transition: .2s -ms-transform, 1s opacity;
+			transition: .2s transform, 1s opacity;
+			cursor: pointer;
+		}
+
+
+
+		.metro li span {
+			color: rgba(255, 255, 255, 0.8);
+			text-transform: uppercase;
+			position: absolute;
+			left: 15px;
+			bottom: 15px;
+			font-size: 14px;
+		}
+
+		.metro li:nth-child(10n) {
+			background: #7FFFD4;
+		}
+
+		.metro li:nth-child(10n+1) {
+			background: #00b6de;
+		}
+
+		.metro li:nth-child(10n+2) {
+			background: #56dea7;
+		}
+
+		.metro li:nth-child(10n+3) {
+			background: #ff7659;
+		}
+
+		.metro li:nth-child(10n+4) {
+			background: #f8cd36;
+		}
+
+		.metro li:nth-child(10n+5) {
+			background: #f26175;
+		}
+
+		.metro li:nth-child(10n+6) {
+			background: #5ca7df;
+		}
+
+		.metro li:nth-child(10n+7) {
+			background: #9e7ac2;
+		}
+
+		.metro li:nth-child(10n+8) {
+			background: #1B813E;
+		}
+
+		.metro li:nth-child(10n+9) {
+			background: #32CD32;
+		}
+
+
+
+		.metro li:nth-child(2n):active {
+			-webkit-transform: scale(0.95);
+			-ms-transform: scale(0.95);
+			transform: scale(0.95);
+		}
+
+		.metro li:nth-child(2n+1):active {
+			-webkit-transform: perspective(600px) rotate3d(1, 0, 0, -10deg);
+			-ms-transform: perspective(600px) rotate3d(1, 0, 0, -10deg);
+			transform: perspective(600px) rotate3d(1, 0, 0, -10deg);
+		}
+
+
+
+		/* POPUP */
+
+		.box {
+			display: table;
+			top: 0;
+			visibility: hidden;
+			-webkit-transform: perspective(1200px) rotateY(180deg) scale(0.1);
+			-ms-transform: perspective(1200px) rotateY(180deg) scale(0.1);
+			transform: perspective(1200px) rotateY(180deg) scale(0.1);
+			top: 0;
+			left: 0;
+			z-index: -1;
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			opacity: 0;
+			transition: 1s all;
+		}
+
+
+
+		.box .close {
+			display: block;
+			cursor: pointer;
+			border: 3px solid #f00c0c;
+			border-radius: 50%;
+			position: absolute;
+			top: 24px;
+			right: 50px;
+			width: 50px;
+			height: 50px;
+			-webkit-transform: rotate(45deg);
+			-ms-transform: rotate(45deg);
+			transform: rotate(45deg);
+			transition: .2s;
+			-webkit-transition-delay: 0.2s;
+			-ms-transition-delay: 0.2s;
+			transition-delay: 0.2s;
+			opacity: 0;
+		}
+
+		.box .close:active {
+			top: 51px;
+		}
+
+		.box .close::before {
+			content: "";
+			display: block;
+			position: absolute;
+			background-color: #fa0f0f;
+			width: 80%;
+			height: 6%;
+			left: 10%;
+			top: 47%;
+		}
+
+		.box .close::after {
+			content: "";
+			display: block;
+			position: absolute;
+			background-color: #fa0f0f;
+			width: 6%;
+			height: 80%;
+			left: 47%;
+			top: 10%;
+		}
+
+		.box.open {
+			left: 0;
+			top: 0;
+			visibility: visible;
+			opacity: 1;
+			z-index: 999;
+			-webkit-transform: perspective(1200px) rotateY(0deg) scale(1);
+			-ms-transform: perspective(1200px) rotateY(0deg) scale(1);
+			transform: perspective(1200px) rotateY(0deg) scale(1);
+			width: 100%;
+			height: 100%;
+		}
+
+		.box.open .close,
+		.box.open p {
+			opacity: 1;
+		}
+
+		#iframe {
+			width: 100%;
+			height: 100%;
+			border: none;
+			overflow: auto;
+		}
+
+		#app {
+			width: 100%;
+			height: calc(100vh - 30px);
+			overflow: auto;
+		}
+
+		li {
+			list-style: none;
+		}
+
+		#app::-webkit-scrollbar {
+			width: 0;
+			height: 0;
+		}
+
+		.module {
+			width: 100%;
+			overflow: hidden;
+			display: flex;
+		}
+
+		.head {
+			width: 160px;
+			height: 100px;
+			padding: 10px;
+			font-size: 30px;
+			text-align: right;
+			color: #aaa;
+			font-weight: bolder;
+		}
+
+		.icon {
+			width: 36px;
+			height: 36px;
+			/* vertical-align: -0.15em; */
+			margin: 30px;
+			fill: currentColor;
+			overflow: hidden;
+		}
+
+		footer {
+			text-align: center;
+			color: #f00c0c;
+			font-size: 10px;
+		}
+	</style>
+</head>
+
+<body>
+	<div>
+		<div id="app"></div>
+		<div class="box">
+			<span class="close"></span>
+			<iframe id="iframe" src="http://wanghg.top/html/string.html"></iframe>
+		</div>
+	</div>
+	<footer>©声明：此网站只用于交流学习，请勿用作它途。如有侵权，请联系， 删除处理。</footer>
+</body>
+<script src="js/iconfont.js"></script>
+<script src="js/jquery.js"></script>
+<script src="js/html.js"></script>
+<script>
+	$(document).ready(function () {
+		htmlObject.map(x => {
+			const lis = x.list.map(v => {
+				return `<li class="title" data-address="${v.address}">
+					<span>${v.name}</span>
+					</li>`
+			}).join('')
+			$("#app").append(`<div class="module">
+									<div class="head">${x.name}</div>
+									<ul class="metro">${lis}</ul>
+								</div>`)
+
+		})
+	});
+	$(document).on('click', '.title', function () {
+		var $box = $('.box');
+		var color = $(this).css('backgroundColor');
+		var address = $(this).attr('data-address');
+		$box.css('backgroundColor', '#fff');
+		$box.addClass('open');
+		$("#iframe").attr("src", address);
+		$('.close').click(function () {
+			$box.removeClass('open');
+			$box.css('backgroundColor', 'transparent');
+		});
+	})
+</script>
+
+
+</html>
