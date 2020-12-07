@@ -274,16 +274,16 @@
 	</div>
 	<footer>©声明：此网站只用于交流学习，请勿用作它途。如有侵权，请联系， 删除处理。</footer>
 </body>
-<script src="js/iconfont.js"></script>
+<!-- <script src="js/iconfont.js"></script> -->
 <script src="js/jquery.js"></script>
 <script src="js/html.js"></script>
 <script>
 	$(document).ready(function () {
 		htmlObject.map(x => {
 			const lis = x.list.map(v => {
-				return `<li class="title" data-address="${v.address}">
+				return v.isShow ? `<li class="title" data-address="${v.address}">
 					<span>${v.name}</span>
-					</li>`
+					</li>`: ''
 			}).join('')
 			$("#app").append(`<div class="module">
 									<div class="head">${x.name}</div>

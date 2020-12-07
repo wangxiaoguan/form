@@ -1,0 +1,348 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+	<title>兼容IE7以上的分页插件</title>
+	<script src="http://wanghg.top/js/jquery.js"></script>
+	<!-- <script type="text/javascript" src="js/page.js"></script> -->
+	<!-- <link rel="stylesheet" type="text/css" href="css/style.css" /> -->
+	<style>
+		html,
+		body {
+			width: 100%;
+			height: 100%;
+			padding: 0;
+			margin: 0;
+		}
+
+		#app {
+			width: 100%;
+			height: 100%;
+		}
+
+		.list {
+			padding: 0 6%;
+		}
+
+		.record {
+			height: 3rem;
+			line-height: 3rem;
+			border-bottom: 1px solid #f0f0f0;
+			font-size: 0.8rem;
+			font-family: 'Microsoft YaHei';
+			font-weight: 400;
+			color: #666;
+			cursor: pointer;
+		}
+
+		.detailLook {
+			float: right;
+			color: #007aff;
+			cursor: pointer;
+		}
+
+		footer {
+			border-bottom: 0px solid transparent;
+			padding: 1rem 0;
+		}
+
+		#page {
+			/* margin: 20px auto; */
+			color: #666;
+			display: block;
+			text-align: center;
+			overflow: hidden;
+		}
+
+		#page li {
+			display: inline-block;
+			min-width: 30px;
+			height: 28px;
+			cursor: pointer;
+			color: #666;
+			font-size: 13px;
+			line-height: 28px;
+			background-color: #f9f9f9;
+			border: 1px solid #dce0e0;
+			text-align: center;
+			margin: 0 4px;
+			border-radius: 4px;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
+			margin-bottom: 20px;
+		}
+
+		.xl-nextPage,
+		.xl-prevPage {
+			width: 60px;
+			color: #007aff;
+			height: 28px;
+		}
+
+		#page li.xl-disabled {
+			opacity: .5;
+			cursor: no-drop;
+		}
+
+		#page li.xl-disabled:hover {
+			background-color: #f9f9f9 !important;
+			border: 1px solid #dce0e0 !important;
+			color: #666 !important;
+		}
+
+		#page li.xl-active {
+			background-color: #007aff;
+			border-color: #007aff;
+			color: #FFF
+		}
+
+		#page li:hover {
+			background-color: #007aff !important;
+			border-color: #007aff;
+			color: #FFF
+		}
+
+		#page li.xl-jumpButton {
+			padding: 0 5px;
+		}
+
+		#xlJumpNum {
+			width: 35px;
+			margin: 0 3px;
+			outline: none;
+			border-radius: 4px;
+			box-sizing: border-box;
+			-webkit-box-sizing: border-box;
+			appearance: none;
+			-webkit-appearance: none;
+			border-radius: 0;
+			-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+		}
+
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			-webkit-appearance: none !important;
+		}
+
+		input[type="number"] {
+			-moz-appearance: none;
+		}
+
+		.xl-prevPage {
+			display: inline-block !important;
+		}
+
+		.xl-active {
+			display: inline-block !important;
+		}
+
+		.xl-nextPage {
+			display: inline-block !important;
+		}
+
+		.xl-disabled {
+			background: #ccc !important;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="page"></div>
+</body>
+<script type="text/javascript">
+	var Paging = (function () {
+		function Paging(elementName, options) {
+			this.elementName = elementName;
+			this.options = options;
+			options.nowPage = options.nowPage >= 1 ? options.nowPage : 1;
+			options.pageNum = options.pageNum > 0 ? options.pageNum : 0;
+			options.canJump = options.canJump || 0;
+			options.showOne = options.showOne || 0;
+			options.buttonNum = (options.buttonNum >= 5 ? options.buttonNum : 5) || 7;
+			this.nowPage = options.nowPage > options.pageNum ? options.pageNum : options.nowPage;
+			this.pageNum = options.pageNum < 0 ? 0 : options.pageNum;
+			this.canJump = options.canJump;
+			this.showOne = options.showOne;
+			this.buttonNum = options.buttonNum;
+			this.callback = options.callback;
+			this.element = document.getElementById(elementName);
+			this.init();
+		}
+		Paging.prototype.init = function () {
+			this.createHtml();
+		};
+		Paging.prototype.createHtml = function () {
+			var _this = this;
+			var content = [];
+			if (this.pageNum <= 0) {
+				return '';
+			}
+			if (!this.showOne && this.pageNum === 1) {
+				this.element.innerHTML = '';
+				return '';
+			}
+			content.push("<ul>");
+			content.push("<li class='xl-prevPage'>上一页</li>");
+			if (this.pageNum <= this.buttonNum) {
+				for (var i = 1; i <= this.pageNum; i++) {
+					if (this.nowPage !== i) {
+						content.push("<li>" + i + "</li>");
+					} else {
+						content.push("<li class='xl-active'>" + i + "</li>");
+					}
+				}
+			} else if (this.nowPage <= Math.floor(this.buttonNum / 2)) {
+				for (var i = 1; i <= this.buttonNum - 2; i++) {
+					if (this.nowPage !== i) {
+						content.push("<li>" + i + "</li>");
+					} else {
+						content.push("<li class='xl-active'>" + i + "</li>");
+					}
+				}
+				content.push("<li class='xl-disabled'>...</li>");
+				content.push("<li>" + this.pageNum + "</li>");
+			} else if (this.pageNum - this.nowPage <= Math.floor(this.buttonNum / 2)) {
+				content.push("<li>" + 1 + "</li>");
+				content.push("<li class='xl-disabled'>...</li>");
+				for (var i = this.pageNum - this.buttonNum + 3; i <= this.pageNum; i++) {
+					if (this.nowPage !== i) {
+						content.push("<li>" + i + "</li>");
+					} else {
+						content.push("<li class='xl-active'>" + i + "</li>");
+					}
+				}
+			} else {
+				if (this.nowPage - Math.floor(this.buttonNum / 2) <= 0) {
+					for (var i = 1; i <= Math.floor(this.buttonNum / 2); i++) {
+						if (this.nowPage !== i) {
+							content.push("<li>" + i + "</li>");
+						} else {
+							content.push("<li class='xl-active'>" + i + "</li>");
+						}
+					}
+				} else {
+					content.push("<li>" + 1 + "</li>");
+					content.push("<li class='xl-disabled'>...</li>");
+					for (var i = this.nowPage - Math.floor(this.buttonNum / 2) + (this.buttonNum % 2 == 0 ? 3 : 2); i <= this.nowPage; i++) {
+						if (this.nowPage !== i) {
+							content.push("<li>" + i + "</li>");
+						} else {
+							content.push("<li class='xl-active'>" + i + "</li>");
+						}
+					}
+				}
+				if (this.pageNum - this.nowPage <= 0) {
+					for (var i = this.nowPage + 1; i <= this.pageNum; i++) {
+						content.push("<li>" + i + "</li>");
+					}
+				} else {
+					for (var i = this.nowPage + 1; i <= this.nowPage + Math.floor(this.buttonNum / 2) - 2; i++) {
+						content.push("<li>" + i + "</li>");
+					}
+					content.push("<li class='xl-disabled'>...</li>");
+					content.push("<li>" + this.pageNum + "</li>");
+				}
+			}
+			content.push("<li class='xl-nextPage'>下一页</li>");
+			if (this.canJump) {
+				content.push("<li class='xl-jumpText xl-disabled'>跳转到<input type='number' id='xlJumpNum'>页</li>");
+				content.push("<li class='xl-jumpButton'>确定</li>");
+			}
+			content.push("</ul>");
+			this.element.innerHTML = content.join('');
+			setTimeout(function () {
+				_this.disabled();
+				_this.bindClickEvent();
+			},
+				20);
+		};
+		Paging.prototype.bindClickEvent = function () {
+			var _this = this;
+			var liList = this.element.children[0].children;
+			var _loop_1 = function (i) {
+				liList[i].removeEventListener('click',
+					function () {
+						_this.clickEvent(liList[i]);
+					});
+			};
+			for (var i = 0; i < liList.length; i++) {
+				_loop_1(i);
+			}
+			var _loop_2 = function (i) {
+				liList[i].addEventListener('click',
+					function () {
+						_this.clickEvent(liList[i]);
+					});
+			};
+			for (var i = 0; i < liList.length; i++) {
+				_loop_2(i);
+			}
+		};
+		Paging.prototype.clickEvent = function (li) {
+			var cla = li.className;
+			var num = parseInt(li.innerHTML);
+			var nowPage = this.nowPage;
+			if (li.className.indexOf('xl-disabled') !== -1 || cla === 'xl-jumpText') {
+				return '';
+			}
+			if (cla === 'xl-prevPage') {
+				if (nowPage >= 1) {
+					this.nowPage -= 1;
+				}
+			} else if (cla === 'xl-nextPage') {
+				if (nowPage < this.pageNum) {
+					this.nowPage += 1;
+				}
+			} else if (cla === 'xl-jumpButton') {
+				var el = document.getElementById('xlJumpNum');
+				if (Number(el.value) > this.pageNum) {
+					this.nowPage = this.pageNum;
+				} else if (Number(el.value) <= 0) {
+					this.nowPage = 1;
+				} else {
+					this.nowPage = Number(el.value);
+				}
+			} else {
+				this.nowPage = num;
+			}
+			this.createHtml();
+			if (this.callback) {
+				this.callback(this.nowPage);
+			}
+		};
+		Paging.prototype.disabled = function () {
+			var nowPage = this.nowPage;
+			var pageNum = this.pageNum;
+			var liList = this.element.children[0].children;
+			if (nowPage === 1) {
+				for (var i = 0; i < liList.length; i++) {
+					if (liList[i].className.indexOf('xl-prevPage') !== -1) {
+						liList[i].setAttribute('class', liList[i].getAttribute('class').concat(' xl-disabled'));
+					}
+				}
+			} else if (nowPage === pageNum) {
+				for (var i = 0; i < liList.length; i++) {
+					if (liList[i].className.indexOf('xl-nextPage') !== -1) {
+						liList[i].setAttribute('class', liList[i].getAttribute('class').concat(' xl-disabled'));
+					}
+				}
+			}
+		};
+		return Paging;
+	}());
+	new Paging('page', {
+		nowPage: 1, // 当前页码
+		pageNum: 10, // 总页码
+		buttonNum: 1, //要展示的页码数量
+		canJump: 1,// 是否能跳转。0=不显示（默认），1=显示
+		showOne: 1,//只有一页时，是否显示。0=不显示,1=显示（默认）
+		callback: function (num) { //回调函数
+			console.log(num);
+		}
+	})
+</script>
+
+
+
+</html>
