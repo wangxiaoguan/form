@@ -16,6 +16,15 @@ var htmlObject = [
         ]
     },
     {
+        type: 'game',
+        name: '知识点',
+        icon: '#icon-youxi',
+        list: [
+            { name: "npm", address: "http://wanghg.top/html/npm.html", isShow: true },
+            { name: "原型链", address: "http://wanghg.top/html/prototype.html", isShow: true }
+        ]
+    },
+    {
         type: 'special',
         name: '样式',
         icon: '#icon-biaoqianA01_zhuanqu-53',
@@ -27,7 +36,13 @@ var htmlObject = [
             { name: "标签方法", address: "http://wanghg.top/html/string1.html", isShow: true },
             { name: "背景", address: "http://wanghg.top/html/background.html", isShow: true },
             { name: "弹性布局", address: "http://wanghg.top/html/flex.html", isShow: true },
-            { name: "对象方法", address: "http://wanghg.top/html/javaScript.html", isShow: true },
+            { name: "鼠标样式", address: "http://wanghg.top/html/cursor.html", isShow: true },
+            { name: "可编辑div", address: "http://wanghg.top/html/editdiv.html", isShow: true },
+            { name: "线性渐变", address: "http://wanghg.top/html/gradient.html", isShow: true },
+            { name: "@keyframes动画", address: "http://wanghg.top/html/keyframes.html", isShow: true },
+            { name: "文字转拼音", address: "http://wanghg.top/html/pinyin.html", isShow: true },
+            { name: "阴影shadow", address: "http://wanghg.top/html/shadow.html", isShow: true },
+            { name: "动画transform", address: "http://wanghg.top/html/transform.html", isShow: true },
         ]
     },
     {
@@ -59,6 +74,8 @@ var htmlObject = [
             { name: "轮播图", address: "http://wanghg.top/html/lunbotu.html", isShow: true },
             { name: "分页器", address: "http://wanghg.top/html/page.html", isShow: true },
             { name: "无缝滚动", address: "http://wanghg.top/html/move.html", isShow: true },
+            { name: "大数据", address: "http://wanghg.top/html/echart/index.html", isShow: true },
+            { name: "锁屏", address: "http://wanghg.top/html/suopin/index.html", isShow: true },
         ]
     },
     {
@@ -94,6 +111,14 @@ var htmlObject = [
             { name: "蛇", address: "http://wanghg.top/game/she/index.html", isShow: true },
             { name: "重力骨髅", address: "http://wanghg.top/game/zhongli/index.html", isShow: true },
             { name: "坦克大战", address: "http://wanghg.top/game/war/index.html", isShow: true },
+            { name: "2048", address: "http://wanghg.top/game/2048/index.html", isShow: true },
+            { name: "魔方", address: "http://wanghg.top/game/mofang/index.html", isShow: true },
+            { name: "台球", address: "http://wanghg.top/game/taiqiu/index.html", isShow: true },
+            { name: "贪吃蛇", address: "http://wanghg.top/game/tanchishe/index.html", isShow: true },
+            { name: "推箱子", address: "http://wanghg.top/game/tuixiangzi/index.html", isShow: true },
+            { name: "五子棋", address: "http://wanghg.top/game/wuziqi/index.html", isShow: true },
+            { name: "消消乐", address: "http://wanghg.top/game/xxle/index.html", isShow: true },
+            { name: "纸牌", address: "http://wanghg.top/game/zhipai/index.html", isShow: true },
         ]
     },
     {

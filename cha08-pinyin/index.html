@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>输入名称：<input type="text" id="chinaName0" oninput="ConvertName()" /></div>
+    <div>拼音转化：<input type="text" id="chinaName1" /></div>
+    <div>拼音连接：<input type="text" id="chinaName2" /></div>
+    <div>转首字母：<input type="text" id="chinaName3" /></div>
+    <!-- <div>转　　化：<input type="text" id="chinaName4" /></div> -->
+    <div>拼音转字：<input type="text" id="chinaName5" /></div>
+    <div>全写拼音：<input type="text" id="fullName" /> </div>
+    <div>简写拼音：<input type="text" id="easyName" /> </div>
+
+</body>
+<script src="http://wanghg.top/js/jquery.js"></script>
+<script src="http://wanghg.top/js/pinyin.js"></script>
+<script type="text/javascript" src="js/pinyin_dict_notone.js"></script>
+<script type="text/javascript" src="js/pinyin_dict_withtone.js"></script>
+<script type="text/javascript" src="js/pinyin_dict_withtone.js"></script>
+<script type="text/javascript" src="js/pinyin_dict_polyphone.js"></script>
+<script type="text/javascript" src="js/pinyinUtil.js"></script>
+<script>
+    /**
+     * 获取汉字的拼音首字母
+     * @param str 汉字字符串，如果遇到非汉字则原样返回
+     * @param polyphone 是否支持多音字，默认false，如果为true，会返回所有可能的组合数组
+     */
+    // pinyinUtil.getFirstLetter(str, polyphone);
+    /**
+     * 根据汉字获取拼音，如果不是汉字直接返回原字符
+     * @param str 要转换的汉字
+     * @param splitter 分隔字符，默认用空格分隔
+     * @param withtone 返回结果是否包含声调，默认是
+     * @param polyphone 是否支持多音字，默认否
+    */
+    // pinyinUtil.getPinyin(str, splitter, withtone, polyphone);
+    /**
+     * 拼音转汉字，只支持单个汉字，返回所有匹配的汉字组合
+     * @param pinyin 单个汉字的拼音，不能包含声调
+     */
+
+    /*如果需要精准识别多音字*/
+    const x1 = pinyinUtil.getPinyin('长城和长大', ' ', true, true); // 输出：cháng chéng hé zhǎng dà
+    const x2 = pinyinUtil.getPinyin('喝水和喝彩', ' ', true, true); // 输出：hē shuǐ hé hè cǎi
+    const x3 = pinyinUtil.getPinyin('伟大的大夫', ' ', true, true); // 输出：wěi dà de dài fū
+
+
+    /**如果你只需要获取拼音首字母*/
+    const x4 = pinyinUtil.getFirstLetter('小茗同学'); // 输出 XMTX
+    const x5 = pinyinUtil.getFirstLetter('大中国', true); // 输出 ['DZG', 'TZG']
+
+
+    /*如果拼音不需要声调*/
+    const x6 = pinyinUtil.getPinyin('小茗同学'); // 输出 'xiao ming tong xue'
+    const x7 = pinyinUtil.getHanzi('ming'); // 输出 '明名命鸣铭冥茗溟酩瞑螟暝'
+
+
+    /*如果需要声调或者需要处理生僻字*/
+    const x8 = pinyinUtil.getPinyin('小茗同学'); // 输出 'xiǎo míng tóng xué'
+    const x9 = pinyinUtil.getPinyin('小茗同学', '-', true, true); // 输出 ['xiǎo-míng-tóng-xué', 'xiǎo-míng-tòng-xué']
+
+    console.log(x1)
+    console.log(x2)
+    console.log(x3)
+    console.log(x4)
+    console.log(x5)
+    console.log(x6)
+    console.log(x7)
+    console.log(x8)
+    console.log(x9)
+
+    var ConvertName = function () {
+        var chinaName = $('#chinaName0').val();
+
+        const fullName1 = pinyinUtil.getPinyin(chinaName);
+        const fullName2 = pinyinUtil.getPinyin(chinaName, '-', true, true);
+        const fullName3 = pinyinUtil.getFirstLetter(chinaName); // 输出 XMTX
+        // const fullName4 = pinyinUtil.getFirstLetter(chinaName, true); // 输出 ['DZG', 'TZG']
+        const fullName5 = pinyinUtil.getHanzi(chinaName); // 输出 '明名命鸣铭冥茗溟酩瞑螟暝'
+
+        var fullName = pinyin.getFullChars(chinaName);
+        //获取简写拼音（调用js中方法）
+        var easyName = pinyin.getCamelChars(chinaName);
+        //给两个文本框赋值    
+        $('#fullName').val(fullName);
+        $('#easyName').val(easyName);
+
+
+        $('#chinaName1').val(fullName1);
+        $('#chinaName2').val(fullName2);
+        $('#chinaName3').val(fullName3);
+        // $('#chinaName4').val(fullName4);
+        $('#chinaName5').val(fullName5);
+    }
+
+</script>
+
+</html>
