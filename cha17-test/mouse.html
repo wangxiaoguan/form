@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,35 +8,71 @@
 </head>
 <script src="js/jquery.js"></script>
 <script src="js/mouse.js"></script>
+
 <body>
-<div class="app">
-    <input type="number" onchange="number(this.value)" min="1" max="12" step="1"/>
-    <input type="color" onchange="color(this.value)"/>
-</div>
-<div id="page_end_html">
-</div>
-<script type="text/javascript">
-// $.shuicheMouse({
-//         type:12,
-//         color:'#aaa'
-//     })
-var num = 1,col="#0f0"
-function number(e){
-    console.log(e)
-    num = e
-    $.shuicheMouse({
-        type:e,
-        color:col
-    })
-}
-function color(e){
-    console.log(e)
-    col = e
-    $.shuicheMouse({
-        type:num,
-        color:e
-    })
-}  
-</script>
+    <div class="app">
+        <input type="number" onchange="number(this.value)" min="1" max="12" step="1" value="1" />
+        <input type="color" onchange="color(this.value)" value="#00ff00" />
+    </div>
+    <div id="page_end_html">
+    </div>
+    <script type="text/javascript">
+        // $.shuicheMouse({
+        //     type: 12,
+        //     color: '#aaa'
+        // })
+        var user = {
+            num: 1,
+            col: "#0f0"
+        };
+        function number(e) {
+            console.log(e)
+            user.num = e
+            $.shuicheMouse({
+                type: e,
+                color: user.col
+            })
+        };
+        function color(e) {
+            console.log(e)
+            user.col = e
+            $.shuicheMouse({
+                type: user.num,
+                color: e
+            })
+        };
+        // console.log('1111111111111');
+
+        // Object.defineProperty(user, 'num', {
+        //     set: function (value) {
+        //         num = value;
+        //         console.log(user)
+        //     }
+        // })
+
+        Object.defineProperties(user, {
+            num: {
+                configurable: false, // 设置属性可以更改，默认为false
+                set: function (value) {
+                    console.log(value)
+                    num = value;
+                    console.log(user)
+                },
+                get: function (value) {
+                    console.log(user)
+                }
+            },
+            col: {
+                configurable: false, // 设置属性可以更改，默认为false
+                set: function (value) {
+                    col = value;
+                    console.log(user)
+                }
+            }
+        })
+        console.log(user)
+        // Object.defineProperty(user, 'name', { set: funtion(value){ name = value; console.log('set: name:' + value) })
+    </script>
 </body>
+
 </html>
