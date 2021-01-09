@@ -15,6 +15,15 @@
 <!-- <script src="http://wanghg.top/js/prism.js"></script> -->
 <script>
     var users = [
+        { 'user': 'barney', 'age': 36, 'active': true },
+        { 'user': 'fred', 'age': 40, 'active': false },
+        { 'user': 'pebbles', 'age': 1, 'active': true }
+    ];
+
+    var c = _.find(users, { age: 36 });
+    console.warn(c)
+    // return
+    var users = [
         { user: 'barney', age: 36, city: { name: 'china' } },
         { user: 'Anri', age: 40, 'active': false },
         { user: 'banDy', age: 41, 'active': false },
