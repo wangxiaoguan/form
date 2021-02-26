@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import style from './index.css';
+import {Button} from 'antd';
 import { Link } from 'react-router-dom';
 export default class Overview extends Component {
     constructor(props) {
@@ -34,6 +35,12 @@ export default class Overview extends Component {
                    <h1> {this.props.match.params.text}</h1>
                 </div>
                 {this.fixedList()}
+                <div>
+                    <Button disabled>测试</Button>
+                    <Button icon="search">测试</Button>
+                    <Button disabled>测试</Button>
+                    <Button>测试</Button>
+                </div>
             </div>
 
         )
