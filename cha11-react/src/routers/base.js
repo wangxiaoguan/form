@@ -25,6 +25,7 @@ class Base extends Component {
 }
 
   render() {
+    console.log(this.props)
     const { children } = this.props;
     const {flag} =this.state;
     return (

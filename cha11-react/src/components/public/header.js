@@ -25,6 +25,8 @@ class Header extends Component {
 			num=4;
 		}else if(nextProps.location.pathname==='/comm'){
 			num=5;
+		}else if(nextProps.location.pathname==='/hooks'){
+			num=6;
 		}
 		this.setState({current:num});
 	}
@@ -37,6 +39,7 @@ class Header extends Component {
 			<Link onClick={() => { this.setState({ current: 3 }) }} to="/tuto" className={current === 3 ? styles.active : ''}>教程</Link>
 			<Link onClick={() => { this.setState({ current: 4 }) }} className={current === 4 ? styles.active : ''} to="/blog" style={{marginRight:'0'}}>博客</Link>
 			<Link onClick={() => { this.setState({ current: 5 }) }} className={current === 5 ? styles.active : ''} to="/comm" style={{marginRight:'0'}}>社区</Link>
+			<Link onClick={() => { this.setState({ current: 6 }) }} className={current === 6 ? styles.active : ''} to="/hooks" style={{marginRight:'0'}}>Hooks</Link>
 		</div>
 	}
 	render() {
